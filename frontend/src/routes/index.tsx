@@ -2,8 +2,11 @@ import { createBrowserRouter } from 'react-router-dom'
 import HomeLayout from '../layouts/HomeLayout'
 import AdminLayout from '../layouts/AdminLayout'
 import AuthLayout from '../layouts/AuthLayout'
-import HomePage from '../pages/home/HomePage'
+import HomePage from '../pages/user/HomePage/HomePage'
 import CategoryPage from '../pages/category/CategoryPage'
+import Pointmallvoucher from '../pages/user/Pointmallvoucher/Pointmallvoucher'
+import Cart from '../pages/user/HomePage/Cart/Cart'
+import Storelist from '../pages/user/Storelist/Storelist'
 import LoginPage from '../pages/auth/LoginPage/LoginPage'
 import RegisterPage from '../pages/auth/RegisterPage/RegisterPage'
 import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage/ForgotPasswordPage'
@@ -18,6 +21,9 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <HomePage /> },
       { path: 'category/:slug', element: <CategoryPage /> },
+      { path: 'pointmall-voucher', element: <Pointmallvoucher /> },
+      { path: 'cart', element: <Cart /> },
+      { path: 'store-list', element: <Storelist /> },
     ],
   },
   {

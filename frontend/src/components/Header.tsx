@@ -35,7 +35,7 @@ export default function Header() {
     <header className="w-full sticky top-0 z-50 font-sans">
       {/* Top bar - Green */}
       <div className="bg-[#009b4d] text-white text-sm py-2">
-        <div className="max-w-300 mx-auto flex items-center justify-between h-9">
+        <div className="max-w-350 mx-auto flex items-center justify-between h-9">
           <Link to="/" className="transition-colors duration-300 hover:text-secondary font-medium">
             Kênh bán hàng
           </Link>
@@ -48,7 +48,7 @@ export default function Header() {
 
       {/* Main header - White */}
       <div className="bg-white border-b border-gray-100">
-        <div className="max-w-300 mx-auto py-3">
+        <div className="max-w-350 mx-auto py-3">
           {/* Row 1: Logo + Search + Actions */}
           <div className="flex items-center justify-between">
 
@@ -59,19 +59,19 @@ export default function Header() {
 
             {/* Search bar */}
             <div className="flex-1 max-w-2xl hidden md:flex flex-col">
-              <div className="flex items-center w-full border border-gray-300 rounded-lg focus-within:border-[#009b4d] transition-colors">
+              <div className="flex items-center w-full border-2 border-gray-200 rounded-lg focus-within:border-primary transition-colors shadow-sm hover:shadow-md">
                 {/* Dropdown */}
                 <div className="relative" ref={dropdownRef}>
                   <button
                     onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="flex items-center gap-1.5 h-full px-3 py-2.5 bg-gray-50 border-r border-gray-300 text-base text-gray-700 hover:bg-gray-100 transition-colors rounded-tl-lg rounded-bl-lg"
+                    className="flex items-center gap-1.5 h-full px-4 py-2.5 bg-gray-50 border-r border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors rounded-l-lg"
                   >
                     <span>{searchType.label}</span>
                     <ChevronDown size={14} className={`text-gray-500 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
                   </button>
 
                   {dropdownOpen && (
-                    <div className="absolute top-full left-0 w-40 bg-white border border-gray-200 rounded-lg shadow-lg mt-1 py-1 z-50">
+                    <div className="absolute top-full left-0 w-44 bg-white border border-gray-200 rounded-xl shadow-xl mt-2 py-1 z-50">
                       {searchOptions.map((option) => (
                         <button
                           key={option.value}
@@ -79,13 +79,13 @@ export default function Header() {
                             setSearchType(option)
                             setDropdownOpen(false)
                           }}
-                          className={`w-full flex items-center gap-2 px-3 py-2 text-xs hover:bg-gray-50 transition-colors ${
-                            searchType.value === option.value ? 'text-[#009b4d] font-semibold' : 'text-gray-700'
+                          className={`w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-green-50 transition-colors ${
+                            searchType.value === option.value ? 'text-primary font-semibold bg-green-50' : 'text-gray-700'
                           }`}
                         >
                           <span>{option.label}</span>
                           {searchType.value === option.value && (
-                            <svg className="w-3.5 h-3.5 ml-auto text-[#009b4d]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg className="w-4 h-4 ml-auto text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
                           )}
@@ -98,24 +98,24 @@ export default function Header() {
                 {/* Input */}
                 <input
                   type="text"
-                  placeholder="Đông trùng hạ thảo"
-                  className="flex-1 px-4 py-2.5 text-base outline-none placeholder:text-gray-400"
+                  placeholder="Tìm kiếm sản phẩm, cửa hàng..."
+                  className="flex-1 px-4 py-2.5 text-sm outline-none placeholder:text-gray-400"
                 />
 
                 {/* Search button */}
-                <button className="px-4 py-2.5 bg-[#009b4d] text-white rounded-br-lg rounded-tr-lg">
-                  <Search size={26} />
+                <button className="px-5 py-2.5 bg-primary text-white hover:bg-primary-hover transition-colors rounded-r-lg">
+                  <Search size={20} />
                 </button>
               </div>
 
               {/* Category links - dưới search */}
-              <div className="flex items-center gap-5 mt-2 text-sm text-gray-600">
+              <div className="flex items-center gap-4 mt-2.5 text-xs text-gray-500">
                 {categories.map((cat) => (
                   <Link
                     key={cat}
                     to="/"
-                    className={`whitespace-nowrap hover:text-[#009b4d] transition-colors ${
-                      cat === 'Đông trùng hạ thảo' ? 'text-[#009b4d] font-medium' : ''
+                    className={`whitespace-nowrap hover:text-primary transition-colors ${
+                      cat === 'Đông trùng hạ thảo' ? 'text-primary font-semibold' : ''
                     }`}
                   >
                     {cat}

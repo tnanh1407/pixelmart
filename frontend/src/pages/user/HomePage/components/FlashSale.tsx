@@ -65,7 +65,7 @@ export default function FlashSale() {
   const flashSaleSwiperRef = useRef<any>(null)
 
   return (
-    <section className="w-full max-w-300 mx-auto mt-10">
+    <section className="w-full max-w-350 mx-auto mt-10">
       {/* Header */}
       <div className="bg-gradient-to-r from-red-600 via-red-500 to-orange-500 rounded-t-2xl px-6 py-5 flex items-center justify-between">
         <div className="flex items-center gap-8">

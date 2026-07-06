@@ -125,7 +125,7 @@ const StarRating = ({ rating, reviews }: { rating: number; reviews: number }) =>
 
 export default function OCOPProducts() {
   return (
-    <section className="w-full max-w-300 mx-auto mt-10">
+    <section className="w-full max-w-350 mx-auto mt-10">
       <h2 className="text-2xl font-bold text-[#009b4d] mb-6">Sản phẩm OCOP</h2>
 
       <div className="bg-white rounded-2xl p-6 shadow-sm">
