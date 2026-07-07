@@ -38,6 +38,7 @@
     "tailwindcss": "^4.3.2",
     "ts-jest": "^29.4.11",
     "ts-node": "^10.9.2",
+    "yet-another-react-lightbox": "^3.32.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {

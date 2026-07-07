@@ -1,211 +1,7 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Search, Star, BadgeCheck, PackageOpen, ChevronLeft, ChevronRight } from 'lucide-react'
-
-const stores = [
-  {
-    id: 1,
-    name: 'Bưu điện khu vực Đoan Hùng',
-    avatar: '/homeLayout/homePage/banner/banner_1.webp',
-    sold: 156,
-    rating: 5,
-    trusted: true,
-    products: [
-      { id: 1, name: 'Bưởi Đoan Hùng Bưởi Cát Quế...', image: '/homeLayout/homePage/banner/banner_1.webp', price: 28000, discount: 30 },
-      { id: 2, name: 'Bưởi Đoan Hùng Bưởi Cát Quế...', image: '/homeLayout/homePage/banner/banner_2.webp', price: 28000, discount: 0 },
-      { id: 3, name: 'Bưởi Đoan Hùng...', image: '/homeLayout/homePage/banner/banner_3.webp', price: 22000, discount: 0 },
-      { id: 4, name: 'Bưởi Diễn Hà Nội...', image: '/homeLayout/homePage/banner/banner_1.webp', price: 35000, discount: 15 },
-      { id: 5, name: 'Cam Cao Phong Hòa Bình...', image: '/homeLayout/homePage/banner/banner_2.webp', price: 45000, discount: 0 },
-      { id: 6, name: 'Na dai Tả Van Lào Cai...', image: '/homeLayout/homePage/banner/banner_3.webp', price: 60000, discount: 20 },
-    ],
-  },
-  {
-    id: 2,
-    name: 'MD Queens',
-    avatar: '/homeLayout/homePage/banner/banner_2.webp',
-    sold: 342,
-    rating: 4.8,
-    trusted: false,
-    products: [
-      { id: 7, name: 'Nước ép táo đỏ organic...', image: '/homeLayout/homePage/banner/banner_1.webp', price: 120000, discount: 10 },
-      { id: 8, name: 'Sinh tố việt quất...', image: '/homeLayout/homePage/banner/banner_2.webp', price: 85000, discount: 0 },
-    ],
-  },
-  {
-    id: 3,
-    name: 'OCOP_CSSX NĂM ĐẦU',
-    avatar: '/homeLayout/homePage/banner/banner_3.webp',
-    sold: 89,
-    rating: 5,
-    trusted: true,
-    products: [
-      { id: 9, name: 'OCOP- Gạo Lứt Sấy Năm Đầu -...', image: '/homeLayout/homePage/banner/banner_1.webp', price: 100000, discount: 0 },
-      { id: 10, name: 'OCOP - Bột Gạo Lứt Huyết Rồng...', image: '/homeLayout/homePage/banner/banner_2.webp', price: 55000, discount: 76 },
-      { id: 11, name: 'OCOP - Trà Atisô...', image: '/homeLayout/homePage/banner/banner_3.webp', price: 95000, discount: 25 },
-      { id: 12, name: 'OCOP - Mè đen sạch...', image: '/homeLayout/homePage/banner/banner_1.webp', price: 75000, discount: 0 },
-    ],
-  },
-  {
-    id: 4,
-    name: 'HKD Đoàn Lương',
-    avatar: '/homeLayout/homePage/banner/banner_1.webp',
-    sold: 1024,
-    rating: 4.9,
-    trusted: true,
-    products: [
-      { id: 13, name: 'Thịt bò gác bếp Sơn La...', image: '/homeLayout/homePage/banner/banner_2.webp', price: 350000, discount: 15 },
-      { id: 14, name: 'Gà đen Hmong...', image: '/homeLayout/homePage/banner/banner_3.webp', price: 180000, discount: 0 },
-      { id: 15, name: 'Rượu ngô Na Hang...', image: '/homeLayout/homePage/banner/banner_1.webp', price: 120000, discount: 10 },
-    ],
-  },
-  {
-    id: 5,
-    name: 'Nông Sản Sạch Phú Thọ',
-    avatar: '/homeLayout/homePage/banner/banner_2.webp',
-    sold: 210,
-    rating: 4.7,
-    trusted: true,
-    products: [
-      { id: 16, name: 'Miến dong Bình Liêu...', image: '/homeLayout/homePage/banner/banner_1.webp', price: 85000, discount: 20 },
-      { id: 17, name: 'Nấm lim xanh...', image: '/homeLayout/homePage/banner/banner_2.webp', price: 250000, discount: 0 },
-      { id: 18, name: 'Măng ớt Tuyên Quang...', image: '/homeLayout/homePage/banner/banner_3.webp', price: 45000, discount: 30 },
-    ],
-  },
-  {
-    id: 6,
-    name: 'Đặc Sản Hà Giang',
-    avatar: '/homeLayout/homePage/banner/banner_3.webp',
-    sold: 67,
-    rating: 4.5,
-    trusted: false,
-    products: [
-      { id: 19, name: 'Thắng cống Hà Giang...', image: '/homeLayout/homePage/banner/banner_1.webp', price: 200000, discount: 0 },
-      { id: 20, name: 'Chè Shan Tuyết...', image: '/homeLayout/homePage/banner/banner_2.webp', price: 150000, discount: 10 },
-    ],
-  },
-  {
-    id: 7,
-    name: 'OCOP Yên Bái',
-    avatar: '/homeLayout/homePage/banner/banner_1.webp',
-    sold: 445,
-    rating: 4.8,
-    trusted: true,
-    products: [
-      { id: 21, name: 'Tinh bột nghệ Yên Bái...', image: '/homeLayout/homePage/banner/banner_2.webp', price: 90000, discount: 25 },
-      { id: 22, name: 'Măng cụt sấy...', image: '/homeLayout/homePage/banner/banner_3.webp', price: 75000, discount: 0 },
-      { id: 23, name: 'Rau cảiOPS...', image: '/homeLayout/homePage/banner/banner_1.webp', price: 30000, discount: 15 },
-      { id: 24, name: 'Mật ong rừng...', image: '/homeLayout/homePage/banner/banner_2.webp', price: 350000, discount: 5 },
-    ],
-  },
-  {
-    id: 8,
-    name: 'Thực Phẩm Sạch Bắc Giang',
-    avatar: '/homeLayout/homePage/banner/banner_2.webp',
-    sold: 189,
-    rating: 4.6,
-    trusted: false,
-    products: [
-      { id: 25, name: 'Vải thiều Lục Ngạn...', image: '/homeLayout/homePage/banner/banner_1.webp', price: 65000, discount: 40 },
-      { id: 26, name: 'Nhãn sấy...',
- image: '/homeLayout/homePage/banner/banner_3.webp', price: 80000, discount: 0 },
-    ],
-  },
-  {
-    id: 9,
-    name: 'Shop Organic Hòa Bình',
-    avatar: '/homeLayout/homePage/banner/banner_3.webp',
-    sold: 523,
-    rating: 4.9,
-    trusted: true,
-    products: [
-      { id: 27, name: 'Rượu cần bản...', image: '/homeLayout/homePage/banner/banner_1.webp', price: 280000, discount: 0 },
-      { id: 28, name: 'Cơm lam...', image: '/homeLayout/homePage/banner/banner_2.webp', price: 45000, discount: 10 },
-      { id: 29, name: 'Gà tre...', image: '/homeLayout/homePage/banner/banner_3.webp', price: 160000, discount: 5 },
-    ],
-  },
-  {
-    id: 10,
-    name: 'Đặc Sản Miền Núi',
-    avatar: '/homeLayout/homePage/banner/banner_1.webp',
-    sold: 78,
-    rating: 4.4,
-    trusted: false,
-    products: [
-      { id: 30, name: 'Rau dớn rừng...', image: '/homeLayout/homePage/banner/banner_2.webp', price: 55000, discount: 0 },
-      { id: 31, name: 'Măng vầu...', image: '/homeLayout/homePage/banner/banner_3.webp', price: 35000, discount: 20 },
-    ],
-  },
-  {
-    id: 11,
-    name: 'OCOP Hải Dương',
-    avatar: '/homeLayout/homePage/banner/banner_2.webp',
-    sold: 312,
-    rating: 4.7,
-    trusted: true,
-    products: [
-      { id: 32, name: 'Bánh đậu xanh Rồng Vàng...', image: '/homeLayout/homePage/banner/banner_1.webp', price: 85000, discount: 15 },
-      { id: 33, name: 'Rượu nho...', image: '/homeLayout/homePage/banner/banner_2.webp', price: 120000, discount: 0 },
-      { id: 34, name: 'Mè xửng...', image: '/homeLayout/homePage/banner/banner_3.webp', price: 65000, discount: 10 },
-      { id: 35, name: 'Trà sen...', image: '/homeLayout/homePage/banner/banner_1.webp', price: 180000, discount: 25 },
-    ],
-  },
-  {
-    id: 12,
-    name: 'Nông Sản Vĩnh Phúc',
-    avatar: '/homeLayout/homePage/banner/banner_3.webp',
-    sold: 156,
-    rating: 4.5,
-    trusted: false,
-    products: [
-      { id: 36, name: 'Đà điểu Tam Đảo...', image: '/homeLayout/homePage/banner/banner_1.webp', price: 450000, discount: 0 },
-      { id: 37, name: 'Nấm linh chi...', image: '/homeLayout/homePage/banner/banner_2.webp', price: 320000, discount: 10 },
-    ],
-  },
-  {
-    id: 13,
-    name: 'Shop Qùa Tặng OCOP',
-    avatar: '/homeLayout/homePage/banner/banner_1.webp',
-    sold: 892,
-    rating: 5,
-    trusted: true,
-    products: [
-      { id: 38, name: 'Giỏ quà Tết OCOP...', image: '/homeLayout/homePage/banner/banner_2.webp', price: 550000, discount: 10 },
-      { id: 39, name: 'Hộp quà Trung thu...', image: '/homeLayout/homePage/banner/banner_3.webp', price: 380000, discount: 0 },
-      { id: 40, name: 'Set quà tặng doanh nghiệp...', image: '/homeLayout/homePage/banner/banner_1.webp', price: 890000, discount: 15 },
-    ],
-  },
-  {
-    id: 14,
-    name: 'Đặc Sản Khánh Hòa',
-    avatar: '/homeLayout/homePage/banner/banner_2.webp',
-    sold: 234,
-    rating: 4.6,
-    trusted: false,
-    products: [
-      { id: 41, name: 'Yến sào Nha Trang...', image: '/homeLayout/homePage/banner/banner_1.webp', price: 1200000, discount: 5 },
-      { id: 42, name: 'Nước mắm Phú Quốc...', image: '/homeLayout/homePage/banner/banner_3.webp', price: 85000, discount: 20 },
-    ],
-  },
-  {
-    id: 15,
-    name: 'Thực Phẩm Sạch Đà Lạt',
-    avatar: '/homeLayout/homePage/banner/banner_3.webp',
-    sold: 1067,
-    rating: 4.8,
-    trusted: true,
-    products: [
-      { id: 43, name: 'Dâu tây Đà Lạt...', image: '/homeLayout/homePage/banner/banner_1.webp', price: 120000, discount: 25 },
-      { id: 44, name: 'Atisô Đà Lạt...', image: '/homeLayout/homePage/banner/banner_2.webp', price: 95000, discount: 0 },
-      { id: 45, name: 'Rau củ hữu cơ...', image: '/homeLayout/homePage/banner/banner_3.webp', price: 65000, discount: 15 },
-      { id: 46, name: 'Mứt hồng...', image: '/homeLayout/homePage/banner/banner_1.webp', price: 75000, discount: 30 },
-      { id: 47, name: 'Trà Atisô...', image: '/homeLayout/homePage/banner/banner_2.webp', price: 110000, discount: 0 },
-    ],
-  },
-]
-
-const provinces = [
-  'Hà Nội', 'Hồ Chí Minh', 'Đà Nẵng', 'Hải Phòng', 'Cần Thơ',
-  'Bình Dương', 'Đồng Nai', 'Khánh Hòa', 'Thanh Hóa', 'Nghệ An',
-]
+import { stores, provinces } from '../../../data/products'
 
 const categories = ['Tất cả', 'OCOP', 'Nông sản và Thực phẩm', 'Sức khỏe và làm đẹp']
 
@@ -237,7 +33,7 @@ export default function Storelist() {
 
       <div className="flex gap-6 py-6">
         {/* Sidebar */}
-        <div className="w-[280px] shrink-0">
+        <div className="w-70 shrink-0">
           <div className="bg-white rounded-xl shadow-sm p-5 sticky top-24">
             <h2 className="text-lg font-bold text-gray-900 mb-5">Bộ lọc</h2>
 
@@ -379,9 +175,9 @@ export default function Storelist() {
                     </div>
                     <p className="text-sm text-black font-medium">Đánh giá</p>
                   </div>
-                  <button className="px-5 py-2 border border-primary text-primary text-base font-medium rounded-lg hover:bg-primary hover:text-white transition-colors">
+                  <Link to={`/store/${store.id}`} className="px-5 py-2 border border-primary text-primary text-base font-medium rounded-lg hover:bg-primary hover:text-white transition-colors">
                     Xem shop
-                  </button>
+                  </Link>
                 </div>
               </div>
 

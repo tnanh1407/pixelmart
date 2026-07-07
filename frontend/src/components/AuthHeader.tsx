@@ -10,8 +10,10 @@ export default function AuthHeader() {
             Kênh bán hàng
           </Link>
           <div className="flex items-center gap-6">
-            <Link to="/" className="transition-colors duration-300 hover:text-secondary font-medium">Gian hàng</Link>
-            <Link to="/" className="transition-colors duration-300 hover:text-secondary font-medium">Mã giảm giá</Link>
+            <Link to="/" className="transition-colors duration-300 hover:text-secondary font-medium">Tiếng Việt</Link>
+            <Link to="/" className="transition-colors duration-300 hover:text-secondary font-medium">Thông Báo</Link>
+            <Link to="/store-list" className="transition-colors duration-300 hover:text-secondary font-medium">Gian hàng</Link>
+            <Link to="/pointmall-voucher" className="transition-colors duration-300 hover:text-secondary font-medium">Mã giảm giá</Link>
           </div>
         </div>
       </div>

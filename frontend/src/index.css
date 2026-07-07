@@ -30,3 +30,8 @@ html {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Swiper product gallery styles */
+.product-thumbs-swiper .swiper-slide-thumb-active {
+  border-color: var(--color-primary) !important;
+}

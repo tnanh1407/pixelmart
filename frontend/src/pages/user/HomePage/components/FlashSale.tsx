@@ -5,18 +5,8 @@ import { Navigation } from 'swiper/modules'
 import { useRef, useState, useEffect } from 'react'
 import 'swiper/css'
 import 'swiper/css/navigation'
-
-const flashSaleProducts = [
-  { id: 1, name: 'Combo thịt gác bếp Cao Lan', image: '/homeLayout/homePage/banner/banner_1.webp', originalPrice: 345000, salePrice: 289000, discount: 15 },
-  { id: 2, name: 'OCOP - Đông Trùng Hạ Thảo Tam Đào Sấy Thăng Hoa', image: '/homeLayout/homePage/banner/banner_2.webp', originalPrice: 275000, salePrice: 190000, discount: 31 },
-  { id: 3, name: 'OCOP - Mật Ong Đông Trùng Hạ Thảo Tam Đào - Hũ 400g', image: '/homeLayout/homePage/banner/banner_3.webp', originalPrice: 380000, salePrice: 250000, discount: 34 },
-  { id: 4, name: 'OCOP - Đông Trùng Hạ Thảo Tam Đào Sấy Thăng Hoa', image: '/homeLayout/homePage/banner/banner_1.webp', originalPrice: 528000, salePrice: 350000, discount: 34 },
-  { id: 5, name: 'OCOP - Hành tím Vĩnh Châu Sóc Trăng - 5kg', image: '/homeLayout/homePage/banner/banner_2.webp', originalPrice: 190000, salePrice: 175000, discount: 8 },
-]
-
-const formatPrice = (price: number) => {
-  return new Intl.NumberFormat('vi-VN').format(price) + 'đ'
-}
+import ProductCard from '../../../../components/ProductCard'
+import { flashSaleProducts } from '../../../../data/products'
 
 const CountdownTimer = () => {
   const [time, setTime] = useState({ days: 181, hours: 21, minutes: 53, seconds: 39 })
@@ -41,10 +31,10 @@ const CountdownTimer = () => {
 
   const TimeBlock = ({ value, label }: { value: number; label: string }) => (
     <div className="flex flex-col items-center">
-      <div className="bg-white text-red-600 font-bold px-3 py-1.5 rounded-lg text-base min-w-[48px] text-center shadow-md">
+      <div className="bg-white text-red-600 font-bold px-3 py-1.5  text-base min-w-12 text-center shadow-md">
         {String(value).padStart(2, '0')}
       </div>
-      <span className="text-white text-[10px] mt-1 opacity-80">{label}</span>
+      <span className="text-white text-md mt-1 opacity-80">{label}</span>
     </div>
   )
 
@@ -66,8 +56,9 @@ export default function FlashSale() {
 
   return (
     <section className="w-full max-w-350 mx-auto mt-10">
+       <h2 className="text-2xl font-bold text-primary mb-6 capitalize">Giảm giá mạnh</h2>
       {/* Header */}
-      <div className="bg-gradient-to-r from-red-600 via-red-500 to-orange-500 rounded-t-2xl px-6 py-5 flex items-center justify-between">
+      <div className="bg-linear-to-r from-red-600 via-red-500 to-orange-500 rounded-t-2xl px-6 py-5 flex items-center justify-between">
         <div className="flex items-center gap-8">
           {/* Logo FlashSale */}
           <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl">
@@ -121,30 +112,7 @@ export default function FlashSale() {
           >
             {flashSaleProducts.map((product) => (
               <SwiperSlide key={product.id}>
-                <Link to={`/product/${product.id}`} className="block group">
-                  <div className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-xl hover:border-red-200 hover:-translate-y-1 transition-all duration-300">
-                    <div className="relative h-[180px] overflow-hidden">
-                      <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                      <div className="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-orange-500 text-white text-[11px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
-                        <div className="bg-white p-0.5 rounded-full">
-                          <Zap size={10} className="text-red-500 fill-red-500" />
-                        </div>
-                        FlashSale
-                      </div>
-                      <div className="absolute top-2 right-2 bg-orange-500 text-white text-[10px] font-bold px-2 py-1 rounded">
-                        GIẢM {product.discount}%
-                      </div>
-                    </div>
-                    <div className="p-3">
-                      <h3 className="text-sm font-medium text-gray-800 line-clamp-2 h-10 mb-2">{product.name}</h3>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-gray-400 text-xs line-through">{formatPrice(product.originalPrice)}</span>
-                        <span className="bg-green-100 text-green-700 text-[10px] font-medium px-1.5 py-0.5 rounded">GIẢM {product.discount}%</span>
-                      </div>
-                      <span className="text-red-500 font-bold text-base">{formatPrice(product.salePrice)}</span>
-                    </div>
-                  </div>
-                </Link>
+                <ProductCard product={product} />
               </SwiperSlide>
             ))}
           </Swiper>

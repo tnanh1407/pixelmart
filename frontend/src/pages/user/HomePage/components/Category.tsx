@@ -9,7 +9,6 @@ import 'swiper/css/navigation'
 const categories = [
   { id: 1, name: 'Đồ uống', image: '/homeLayout/homePage/category/category (ocop).png', color: 'bg-sky-300', link: '/products?category=drinks' },
   { id: 2, name: 'Sức khỏe và làm đẹp', image: null, color: 'bg-pink-300', link: '/products?category=health' },
-  { id: 3, name: 'Tất cả sản phẩm', image: null, color: 'bg-emerald-300', link: '/products' },
   { id: 4, name: 'Sản phẩm Ocop', image: '/homeLayout/homePage/category/category (ocop).png', color: 'bg-yellow-300', link: '/products?category=ocop' },
   { id: 5, name: 'Thực phẩm và đặc sản', image: null, color: 'bg-orange-300', link: '/products?category=food' },
   { id: 6, name: 'Nông sản tươi', image: null, color: 'bg-lime-300', link: '/products?category=fresh' },
@@ -24,9 +23,9 @@ export default function Category() {
 
   return (
     <section className="w-full max-w-350 mx-auto mt-10">
-      <h2 className="text-2xl font-bold text-[#009b4d] mb-6">Danh mục</h2>
+      <h2 className="text-2xl font-bold text-primary mb-6 capitalize">Danh mục</h2>
 
-      <div className="bg-white rounded-2xl p-6 shadow-sm">
+      <div className="bg-[url('/core/background.jpg')]  p-6 shadow-sm rounded-xl ">
         <div className="relative">
           <button
             onClick={() => swiperRef.current?.slidePrev()}
@@ -66,7 +65,7 @@ export default function Category() {
                     )}
                     <div className="absolute inset-0 bg-linear-to-r from-black/60 via-black/30 to-transparent"></div>
                     <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10">
-                      <h3 className="text-white font-bold text-[15px] leading-tight max-w-25 drop-shadow-md">{cat.name}</h3>
+                      <h3 className="text-white font-bold text-base leading-tight max-w-25 drop-shadow-md capitalize">{cat.name}</h3>
                     </div>
                   </div>
                 </Link>
