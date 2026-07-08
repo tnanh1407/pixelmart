@@ -4,7 +4,8 @@
     "rootDir": "src",
     "outDir": "dist",
     "noEmit": false,
-    "types": ["node"]
+    "allowImportingTsExtensions": false,
+    "types": []
   },
   "include": ["src"],
   "exclude": [
