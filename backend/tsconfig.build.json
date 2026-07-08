@@ -4,8 +4,8 @@
     "rootDir": "src",
     "outDir": "dist",
     "noEmit": false,
-    "allowImportingTsExtensions": false,
-    "types": []
+    "rewriteRelativeImportExtensions": true,
+    "types": ["node"]
   },
   "include": ["src"],
   "exclude": [
