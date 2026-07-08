@@ -5,7 +5,8 @@
     "outDir": "dist",
     "noEmit": false,
     "rewriteRelativeImportExtensions": true,
-    "types": ["node"]
+    "types": ["node"],
+    "typeRoots": ["./node_modules/@types"]
   },
   "include": ["src"],
   "exclude": [
