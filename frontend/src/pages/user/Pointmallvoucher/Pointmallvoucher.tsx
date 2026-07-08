@@ -108,16 +108,16 @@ export default function Pointmallvoucher() {
       <div className="relative w-full h-35 rounded-b-2xl overflow-hidden">
         <img src="/Pointmallvoucher/banner_Pointmallvoucher.png" alt="Banner" className="w-full h-full object-cover" />
         <div className="absolute inset-0 flex items-center justify-end pr-12">
-          <h1 className="text-3xl font-bold text-white drop-shadow-md">Mã giảm giá</h1>
+          <h1 className="text-3xl font-bold text-white drop-shadow-md capitalize">Mã giảm giá</h1>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="bg-white mt-4 rounded-t-xl">
+      <div className="bg-white mt-4 rounded-t-xl mb-20">
         <div className="flex border-b border-gray-200 px-6">
           <button
             onClick={() => setActiveTab('discount')}
-            className={`px-4 py-3 text-base font-medium transition-colors relative ${
+            className={`px-4 py-3 text-base font-medium transition-colors relative capitalize ${
               activeTab === 'discount' ? 'text-primary' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
@@ -128,7 +128,7 @@ export default function Pointmallvoucher() {
           </button>
           <button
             onClick={() => setActiveTab('shipping')}
-            className={`px-4 py-3 text-base font-medium transition-colors relative ${
+            className={`px-4 py-3 text-base font-medium transition-colors relative capitalize ${
               activeTab === 'shipping' ? 'text-primary' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
@@ -150,22 +150,22 @@ export default function Pointmallvoucher() {
             filteredVouchers.map((voucher) => (
               <div key={voucher.id} className="flex items-stretch bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                 {/* Icon Section */}
-                <div className="flex flex-col items-center justify-center bg-secondary px-5 py-4 w-25 relative">
+                <div className="flex flex-col items-center justify-center bg-secondary px-5 py-4 w-30 relative">
                   <div className="absolute top-0 left-0 w-3 h-3 bg-white rounded-full -translate-x-1.5" />
                   <div className="absolute bottom-0 left-0 w-3 h-3 bg-white rounded-full -translate-x-1.5" />
                   <div className="text-white mb-1">
                     {voucher.type === 'discount' ? <Gift size={36} /> : <Truck size={36} />}
                   </div>
-                  <span className="text-white text-xs font-semibold text-center leading-tight">
+                  <span className="text-white text-sm font-semibold text-center leading-tight capitalize">
                     {voucher.type === 'discount' ? 'Quà tặng' : 'Vận chuyển'}
                   </span>
                 </div>
 
                 {/* Voucher Info */}
                 <div className="w-1/2 px-4 py-3 flex flex-col justify-center">
-                  <h3 className="text-base font-bold text-gray-900 mb-1">{voucher.code}</h3>
+                  <h3 className="text-xl font-medium text-gray-900 mb-1">{voucher.code}</h3>
                   <p className="text-sm text-gray-500 mb-2">{voucher.description}</p>
-                  <div className="flex items-center gap-2 text-xs">
+                  <div className="flex items-center gap-2 text-sm">
                     <span className="text-gray-400">Hạn sử dụng: {voucher.expiry}</span>
                     <span
                       className="text-primary cursor-pointer hover:underline"
@@ -178,7 +178,7 @@ export default function Pointmallvoucher() {
 
                 {/* Save Button */}
                 <div className="flex items-center ml-18">
-                  <button className="px-5 py-2 border border-primary text-primary text-sm font-medium rounded-full hover:bg-primary hover:text-white transition-colors whitespace-nowrap">
+                  <button className="px-5 py-2 border border-primary text-primary text-base font-medium rounded-full hover:bg-primary hover:text-white transition-colors whitespace-nowrap capitalize cursor-pointer">
                     Lưu ngay
                   </button>
                 </div>

@@ -93,21 +93,25 @@ export default function Cart() {
   }
 
   return (
-    <div className="w-full max-w-350 mx-auto py-6">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Giỏ hàng ({cartItems.length})</h1>
+    <div className="w-full max-w-350 mx-auto space-y-3 mb-20">
+      {/* Banner */}
+      <div className="relative w-full h-35 rounded-b-2xl overflow-hidden">
+        <img src="/Pointmallvoucher/banner_Pointmallvoucher.png" alt="Banner" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 flex items-center justify-end pr-12">
+          <h1 className="text-3xl font-bold text-white drop-shadow-md capitalize">Giỏ hàng ({cartItems.length})</h1>
+        </div>
+      </div>
 
       {/* Select All */}
-      <div className="flex items-center gap-3 bg-white border border-gray-100 rounded-xl px-4 py-3 mb-3 shadow-sm">
-        <label className="flex items-center gap-3 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={isAllSelected}
-            onChange={toggleSelectAll}
-            className="w-5 h-5 rounded border-gray-300 text-primary accent-primary cursor-pointer"
-          />
-          <span className="text-sm font-medium text-gray-700">Chọn tất cả ({cartItems.length} sản phẩm)</span>
-        </label>
-      </div>
+      <label className="flex items-center gap-3 py-3 mb-3 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={isAllSelected}
+          onChange={toggleSelectAll}
+          className="w-5 h-5 rounded border-gray-300 text-primary accent-primary cursor-pointer"
+        />
+        <span className="text-base font-medium text-gray-700 capitalize">Chọn tất cả sản phẩm</span>
+      </label>
 
       <div className="flex gap-6">
         {/* Cart Items */}
@@ -115,11 +119,10 @@ export default function Cart() {
           {cartItems.map((item) => (
             <div
               key={item.id}
-              className={`flex items-center bg-white rounded-2xl overflow-hidden shadow-sm border-2 transition-all ${
-                selectedIds.includes(item.id)
-                  ? 'border-primary shadow-md'
-                  : 'border-transparent hover:border-gray-200'
-              }`}
+              className={`cursor-pointer flex items-center bg-white rounded-2xl overflow-hidden shadow-sm border-2 transition-all ${selectedIds.includes(item.id)
+                ? 'border-primary shadow-md'
+                : 'border-transparent hover:border-gray-200'
+                }`}
             >
               {/* Checkbox */}
               <div className="flex items-center px-4 shrink-0">
@@ -137,8 +140,8 @@ export default function Cart() {
               </div>
 
               {/* Info */}
-              <div className="flex-1 px-5 py-4 min-w-0">
-                <h3 className="text-base font-semibold text-gray-800 line-clamp-1 mb-1.5">{item.name}</h3>
+              <div className="flex-1 px-5 py-4 min-w-0 ">
+                <h3 className="text-base font-semibold text-gray-800 line-clamp-1 mb-1.5 capitalize">{item.name}</h3>
                 <div className="flex items-baseline gap-2 mb-3">
                   <span className="text-primary font-bold text-lg">{formatPrice(item.price)}</span>
                   <span className="text-gray-400 text-sm line-through">{formatPrice(item.originalPrice)}</span>
@@ -167,14 +170,14 @@ export default function Cart() {
 
               {/* Right: Total + Delete */}
               <div className="flex items-center gap-3 px-5 shrink-0">
-                <span className="text-base font-bold text-gray-900 whitespace-nowrap">
+                <span className="text-lg font-bold text-gray-900 whitespace-nowrap">
                   {formatPrice(item.price * item.quantity)}
                 </span>
                 <button
                   onClick={() => removeItem(item.id)}
-                  className="p-2.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
+                  className="cursor-pointer p-2.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
                 >
-                  <Trash2 size={18} />
+                  <Trash2 size={20} />
                 </button>
               </div>
             </div>
@@ -184,7 +187,7 @@ export default function Cart() {
         {/* Summary */}
         <div className="w-[320px] shrink-0">
           <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-5 sticky top-24">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">Tóm tắt đơn hàng</h2>
+            <h2 className="text-lg font-bold text-gray-900 mb-4 capitalize">Tóm tắt đơn hàng</h2>
 
             {/* Voucher */}
             <div className="flex items-center gap-2 border border-gray-200 rounded-lg px-3 py-2.5 mb-4">
@@ -194,7 +197,7 @@ export default function Cart() {
                 placeholder="Nhập mã giảm giá"
                 className="flex-1 text-sm outline-none bg-transparent placeholder:text-gray-400"
               />
-              <button className="text-primary text-sm font-medium hover:underline whitespace-nowrap">
+              <button className="cursor-pointer text-primary text-sm font-medium hover:text-secondary whitespace-nowrap capitalize">
                 Áp dụng
               </button>
             </div>
@@ -202,7 +205,7 @@ export default function Cart() {
             <div className="space-y-3 text-sm mb-4">
               <div className="flex justify-between">
                 <span className="text-gray-500">Đã chọn</span>
-                <span className="font-medium text-gray-900">{selectedIds.length}/{cartItems.length} sản phẩm</span>
+                <span className="font-medium text-gray-900">{totalQuantity} sản phẩm</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">Tạm tính</span>
@@ -242,7 +245,7 @@ export default function Cart() {
 
             <div className="border-t border-gray-100 pt-4 mb-4">
               <div className="flex justify-between">
-                <span className="text-base font-bold text-gray-900">Tổng cộng</span>
+                <span className="text-base font-bold text-gray-900 capitalize">Tổng cộng</span>
                 <span className="text-base font-bold text-primary">
                   {selectedIds.length === 0 ? '0đ' : formatPrice(total)}
                 </span>
@@ -251,13 +254,12 @@ export default function Cart() {
 
             <button
               disabled={selectedIds.length === 0}
-              className={`w-full py-3 font-bold rounded-xl transition-colors ${
-                selectedIds.length === 0
-                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                  : 'bg-primary text-white hover:bg-primary-hover'
-              }`}
+              className={`capitalize w-full py-3 font-bold rounded-xl transition-colors ${selectedIds.length === 0
+                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                : 'bg-primary text-white hover:bg-primary-hover'
+                }`}
             >
-              Thanh toán ({totalQuantity})
+              Thanh toán
             </button>
           </div>
         </div>

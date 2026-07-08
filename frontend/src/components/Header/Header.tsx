@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
-import { Search, User, ShoppingCart, ChevronDown, Menu, X } from 'lucide-react'
+import { Search, User, ShoppingCart, ChevronDown, Menu, X, LogOut } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
+import { useAuth } from '@/hooks/useAuth'
+import { useLogoutMutation } from '@/hooks/useAuthMutations'
 
 const categories = [
   'Hạnh nhân Vinh Châu',
@@ -16,10 +18,14 @@ const searchOptions = [
 ]
 
 export default function Header() {
+
   const [mobileOpen, setMobileOpen] = useState(false)
   const [searchType, setSearchType] = useState(searchOptions[0])
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+
+  const { user, isAuthenticated } = useAuth()
+  const logoutMutation = useLogoutMutation()
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -31,19 +37,24 @@ export default function Header() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  const handleLogout = () => {
+    logoutMutation.mutate()
+  }
+
+
   return (
     <header className="w-full sticky top-0 z-50 font-sans">
       {/* Top bar - Green */}
-      <div className="bg-[#009b4d] text-white text-base py-2">
+      <div className="bg-primary text-white text-base py-2">
         <div className="max-w-350 mx-auto flex items-center justify-between h-9">
-          <Link to="/" className="transition-colors duration-300 hover:text-secondary font-medium">
+          <Link to="/" className="transition-colors duration-300 hover:text-secondary font-medium capitalize">
             Kênh bán hàng
           </Link>
           <div className="flex items-center gap-6">
-            <Link to="/" className="transition-colors duration-300 hover:text-secondary font-medium">Tiếng Việt</Link>
-            <Link to="/" className="transition-colors duration-300 hover:text-secondary font-medium">Thông báo</Link>
-            <Link to="/store-list" className="transition-colors duration-300 hover:text-secondary font-medium">Gian hàng</Link>
-            <Link to="/pointmall-voucher" className="transition-colors duration-300 hover:text-secondary font-medium">Mã giảm giá</Link>
+            <Link to="/" className="transition-colors duration-300 hover:text-secondary font-medium capitalize">Tiếng Việt</Link>
+            <Link to="/" className="transition-colors duration-300 hover:text-secondary font-medium capitalize">Thông báo</Link>
+            <Link to="/store-list" className="transition-colors duration-300 hover:text-secondary font-medium capitalize">Gian hàng</Link>
+            <Link to="/pointmall-voucher" className="transition-colors duration-300 hover:text-secondary font-medium capitalize">Mã giảm giá</Link>
           </div>
         </div>
       </div>
@@ -66,7 +77,7 @@ export default function Header() {
                 <div className="relative" ref={dropdownRef}>
                   <button
                     onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="cursor-pointer  flex items-center gap-1.5 h-full px-4 py-2.5 bg-gray-50 border-r border-gray-200 text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors rounded-l-lg"
+                    className="cursor-pointer capitalize flex items-center gap-1.5 h-full px-4 py-2.5 bg-gray-50 border-r border-gray-200 text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors rounded-l-lg"
                   >
                     <span>{searchType.label}</span>
                     <ChevronDown size={16} className={`text-gray-500 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
@@ -81,8 +92,7 @@ export default function Header() {
                             setSearchType(option)
                             setDropdownOpen(false)
                           }}
-                          className={`w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-green-50 transition-colors ${searchType.value === option.value ? 'text-primary font-semibold bg-green-50' : 'text-gray-700'
-                            }`}
+                          className={`cursor-pointer capitalize w-full flex text-base items-center gap-2 px-4 py-2.5 font-medium hover:bg-green-50 transition-colors ${searchType.value === option.value ? 'text-primary font-semibold bg-green-50' : 'text-gray-700'}`}
                         >
                           <span>{option.label}</span>
                           {searchType.value === option.value && (
@@ -104,7 +114,7 @@ export default function Header() {
                 />
 
                 {/* Search button */}
-                <button className="px-5 py-2.5 bg-primary text-white hover:bg-primary-hover transition-colors rounded-r-lg">
+                <button className="cursor-pointer px-5 py-2.5 bg-primary text-white hover:bg-primary-hover transition-colors rounded-r-lg">
                   <Search size={20} />
                 </button>
               </div>
@@ -115,8 +125,7 @@ export default function Header() {
                   <Link
                     key={cat}
                     to="/"
-                    className={`whitespace-nowrap hover:text-primary transition-colors ${cat === 'Đông trùng hạ thảo' ? 'text-primary font-semibold' : ''
-                      }`}
+                    className={`whitespace-nowrap hover:text-secondary transition-colors ${cat === 'Đông trùng hạ thảo' ? 'text-primary font-semibold' : ''}`}
                   >
                     {cat}
                   </Link>
@@ -126,13 +135,40 @@ export default function Header() {
 
             {/* Right actions */}
             <div className="flex items-center gap-5 shrink-0">
-              <Link to="/login" className="flex items-center gap-2 text-gray-700 hover:text-secondary transition-colors">
-                <User size={20} />
-                <span className="text-base font-medium hidden sm:inline">Đăng nhập</span>
-              </Link>
-              <Link to="/cart" className="flex items-center gap-2 text-gray-700 hover:text-secondary transition-colors">
-                <ShoppingCart size={20} />
-                <span className="text-base font-medium hidden sm:inline">Giỏ hàng</span>
+              {isAuthenticated ? (
+
+                <>
+                  {/* User info + Logout */}
+                  <div className="flex items-center gap-2 text-primary">
+                    <User size={22} />
+                    <span className="text-base font-medium hidden sm:inline capitalize">
+                      {user?.name}
+                    </span>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    disabled={logoutMutation.isPending}
+                    className="text-primary flex items-center gap-2 hover:text-secondary transition-colors cursor-pointer disabled:opacity-50"
+                  >
+                    <LogOut size={22} />
+                    <span className="text-base font-medium hidden sm:inline capitalize">
+                      {logoutMutation.isPending ? 'Đang đăng xuất...' : 'Đăng xuất'}
+                    </span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  {/* Login */}
+                  <Link to="/login" className="text-primary flex items-center gap-2 hover:text-secondary transition-colors">
+                    <User size={22} />
+                    <span className="text-base font-medium hidden sm:inline capitalize">Đăng nhập</span>
+                  </Link>
+                </>
+              )}
+              {/* Cart - luôn hiển thị */}
+              <Link to="/cart" className="text-primary flex items-center gap-2 hover:text-secondary transition-colors">
+                <ShoppingCart size={22} />
+                <span className="text-base font-medium hidden sm:inline capitalize">Giỏ hàng</span>
               </Link>
             </div>
 
@@ -161,7 +197,7 @@ export default function Header() {
         </div>
         <div className="flex items-center gap-3 mt-2 text-xs text-gray-600 overflow-x-auto">
           {categories.map((cat) => (
-            <Link key={cat} to="/" className="whitespace-nowrap hover:text-[#009b4d] transition-colors">
+            <Link key={cat} to="/" className="whitespace-nowrap hover:text-secondary transition-colors">
               {cat}
             </Link>
           ))}
@@ -172,12 +208,32 @@ export default function Header() {
       {mobileOpen && (
         <div className="md:hidden bg-white border-t border-gray-100 shadow-lg">
           <div className="px-4 py-3 space-y-2">
-            <Link to="/login" className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg" onClick={() => setMobileOpen(false)}>
-              Đăng nhập
-            </Link>
-            <Link to="/register" className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg" onClick={() => setMobileOpen(false)}>
-              Đăng ký
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <div className="px-3 py-2 text-primary font-medium">
+                  Xin chào, {user?.name}
+                </div>
+                <button
+                  onClick={() => {
+                    handleLogout()
+                    setMobileOpen(false)
+                  }}
+                  disabled={logoutMutation.isPending}
+                  className="w-full text-left px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg cursor-pointer"
+                >
+                  {logoutMutation.isPending ? 'Đang đăng xuất...' : 'Đăng xuất'}
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg" onClick={() => setMobileOpen(false)}>
+                  Đăng nhập
+                </Link>
+                <Link to="/register" className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg" onClick={() => setMobileOpen(false)}>
+                  Đăng ký
+                </Link>
+              </>
+            )}
             <Link to="/cart" className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg" onClick={() => setMobileOpen(false)}>
               Giỏ hàng
             </Link>

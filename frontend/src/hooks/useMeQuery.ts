@@ -1,0 +1,23 @@
+import { useQuery } from '@tanstack/react-query'
+import { authService } from '@/services/auth.service'
+import useUserStore from '@/stores/useUserStore'
+
+export function useMeQuery() {
+  const { setUser, logout } = useUserStore.getState()
+  const isAuthenticated = useUserStore((state) => state.isAuthenticated)
+
+  return useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const user = await authService.getMe()
+      setUser(user)
+      return user
+    },
+    enabled: isAuthenticated,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: false,
+    onError: () => {
+      logout()
+    },
+  })
+}

@@ -1,0 +1,15 @@
+import { Router } from "express";
+import authController from "../../controllers/auth.controller.js";
+import asyncHandler from "../../middlewares/asyncHandler.js";
+import { auth } from "../../middlewares/auth.middleware.js";
+
+const router = Router();
+
+router.post("/register", asyncHandler(authController.register.bind(authController)));
+router.post("/login", asyncHandler(authController.login.bind(authController)));
+router.post("/google", asyncHandler(authController.googleLogin.bind(authController)));
+router.post("/refresh", asyncHandler(authController.refreshToken.bind(authController)));
+router.post("/logout", asyncHandler(authController.logout.bind(authController)));
+router.get("/me", auth, asyncHandler(authController.getMe.bind(authController)));
+
+export default router;

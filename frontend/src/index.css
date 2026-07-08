@@ -8,6 +8,9 @@
   --color-primary: #049645;
   --color-primary-hover:#007a3d;
   --color-secondary: rgba(246, 158, 0, 1);
+  --color-red-error : rgb(252, 51, 93);
+  --color-text-second :rgb(54, 65, 83);
+  --color-text-second-light : rgb(152, 160, 174);
 }
 
 html {

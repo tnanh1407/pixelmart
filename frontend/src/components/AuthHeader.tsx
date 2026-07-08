@@ -4,8 +4,8 @@ export default function AuthHeader() {
   return (
     <header className="w-full sticky top-0 z-50 font-sans">
       {/* Top bar - Green */}
-      <div className="bg-primary text-white text-sm py-2 ">
-        <div className="max-w-350 mx-auto   flex items-center justify-between h-9">
+      <div className="bg-primary text-white text-base py-2 ">
+        <div className="max-w-350 mx-auto  flex items-center justify-between h-9">
           <Link to="/" className="transition-colors duration-300 hover:text-secondary font-medium">
             Kênh bán hàng
           </Link>

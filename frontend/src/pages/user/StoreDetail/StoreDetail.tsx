@@ -179,7 +179,7 @@ export default function StoreDetail() {
       </div>
 
       {/* Store Header Card */}
-      <div className="relative bg-white rounded-2xl shadow-sm mx-6 -mt-16 z-10 p-6 ">
+      <div className="relative bg-[url('/core/background.jpg')] rounded-2xl shadow-sm mx-6 -mt-16 z-10 p-6 ">
         <div className="flex items-start gap-10">
           {/* Avatar */}
           <div className="relative shrink-0">
@@ -197,16 +197,16 @@ export default function StoreDetail() {
           <div className=" min-w-0 ">
             <div className="flex items-center gap-2 mb-1">
               <h1 className="text-2xl font-bold text-gray-900">{store.name}</h1>
-            {store.isPreferred && (
-              <span className="bg-primary text-white text-sm font-medium px-2.5 py-0.5 border border-gray-300">
-                Preferred+
-              </span>
-            )}
+              {store.isPreferred && (
+                <span className="bg-primary text-white text-sm font-medium px-2.5 py-0.5 border border-gray-300">
+                  Preferred+
+                </span>
+              )}
             </div>
             <div className="flex justify-center text-base text-gray-500 flex-col font-medium">
               <span className="flex items-center gap-1"><Clock size={16} />Active 10 phút trước</span>
               <span className="flex items-center gap-1"><MapPin size={16} /> {store.address}</span>
-              
+
             </div>
 
             {/* Action Buttons */}
@@ -230,12 +230,12 @@ export default function StoreDetail() {
 
           {/* Stats */}
           <div className="grid grid-cols-2 gap-x-6 gap-y-2 shrink-0 text-base ml-40 flex-1 font-medium">
-            <div className="flex items-center gap-2"><Package size={16} className="text-gray-400 shrink-0" /><span className="text-gray-500">Products:</span> <span className="font-bold text-[#009b4d]">{store.products}</span></div>
-            <div className="flex items-center gap-2"><Eye size={16} className="text-gray-400 shrink-0" /><span className="text-gray-500">Followers:</span> <span className="font-bold text-[#009b4d]">{store.followers.toLocaleString()}</span></div>
-            <div className="flex items-center gap-2"><UserPlus size={16} className="text-gray-400 shrink-0" /><span className="text-gray-500">Following:</span> <span className="font-bold text-[#009b4d]">{store.following}</span></div>
-            <div className="flex items-center gap-2"><Star size={16} className="text-gray-400 shrink-0" /><span className="text-gray-500">Rating:</span> <span className="font-bold text-[#009b4d]">{store.rating} ({store.totalRating.toLocaleString()})</span></div>
-            <div className="flex items-center gap-2"><MessageSquare size={16} className="text-gray-400 shrink-0" /><span className="text-gray-500">Chat Performance:</span> <span className="font-bold text-[#009b4d]">{store.responseRate}% ({store.responseTime})</span></div>
-            <div className="flex items-center gap-2"><Calendar size={16} className="text-gray-400 shrink-0" /><span className="text-gray-500">Joined:</span> <span className="font-bold text-[#009b4d]">{store.joinDate}</span></div>
+            <div className="flex items-center gap-2"><Package size={16} className="text-black shrink-0" /><span className="text-black">Products:</span> <span className="font-bold text-[#009b4d]">{store.products}</span></div>
+            <div className="flex items-center gap-2"><Eye size={16} className="text-black shrink-0" /><span className="text-black">Followers:</span> <span className="font-bold text-[#009b4d]">{store.followers.toLocaleString()}</span></div>
+            <div className="flex items-center gap-2"><UserPlus size={16} className="text-black shrink-0" /><span className="text-black">Following:</span> <span className="font-bold text-[#009b4d]">{store.following}</span></div>
+            <div className="flex items-center gap-2"><Star size={16} className="text-black shrink-0" /><span className="text-black">Rating:</span> <span className="font-bold text-[#009b4d]">{store.rating} ({store.totalRating.toLocaleString()})</span></div>
+            <div className="flex items-center gap-2"><MessageSquare size={16} className="text-black shrink-0" /><span className="text-black">Chat Performance:</span> <span className="font-bold text-[#009b4d]">{store.responseRate}% ({store.responseTime})</span></div>
+            <div className="flex items-center gap-2"><Calendar size={16} className="text-black shrink-0" /><span className="text-black">Joined:</span> <span className="font-bold text-[#009b4d]">{store.joinDate}</span></div>
           </div>
         </div>
       </div>
@@ -267,17 +267,17 @@ export default function StoreDetail() {
 
             {/* About Shop */}
             <section className="bg-white rounded-2xl shadow-sm p-6">
-              <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <Info size={20} className="text-[#009b4d]" />
+              <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2 capitalize">
+                <Info size={22} className="text-primary" />
                 Giới thiệu shop
               </h2>
               <div className="space-y-5">
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Mô tả</h3>
+                  <h3 className="text-base font-semibold text-gray-500 uppercase tracking-wider mb-2 ">Mô tả</h3>
                   <p className="text-gray-700 leading-relaxed">{store.description}</p>
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Phân loại sản phẩm</h3>
+                  <h3 className="text-base font-semibold text-gray-500 uppercase tracking-wider mb-2">Phân loại sản phẩm</h3>
                   <div className="flex flex-wrap gap-2">
                     {store.categories.map((cat) => (
                       <span key={cat} className="bg-green-50 text-[#009b4d] px-3 py-1 rounded-full text-sm font-medium">{cat}</span>
@@ -298,7 +298,7 @@ export default function StoreDetail() {
             {/* Recommended For You */}
             <section>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-bold text-gray-800">Đề xuất cho bạn</h2>
+                <h2 className="text-xl font-bold uppercase text-primary">Đề xuất cho bạn</h2>
                 <button
                   onClick={() => setActiveTab('all')}
                   className="flex items-center gap-1 text-[#009b4d] text-sm font-medium hover:underline"
@@ -316,8 +316,8 @@ export default function StoreDetail() {
             {/* Hot Deals */}
             <section>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-                  <span className="text-red-500">🔥</span> Ưu đãi hot
+                <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2 uppercase">
+                  Ưu đãi hot
                 </h2>
                 <button
                   onClick={() => setActiveTab('all')}
