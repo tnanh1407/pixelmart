@@ -9,15 +9,17 @@ export function useMeQuery() {
   return useQuery({
     queryKey: ['user'],
     queryFn: async () => {
-      const user = await authService.getMe()
-      setUser(user)
-      return user
+      try {
+        const user = await authService.getMe()
+        setUser(user)
+        return user
+      } catch {
+        logout()
+        throw new Error('Unauthorized')
+      }
     },
     enabled: isAuthenticated,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,
     retry: false,
-    onError: () => {
-      logout()
-    },
   })
 }
