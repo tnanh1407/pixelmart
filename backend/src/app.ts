@@ -13,7 +13,18 @@ const app = express();
 
 app.use(helmet());
 app.use(cors({
-  origin: env.CLIENT_URL,
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      env.CLIENT_URL,
+      "https://www.tnanhdev.id.vn",
+      "https://tnanhdev.id.vn",
+    ];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
 }));
 app.use(cookieParser());
