@@ -1,9 +1,13 @@
 FROM node:22-alpine AS builder
 
+# đặt thư mục app làm việc trong container
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm ci
+# lệnh này copy file
+COPY package*.json ./ 
+
+# cài tất cả dependancies
+RUN npm ci 
 
 COPY . .
 RUN npm run build

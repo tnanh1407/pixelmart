@@ -5,3 +5,5 @@ coverage
 .git
 tests
 *.md
+.agents
+opencode.json
