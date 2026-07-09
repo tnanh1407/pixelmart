@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, Mail, Lock, Loader2 } from 'lucide-react'
 import { z } from 'zod'
@@ -95,6 +96,7 @@ export default function LoginPage() {
 
   return (
     <div className="w-full max-w-md font-sans">
+      <SpeedInsights />
       <div className="bg-white rounded-xl shadow-lg p-6">
         <h2 className="text-2xl font-bold text-center text-text-second mb-1 uppercase">Đăng nhập</h2>
         <p className="text-text-second-light text-center text-sm mb-5 capitalize">Chào mừng bạn quay trở lại!</p>
