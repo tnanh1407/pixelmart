@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Search, User, ShoppingCart, ChevronDown, Menu, X, LogOut } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 import { useAuth } from '@/hooks/useAuth'
@@ -23,6 +23,7 @@ export default function Header() {
   const [searchType, setSearchType] = useState(searchOptions[0])
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
 
   const { user, isAuthenticated } = useAuth()
   const logoutMutation = useLogoutMutation()
@@ -36,10 +37,6 @@ export default function Header() {
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
-
-  const handleLogout = () => {
-    logoutMutation.mutate()
-  }
 
 
   return (
@@ -136,25 +133,13 @@ export default function Header() {
             {/* Right actions */}
             <div className="flex items-center gap-5 shrink-0">
               {isAuthenticated ? (
-
                 <>
-                  {/* User info + Logout */}
-                  <div className="flex items-center gap-2 text-primary">
+                  <Link to="/user/profile" className="flex items-center gap-2 text-primary hover:text-primary-hover transition-colors">
                     <User size={22} />
                     <span className="text-base font-medium hidden sm:inline capitalize">
                       {user?.name}
                     </span>
-                  </div>
-                  <button
-                    onClick={handleLogout}
-                    disabled={logoutMutation.isPending}
-                    className="text-primary flex items-center gap-2 hover:text-secondary transition-colors cursor-pointer disabled:opacity-50"
-                  >
-                    <LogOut size={22} />
-                    <span className="text-base font-medium hidden sm:inline capitalize">
-                      {logoutMutation.isPending ? 'Đang đăng xuất...' : 'Đăng xuất'}
-                    </span>
-                  </button>
+                  </Link>
                 </>
               ) : (
                 <>
@@ -210,19 +195,13 @@ export default function Header() {
           <div className="px-4 py-3 space-y-2">
             {isAuthenticated ? (
               <>
-                <div className="px-3 py-2 text-primary font-medium">
-                  Xin chào, {user?.name}
-                </div>
-                <button
-                  onClick={() => {
-                    handleLogout()
-                    setMobileOpen(false)
-                  }}
-                  disabled={logoutMutation.isPending}
-                  className="w-full text-left px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg cursor-pointer"
+                <Link
+                  to="/user/profile"
+                  className="block px-3 py-2 text-primary font-medium hover:bg-gray-50 rounded-lg"
+                  onClick={() => setMobileOpen(false)}
                 >
-                  {logoutMutation.isPending ? 'Đang đăng xuất...' : 'Đăng xuất'}
-                </button>
+                  Xin chào, {user?.name}
+                </Link>
               </>
             ) : (
               <>

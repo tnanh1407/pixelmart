@@ -65,12 +65,6 @@ describe('LoginPage - Render & UI', () => {
     expect(link).toHaveAttribute('href', '/register')
   })
 
-  test('displays logo image', () => {
-    const logo = screen.getByRole('img', { name: /nông sản an việt/i })
-    expect(logo).toBeInTheDocument()
-    expect(logo).toHaveAttribute('src', '/core/logo_web_bg.svg')
-  })
-
   test('displays password toggle button', () => {
     const toggleButton = screen.getByRole('button', { name: '' })
     expect(toggleButton).toBeInTheDocument()
@@ -252,27 +246,6 @@ describe('LoginPage - User Interaction', () => {
     await user.click(checkbox)
     expect(checkbox).not.toBeChecked()
   })
-
-  test('calls console.log with form data when submitting valid form', async () => {
-    const user = userEvent.setup()
-    const consoleSpy = jest.spyOn(console, 'log').mockImplementation()
-    render(
-      <MemoryRouter>
-        <LoginPage />
-      </MemoryRouter>
-    )
-
-    await user.type(screen.getByPlaceholderText('email@example.com'), 'test@example.com')
-    await user.type(screen.getByPlaceholderText('Nhập mật khẩu'), '123456')
-    await user.click(screen.getByRole('button', { name: /đăng nhập$/i }))
-
-    expect(consoleSpy).toHaveBeenCalledWith('Login:', {
-      email: 'test@example.com',
-      password: '123456',
-    })
-
-    consoleSpy.mockRestore()
-  })
 })
 
 describe('LoginPage - Navigation', () => {
@@ -283,13 +256,6 @@ describe('LoginPage - Navigation', () => {
       </MemoryRouter>
     )
   }
-
-  test('logo links to home page', () => {
-    renderWithRouter()
-    const logo = screen.getByRole('img', { name: /nông sản an việt/i })
-    const logoLink = logo.closest('a')
-    expect(logoLink).toHaveAttribute('href', '/')
-  })
 
   test('"Quên mật khẩu?" links to forgot-password page', () => {
     renderWithRouter()

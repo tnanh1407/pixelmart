@@ -33,7 +33,7 @@ const errorHandler = (err: any, req: Request, res: Response, next: NextFunction)
 
   // todo1 : chạy vào zod
   if (err.name === "ZodError") {
-    const messages = err.errors.map((e: any) => e.message);
+    const messages = err.issues.map((e: any) => e.message);
     return res.status(400).json({
       status: "error",
       message: messages.join(", "),

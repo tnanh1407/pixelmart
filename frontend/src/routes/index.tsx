@@ -14,6 +14,10 @@ import ProductDetail from '../pages/user/ProductDetail/ProductDetail'
 import LoginPage from '../pages/auth/LoginPage/LoginPage'
 import RegisterPage from '../pages/auth/RegisterPage/RegisterPage'
 import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage/ForgotPasswordPage'
+import ResetPasswordPage from '../pages/auth/ResetPasswordPage/ResetPasswordPage'
+import VerifyEmailPage from '../pages/auth/VerifyEmailPage/VerifyEmailPage'
+import UserLayout from '../layouts/UserLayout'
+import ProfilePage from '../pages/user/Profile/ProfilePage'
 import DashboardPage from '../pages/admin/DashboardPage'
 import UsersPage from '../pages/admin/UsersPage'
 import NotFoundPage from '../pages/notFound/NotFoundPage'
@@ -44,6 +48,20 @@ const router = createBrowserRouter([
           { index: true, element: <ForgotPasswordPage /> },
         ],
       },
+      {
+        path: '/reset-password',
+        element: <AuthLayout />,
+        children: [
+          { index: true, element: <ResetPasswordPage /> },
+        ],
+      },
+      {
+        path: '/verify-email',
+        element: <AuthLayout />,
+        children: [
+          { index: true, element: <VerifyEmailPage /> },
+        ],
+      },
     ],
   },
 
@@ -70,6 +88,14 @@ const router = createBrowserRouter([
         element: <HomeLayout />,
         children: [
           { index: true, element: <Cart /> },
+        ],
+      },
+      {
+        path: '/user',
+        element: <UserLayout />,
+        children: [
+          { index: true, element: <ProfilePage /> },
+          { path: 'profile', element: <ProfilePage /> },
         ],
       },
     ],

@@ -42,7 +42,31 @@ export const loginSchema = z.object({
 export const googleLoginSchema = z.object({
   googleId: z.string().min(1, "Google ID is required"),
   email: z.string().email("Invalid email format"),
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  avatar: z.string().url("Invalid avatar URL").optional(),
+  name: z.string().min(2, "Name is required"),
+  avatar: z.string().optional(),
+});
+
+export const verifyEmailSchema = z.object({
+  code: z
+    .string()
+    .length(6, "Verification code must be 6 digits")
+    .regex(/^\d+$/, "Verification code must contain only numbers"),
+});
+
+export const resendVerificationSchema = z.object({});
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email("Invalid email format"),
+});
+
+export const resetPasswordSchema = z.object({
+  token: z.string().min(1, "Reset token is required"),
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .max(100, "Password must be less than 100 characters"),
+  confirmPassword: z.string().min(1, "Confirm password is required"),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
 });

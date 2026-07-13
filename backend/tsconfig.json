@@ -1,4 +1,7 @@
 {
+  "compilerOptions": {
+    "jsx": "react"
+  },
   "extends": "./tsconfig.base.json",
   "include": ["src", "tests", "src/types", "src/utils/bcrypt.tsjson", "tsconfig.eslint.json", "tsconfig.build.json", "bcrypt.ts", "tsconfig.base.json", "jest.config.cjs", "eslint.config.cjs"]
 }

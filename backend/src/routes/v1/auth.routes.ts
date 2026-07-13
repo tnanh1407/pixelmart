@@ -12,4 +12,11 @@ router.post("/refresh", asyncHandler(authController.refreshToken.bind(authContro
 router.post("/logout", asyncHandler(authController.logout.bind(authController)));
 router.get("/me", auth, asyncHandler(authController.getMe.bind(authController)));
 
+router.post("/send-verification", auth, asyncHandler(authController.sendVerificationCode.bind(authController)));
+router.post("/verify-email", auth, asyncHandler(authController.verifyEmail.bind(authController)));
+router.post("/resend-verification", auth, asyncHandler(authController.resendVerificationCode.bind(authController)));
+
+router.post("/forgot-password", asyncHandler(authController.forgotPassword.bind(authController)));
+router.post("/reset-password", asyncHandler(authController.resetPassword.bind(authController)));
+
 export default router;

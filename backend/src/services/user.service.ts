@@ -1,7 +1,7 @@
 import userRepository from "../repositories/user.repository.js";
 import { type IUser } from "../models/user.model.js";
 import { AppError } from "../middlewares/error.middleware.js";
-import { ObjectId } from "mongoose";
+import cloudinary from "../config/cloudinary.js";
 
 class UserService {
   async createUser(data: Partial<IUser>) {
@@ -65,6 +65,45 @@ class UserService {
       throw new AppError("User not found", 404);
     }
     return await userRepository.delete(id);
+  }
+
+  async toggleActive(id: string) {
+    const user = await userRepository.findById(id);
+    if (!user) {
+      throw new AppError("User not found", 404);
+    }
+
+    const updatedUser = await userRepository.update(id, { isActive: !user.isActive });
+    return updatedUser;
+  }
+
+  async uploadAvatar(userId: string, file: Express.Multer.File) {
+    const user = await userRepository.findById(userId);
+    if (!user) {
+      throw new AppError("User not found", 404);
+    }
+
+    if (user.avatar && user.avatar.includes("cloudinary")) {
+      const parts = user.avatar.split("/");
+      const filename = parts[parts.length - 1];
+      const publicId = filename.split(".")[0];
+      await cloudinary.uploader.destroy(`pixelmart/avatars/${publicId}`);
+    }
+
+    const b64 = Buffer.from(file.buffer).toString("base64");
+    const dataURI = `data:${file.mimetype};base64,${b64}`;
+    const result = await cloudinary.uploader.upload(dataURI, {
+      folder: "pixelmart/avatars",
+      public_id: userId,
+      format: "webp",
+      overwrite: true,
+      transformation: [
+        { width: 256, height: 256, crop: "fill", quality: "auto" },
+      ],
+    });
+
+    const updatedUser = await userRepository.update(userId, { avatar: result.secure_url });
+    return updatedUser;
   }
 }
 

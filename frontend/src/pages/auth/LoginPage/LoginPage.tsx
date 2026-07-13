@@ -5,10 +5,10 @@ import { Eye, EyeOff, Mail, Lock, Loader2 } from 'lucide-react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { GoogleLogin, type CredentialResponse } from '@react-oauth/google'
-import { jwtDecode } from 'jwt-decode'
+import { GoogleLogin } from '@react-oauth/google'
 import Swal from 'sweetalert2'
-import { useLoginMutation, useGoogleLoginMutation } from '@/hooks/useAuthMutations'
+import { useLoginMutation } from '@/hooks/useAuthMutations'
+import { useGoogleAuth } from '@/hooks/useGoogleAuth'
 
 const loginSchema = z.object({
   email: z.string().min(1, 'Email không được để trống').email('Email không hợp lệ'),
@@ -17,21 +17,13 @@ const loginSchema = z.object({
 
 type LoginFormData = z.infer<typeof loginSchema>
 
-interface GoogleJwtPayload {
-  sub: string
-  email: string
-  given_name: string
-  family_name: string
-  picture?: string
-}
-
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [remember, setRemember] = useState(false)
   const navigate = useNavigate()
 
   const loginMutation = useLoginMutation()
-  const googleLoginMutation = useGoogleLoginMutation()
+  const { handleGoogleSuccess, handleGoogleError, isPending: isGooglePending } = useGoogleAuth()
 
   const {
     register,
@@ -46,53 +38,37 @@ export default function LoginPage() {
     loginMutation.mutate(data, {
       onSuccess: () => navigate('/'),
       onError: (err: any) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Đăng nhập thất bại',
-          text: err?.response?.data?.message || 'Đăng nhập thất bại',
-          confirmButtonColor: '#049645',
-        })
-      },
-    })
-  }
+        const message = err?.response?.data?.message || 'Đăng nhập thất bại'
+        const isUnverified = message.toLowerCase().includes('email not verified')
 
-  const handleGoogleSuccess = (credentialResponse: CredentialResponse) => {
-    if (!credentialResponse.credential) return
-
-    const decoded = jwtDecode<GoogleJwtPayload>(credentialResponse.credential)
-
-    googleLoginMutation.mutate(
-      {
-        googleId: decoded.sub,
-        email: decoded.email,
-        firstName: decoded.given_name,
-        lastName: decoded.family_name,
-        avatar: decoded.picture,
-      },
-      {
-        onSuccess: () => navigate('/'),
-        onError: (err: any) => {
+        if (isUnverified) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Email chưa được xác thực',
+            text: message,
+            showCancelButton: true,
+            confirmButtonText: 'Xác thực ngay',
+            cancelButtonText: 'Đóng',
+            confirmButtonColor: '#049645',
+            cancelButtonColor: '#6b7280',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              navigate('/verify-email')
+            }
+          })
+        } else {
           Swal.fire({
             icon: 'error',
-            title: 'Đăng nhập Google thất bại',
-            text: err?.response?.data?.message || 'Đăng nhập Google thất bại',
+            title: 'Đăng nhập thất bại',
+            text: message,
             confirmButtonColor: '#049645',
           })
-        },
-      }
-    )
-  }
-
-  const handleGoogleError = () => {
-    Swal.fire({
-      icon: 'error',
-      title: 'Đăng nhập Google thất bại',
-      text: 'Đăng nhập Google thất bại',
-      confirmButtonColor: '#049645',
+        }
+      },
     })
   }
 
-  const isPending = loginMutation.isPending || googleLoginMutation.isPending
+  const isPending = loginMutation.isPending || isGooglePending
 
   return (
     <div className="w-full max-w-md font-sans">

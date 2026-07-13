@@ -17,6 +17,7 @@ export interface IUser {
   isActive: boolean;
 }
 
+
 export interface IUserDocument extends IUser, mongoose.Document {
   createdAt: Date;
   updatedAt: Date;

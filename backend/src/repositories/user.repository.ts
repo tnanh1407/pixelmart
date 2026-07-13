@@ -1,3 +1,4 @@
+import { hashPassword } from "~/utils/bcrypt.ts";
 import User, { type IUser, type IUserDocument } from "../models/user.model.js";
 
 interface PaginationOptions {
@@ -68,15 +69,16 @@ class UserRepository {
     id: string,
     data: Partial<IUser>
   ): Promise<IUserDocument | null> {
-    return await User.findByIdAndUpdate(id, data, { new: true });
+    return await User.findByIdAndUpdate(id, data, { returnDocument: "after" });
   }
 
   async updatePassword(id: string, password: string): Promise<IUserDocument | null> {
-    return await User.findByIdAndUpdate(id, { password }, { new: true });
+    const hashed = await hashPassword(password);
+    return await User.findByIdAndUpdate(id, {password : hashed }, { returnDocument: "after" });
   }
 
   async updateEmailVerified(id: string, isEmailVerified: boolean): Promise<IUserDocument | null> {
-    return await User.findByIdAndUpdate(id, { isEmailVerified }, { new: true });
+    return await User.findByIdAndUpdate(id, { isEmailVerified }, { returnDocument: "after" });
   }
 
   async delete(id: string): Promise<IUserDocument | null> {

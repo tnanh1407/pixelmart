@@ -1,10 +1,14 @@
 import { type Request, type Response } from "express";
 import authService from "../services/auth.service.js";
+import emailVerificationService from "../services/email-verification.service.js";
 import env from "../config/env.js";
 import {
   registerSchema,
   loginSchema,
   googleLoginSchema,
+  verifyEmailSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
 } from "../validators/user.validator.js";
 
 const isProduction = env.NODE_ENV === "production";
@@ -43,8 +47,8 @@ export class AuthController {
   }
 
   async login(req: Request, res: Response) {
-    const { email, password } = loginSchema.parse(req.body);
-    const result = await authService.login(email, password);
+    const data = loginSchema.parse(req.body);
+    const result = await authService.login(data);
 
     this.setTokenCookies(res, result.accessToken, result.refreshToken);
 
@@ -56,8 +60,8 @@ export class AuthController {
   }
 
   async googleLogin(req: Request, res: Response) {
-    const { googleId, email, firstName, lastName, avatar } = googleLoginSchema.parse(req.body);
-    const result = await authService.googleLogin(googleId, email, firstName, lastName, avatar);
+    const data = googleLoginSchema.parse(req.body);
+    const result = await authService.googleLogin(data);
 
     this.setTokenCookies(res, result.accessToken, result.refreshToken);
 
@@ -101,9 +105,69 @@ export class AuthController {
   async getMe(req: Request, res: Response) {
     const userId = String(req.user?.userId);
     const user = await authService.getMe(userId);
+
+    if (!user.isActive) {
+      res.status(403).json({
+        success: false,
+        message: "Tài khoản đã bị khóa. Vui lòng liên hệ quản trị viên.",
+      });
+      return;
+    }
+
     res.json({
       success: true,
       data: user,
+    });
+  }
+
+  async sendVerificationCode(req: Request, res: Response) {
+    const userId = String(req.user?.userId);
+    await emailVerificationService.sendVerificationCode(userId);
+
+    res.json({
+      success: true,
+      message: "Verification code sent successfully",
+    });
+  }
+
+  async verifyEmail(req: Request, res: Response) {
+    const userId = String(req.user?.userId);
+    const { code } = verifyEmailSchema.parse(req.body);
+    await emailVerificationService.verifyEmail(userId, code);
+
+    res.json({
+      success: true,
+      message: "Email verified successfully",
+    });
+  }
+
+  async resendVerificationCode(req: Request, res: Response) {
+    const userId = String(req.user?.userId);
+    await emailVerificationService.resendVerificationCode(userId);
+
+    res.json({
+      success: true,
+      message: "Verification code resent successfully",
+    });
+  }
+
+  async forgotPassword(req: Request, res: Response) {
+    const { email } = forgotPasswordSchema.parse(req.body);
+    await authService.forgotPassword(email);
+
+    res.json({
+      success: true,
+      message: "If the email exists, a reset link has been sent",
+    });
+  }
+
+  async resetPassword(req: Request, res: Response) {
+    const { token, password } = resetPasswordSchema.parse(req.body);
+    await authService.resetPassword(token, password);
+
+    res.json({
+      success: true,
+      message: "Password reset successfully",
     });
   }
 }

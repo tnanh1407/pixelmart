@@ -25,6 +25,7 @@ interface UserState {
   logout: () => Promise<void>
   fetchUser: () => Promise<void>
   setUser: (user: User) => void
+  uploadAvatar: (file: File) => Promise<void>
 }
 
 const useUserStore = create<UserState>()(
@@ -96,6 +97,11 @@ const useUserStore = create<UserState>()(
       },
 
       setUser: (user) => set({ user, isAuthenticated: true }),
+
+      uploadAvatar: async (file) => {
+        const user = await authService.uploadAvatar(file)
+        set({ user })
+      },
     }),
     {
       name: 'user-storage',

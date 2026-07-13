@@ -40,12 +40,6 @@ describe('ForgotPasswordPage - Render & UI', () => {
     expect(button).toHaveAttribute('type', 'submit')
   })
 
-  test('displays logo image', () => {
-    const logo = screen.getByRole('img', { name: /nông sản bưu điện/i })
-    expect(logo).toBeInTheDocument()
-    expect(logo).toHaveAttribute('src', '/core/logo_web.svg')
-  })
-
   test('displays "Quay lại đăng nhập" link', () => {
     const link = screen.getByRole('link', { name: /quay lại đăng nhập/i })
     expect(link).toBeInTheDocument()
@@ -95,31 +89,9 @@ describe('ForgotPasswordPage - User Interaction', () => {
 
     expect(input).toHaveValue('test@example.com')
   })
-
-  test('calls console.log with form data when submitting valid form', async () => {
-    const user = userEvent.setup()
-    const consoleSpy = jest.spyOn(console, 'log').mockImplementation()
-    renderForgotPasswordPage()
-
-    await user.type(screen.getByPlaceholderText('email@example.com'), 'test@example.com')
-    await user.click(screen.getByRole('button', { name: /gửi link đặt lại mật khẩu/i }))
-
-    expect(consoleSpy).toHaveBeenCalledWith('Forgot password:', {
-      email: 'test@example.com',
-    })
-
-    consoleSpy.mockRestore()
-  })
 })
 
 describe('ForgotPasswordPage - Navigation', () => {
-  test('logo links to home page', () => {
-    renderForgotPasswordPage()
-    const logo = screen.getByRole('img', { name: /nông sản bưu điện/i })
-    const logoLink = logo.closest('a')
-    expect(logoLink).toHaveAttribute('href', '/')
-  })
-
   test('"Quay lại đăng nhập" links to login page', () => {
     renderForgotPasswordPage()
     const link = screen.getByRole('link', { name: /quay lại đăng nhập/i })

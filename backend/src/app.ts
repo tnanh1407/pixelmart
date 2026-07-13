@@ -12,13 +12,10 @@ import userRoutes from "./routes/v1/user.routes.ts";
 const app = express();
 
 app.use(helmet());
+
 app.use(cors({
   origin: (origin, callback) => {
-    const allowedOrigins = [
-      env.CLIENT_URL,
-      "https://www.tnanhdev.id.vn",
-      "https://tnanhdev.id.vn",
-    ];
+    const allowedOrigins = env.CLIENT_URL ? [env.CLIENT_URL] : [];
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -29,6 +26,7 @@ app.use(cors({
 }));
 app.use(cookieParser());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));  // đọc dữ liệu form 
 
 if (env.NODE_ENV === "development") {
   app.use(morgan("dev"));
@@ -36,6 +34,7 @@ if (env.NODE_ENV === "development") {
   app.use(morgan("combined"));
 }
 
+// check status
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });

@@ -13,13 +13,17 @@ export function useMeQuery() {
         const user = await authService.getMe()
         setUser(user)
         return user
-      } catch {
-        logout()
-        throw new Error('Unauthorized')
+      } catch (err: any) {
+        // Chỉ logout khi realmente 401 (token hết hạn)
+        // Network error hoặc 500 sẽ không logout ngay
+        if (err?.response?.status === 401) {
+          logout()
+        }
+        throw err
       }
     },
     enabled: isAuthenticated,
     staleTime: 5 * 60 * 1000,
-    retry: false,
+    retry: 1,
   })
 }

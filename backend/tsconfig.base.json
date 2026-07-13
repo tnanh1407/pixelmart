@@ -13,6 +13,7 @@
     "baseUrl": ".",
     "ignoreDeprecations": "6.0",
     "allowImportingTsExtensions": true,
+    "jsx": "react-jsx",
     "noEmit": true,
     "types": [
       "jest",

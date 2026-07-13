@@ -75,17 +75,6 @@ describe('RegisterPage - Render & UI', () => {
     expect(button).toHaveAttribute('type', 'submit')
   })
 
-  test('displays "Đăng ký với Google" button', () => {
-    const button = screen.getByRole('button', { name: /đăng ký với google/i })
-    expect(button).toBeInTheDocument()
-  })
-
-  test('displays logo image', () => {
-    const logo = screen.getByRole('img', { name: /nông sản bưu điện/i })
-    expect(logo).toBeInTheDocument()
-    expect(logo).toHaveAttribute('src', '/core/logo_web_bg.svg')
-  })
-
   test('displays both password toggle buttons', () => {
     const toggleButtons = screen.getAllByRole('button', { name: '' })
     expect(toggleButtons.length).toBe(2)
@@ -238,41 +227,9 @@ describe('RegisterPage - User Interaction', () => {
     await user.click(checkbox)
     expect(checkbox).not.toBeChecked()
   })
-
-  test('calls console.log with form data when submitting valid form', async () => {
-    const user = userEvent.setup()
-    const consoleSpy = jest.spyOn(console, 'log').mockImplementation()
-    renderRegisterPage()
-
-    await user.type(screen.getByPlaceholderText('Nguyễn'), 'Nguyễn')
-    await user.type(screen.getByPlaceholderText('Văn A'), 'Văn A')
-    await user.type(screen.getByPlaceholderText('email@example.com'), 'test@example.com')
-    await user.type(screen.getByPlaceholderText('Tạo mật khẩu'), '123456')
-    await user.type(screen.getByPlaceholderText('Nhập lại mật khẩu'), '123456')
-    await user.click(screen.getByRole('checkbox'))
-    await user.click(screen.getByRole('button', { name: /đăng ký tài khoản/i }))
-
-    expect(consoleSpy).toHaveBeenCalledWith('Register:', {
-      firstName: 'Nguyễn',
-      lastName: 'Văn A',
-      email: 'test@example.com',
-      password: '123456',
-      confirmPassword: '123456',
-      terms: true,
-    })
-
-    consoleSpy.mockRestore()
-  })
 })
 
 describe('RegisterPage - Navigation', () => {
-  test('logo links to home page', () => {
-    renderRegisterPage()
-    const logo = screen.getByRole('img', { name: /nông sản bưu điện/i })
-    const logoLink = logo.closest('a')
-    expect(logoLink).toHaveAttribute('href', '/')
-  })
-
   test('"Đăng nhập ngay" links to login page', () => {
     renderRegisterPage()
     const link = screen.getByRole('link', { name: /đăng nhập ngay/i })

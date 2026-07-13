@@ -16,8 +16,7 @@ export interface User {
 interface GoogleLoginPayload {
   googleId: string
   email: string
-  firstName: string
-  lastName: string
+  name: string
   avatar?: string
 }
 
@@ -49,8 +48,33 @@ export const authService = {
     await api.post('/auth/logout')
   },
 
+  async forgotPassword(email: string): Promise<void> {
+    await api.post('/auth/forgot-password', { email })
+  },
+
+  async resetPassword(token: string, password: string, confirmPassword: string): Promise<void> {
+    await api.post('/auth/reset-password', { token, password, confirmPassword })
+  },
+
+  async sendVerification(): Promise<void> {
+    await api.post('/auth/send-verification')
+  },
+
+  async verifyEmail(code: string): Promise<void> {
+    await api.post('/auth/verify-email', { code })
+  },
+
   async getMe(): Promise<User> {
     const { data } = await api.get('/auth/me')
+    return data.data
+  },
+
+  async uploadAvatar(file: File): Promise<User> {
+    const formData = new FormData()
+    formData.append('avatar', file)
+    const { data } = await api.patch('/users/avatar', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
     return data.data
   },
 }

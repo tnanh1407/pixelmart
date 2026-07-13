@@ -30,7 +30,9 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config
 
-    if (error.response?.status === 401 && !originalRequest._retry && !originalRequest.url?.includes('/auth/logout')) {
+    const noRefreshUrls = ['/auth/login', '/auth/register', '/auth/google', '/auth/logout']
+    const shouldNotRefresh = noRefreshUrls.some((url) => originalRequest.url?.includes(url))
+    if (error.response?.status === 401 && !originalRequest._retry && !shouldNotRefresh) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject })
@@ -52,7 +54,7 @@ api.interceptors.response.use(
         return api(originalRequest)
       } catch (refreshError) {
         processQueue(refreshError)
-        window.location.href = '/login'
+        // Không redirect ở đây - để ProtectedRoute xử lý
         return Promise.reject(refreshError)
       } finally {
         isRefreshing = false

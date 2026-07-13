@@ -5,10 +5,10 @@ import { Eye, EyeOff, Mail, Lock, Loader2 } from 'lucide-react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { GoogleLogin, type CredentialResponse } from '@react-oauth/google'
-import { jwtDecode } from 'jwt-decode'
+import { GoogleLogin } from '@react-oauth/google'
 import Swal from 'sweetalert2'
-import { useRegisterMutation, useGoogleLoginMutation } from '@/hooks/useAuthMutations'
+import { useRegisterMutation } from '@/hooks/useAuthMutations'
+import { useGoogleAuth } from '@/hooks/useGoogleAuth'
 
 const registerSchema = z
   .object({
@@ -26,21 +26,13 @@ const registerSchema = z
 
 type RegisterFormData = z.infer<typeof registerSchema>
 
-interface GoogleJwtPayload {
-  sub: string
-  email: string
-  given_name: string
-  family_name: string
-  picture?: string
-}
-
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const navigate = useNavigate()
 
   const registerMutation = useRegisterMutation()
-  const googleLoginMutation = useGoogleLoginMutation()
+  const { handleGoogleSuccess, handleGoogleError, isPending: isGooglePending } = useGoogleAuth()
 
   const {
     register,
@@ -72,9 +64,17 @@ export default function RegisterPage() {
           Swal.fire({
             icon: 'success',
             title: 'Đăng ký thành công!',
-            text: 'Vui lòng đăng nhập để tiếp tục.',
+            text: 'Bạn có muốn xác thực email ngay bây giờ?',
+            showCancelButton: true,
+            confirmButtonText: 'Xác thực ngay',
+            cancelButtonText: 'Để sau',
             confirmButtonColor: '#049645',
-          }).then(() => navigate('/login'))
+            cancelButtonColor: '#6b7280',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              navigate('/verify-email')
+            }
+          })
         },
         onError: (err: any) => {
           Swal.fire({
@@ -88,50 +88,7 @@ export default function RegisterPage() {
     )
   }
 
-  const handleGoogleSuccess = (credentialResponse: CredentialResponse) => {
-    if (!credentialResponse.credential) return
-
-    const decoded = jwtDecode<GoogleJwtPayload>(credentialResponse.credential)
-
-    googleLoginMutation.mutate(
-      {
-        googleId: decoded.sub,
-        email: decoded.email,
-        firstName: decoded.given_name,
-        lastName: decoded.family_name,
-        avatar: decoded.picture,
-      },
-      {
-        onSuccess: () => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Đăng ký thành công!',
-            text: 'Vui lòng đăng nhập để tiếp tục.',
-            confirmButtonColor: '#049645',
-          }).then(() => navigate('/login'))
-        },
-        onError: (err: any) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Đăng ký Google thất bại',
-            text: err?.response?.data?.message || 'Đăng ký Google thất bại',
-            confirmButtonColor: '#049645',
-          })
-        },
-      }
-    )
-  }
-
-  const handleGoogleError = () => {
-    Swal.fire({
-      icon: 'error',
-      title: 'Đăng ký Google thất bại',
-      text: 'Đăng ký Google thất bại',
-      confirmButtonColor: '#049645',
-    })
-  }
-
-  const isPending = registerMutation.isPending || googleLoginMutation.isPending
+  const isPending = registerMutation.isPending || isGooglePending
 
   return (
     <div className="w-full max-w-md font-sans">

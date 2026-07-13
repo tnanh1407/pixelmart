@@ -5,8 +5,7 @@ import useUserStore from '@/stores/useUserStore'
 interface GoogleLoginPayload {
   googleId: string
   email: string
-  firstName: string
-  lastName: string
+  name: string
   avatar?: string
 }
 
@@ -33,15 +32,9 @@ export function useLoginMutation() {
 }
 
 export function useRegisterMutation() {
-  const queryClient = useQueryClient()
-  const { setUser } = useUserStore.getState()
 
   return useMutation({
     mutationFn: (payload: RegisterPayload) => authService.register(payload),
-    onSuccess: (user: User) => {
-      setUser(user)
-      queryClient.setQueryData(['user'], user)
-    },
   })
 }
 
@@ -68,5 +61,11 @@ export function useLogoutMutation() {
       storeLogout()
       queryClient.clear()
     },
+  })
+}
+
+export function useForgotPasswordMutation() {
+  return useMutation({
+    mutationFn: ({ email }: { email: string }) => authService.forgotPassword(email),
   })
 }

@@ -45,6 +45,36 @@ class UserController {
       message: "User deleted successfully",
     });
   }
+
+  async toggleActive(req: Request, res: Response) {
+    const id = String(req.params.id);
+    const user = await userService.toggleActive(id);
+    res.json({
+      success: true,
+      message: `User ${user?.isActive ? "activated" : "deactivated"} successfully`,
+      data: user,
+    });
+  }
+
+  async uploadAvatar(req: Request, res: Response) {
+    const id = String(req.user?.userId);
+    const file = req.file as Express.Multer.File;
+
+    if (!file) {
+      res.status(400).json({
+        success: false,
+        message: "No file uploaded",
+      });
+      return;
+    }
+
+    const user = await userService.uploadAvatar(id, file);
+    res.json({
+      success: true,
+      message: "Avatar uploaded successfully",
+      data: user,
+    });
+  }
 }
 
 export default new UserController();
