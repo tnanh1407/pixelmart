@@ -149,7 +149,7 @@ class AuthService {
   }
 
   async getMe(userId: string) {
-    const user = await userRepository.findById(userId);
+    const user = await userRepository.findByIdWithPassword(userId);
     if (!user) {
       throw new AppError("User not found", 404);
     }
@@ -209,6 +209,26 @@ class AuthService {
 
     await userRepository.updatePassword(resetToken.userId, newPassword);
     await verificationTokenRepository.markAsUsed(resetToken._id.toString());
+  }
+
+  async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<void> {
+    const user = await userRepository.findByEmailWithPassword(
+      (await userRepository.findById(userId))?.email || ""
+    );
+    if (!user) {
+      throw new AppError("User not found", 404);
+    }
+
+    if (!user.password) {
+      throw new AppError("Tài khoản này sử dụng đăng nhập Google. Không thể thay đổi mật khẩu.", 400);
+    }
+
+    const isPasswordValid = await comparePassword(currentPassword, user.password);
+    if (!isPasswordValid) {
+      throw new AppError("Mật khẩu hiện tại không đúng", 400);
+    }
+
+    await userRepository.updatePassword(userId, newPassword);
   }
 }
 

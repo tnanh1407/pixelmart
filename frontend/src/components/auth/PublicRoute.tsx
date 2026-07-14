@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/hooks/auth'
 
 export default function PublicRoute() {
   const { isAuthenticated, isLoading } = useAuth()

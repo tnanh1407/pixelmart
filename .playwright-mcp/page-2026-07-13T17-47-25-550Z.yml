@@ -1,0 +1,1341 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e5]:
+      - link [ref=e7] [cursor=pointer]:
+        - /url: https://nongsan.buudien.vn/home
+        - img "logo" [ref=e8]
+      - text: 
+      - generic [ref=e9]:
+        - generic [ref=e10]: 
+        - link "" [ref=e12] [cursor=pointer]:
+          - /url: /home/Login/login.html
+        - link "" [ref=e14] [cursor=pointer]:
+          - /url: javascript:void(0)
+        - generic [ref=e16] [cursor=pointer]: 
+  - main [ref=e19]:
+    - generic [ref=e25]:
+      - group "1 / 1" [ref=e26]:
+        - link [ref=e28] [cursor=pointer]:
+          - /url: /home/Advclick/Advclick.html?adv_id=41
+          - img "Gạo ST25" [ref=e29]
+      - group "1 / 1" [ref=e30]:
+        - link [ref=e32] [cursor=pointer]:
+          - /url: /home/Advclick/Advclick.html?adv_id=41
+          - img "Gạo ST25" [ref=e33]
+      - group "1 / 1" [ref=e34]:
+        - link [ref=e36] [cursor=pointer]:
+          - /url: /home/Advclick/Advclick.html?adv_id=41
+          - img "Gạo ST25" [ref=e37]
+    - generic [ref=e40]:
+      - heading "Danh mục" [level=2] [ref=e41]
+      - generic [ref=e42]:
+        - generic [ref=e44]:
+          - group "4 / 6" [ref=e45]:
+            - link "Thực phẩm bổ dưỡng Thực phẩm bổ dưỡng" [ref=e47] [cursor=pointer]:
+              - /url: /home/Search/index.html?cate_id=3
+              - img "Thực phẩm bổ dưỡng" [ref=e48]
+              - generic [ref=e49]: Thực phẩm bổ dưỡng
+          - group "5 / 6" [ref=e50]:
+            - link "Đồ uống Đồ uống" [ref=e52] [cursor=pointer]:
+              - /url: /home/Search/index.html?cate_id=4
+              - img "Đồ uống" [ref=e53]
+              - generic [ref=e54]: Đồ uống
+          - group "6 / 6" [ref=e55]:
+            - link "Sức khỏe và làm đẹp Sức khỏe và làm đẹp" [ref=e57] [cursor=pointer]:
+              - /url: /home/Search/index.html?cate_id=6
+              - img "Sức khỏe và làm đẹp" [ref=e58]
+              - generic [ref=e59]: Sức khỏe và làm đẹp
+          - group "1 / 6" [ref=e60]:
+            - link [ref=e62] [cursor=pointer]:
+              - /url: /home/Search/index.html
+              - img "Tất cả sản phẩm" [ref=e63]
+              - generic [ref=e64]: Tất cả sản phẩm
+          - group "2 / 6" [ref=e65]:
+            - link "Sản phẩm OCOP Sản phẩm Ocop" [ref=e67] [cursor=pointer]:
+              - /url: https://nongsan.buudien.vn/home/Search/index.html?keyword=OCOP
+              - img "Sản phẩm OCOP" [ref=e68]
+              - generic [ref=e69]: Sản phẩm Ocop
+          - group "3 / 6" [ref=e70]:
+            - link "Thực phẩm và đặc sản Thực phẩm và đặc sản" [ref=e72] [cursor=pointer]:
+              - /url: /home/Search/index.html?cate_id=2
+              - img "Thực phẩm và đặc sản" [ref=e73]
+              - generic [ref=e74]: Thực phẩm và đặc sản
+          - group "4 / 6" [ref=e75]:
+            - link "Thực phẩm bổ dưỡng Thực phẩm bổ dưỡng" [ref=e77] [cursor=pointer]:
+              - /url: /home/Search/index.html?cate_id=3
+              - img "Thực phẩm bổ dưỡng" [ref=e78]
+              - generic [ref=e79]: Thực phẩm bổ dưỡng
+          - group "5 / 6" [ref=e80]:
+            - link "Đồ uống Đồ uống" [ref=e82] [cursor=pointer]:
+              - /url: /home/Search/index.html?cate_id=4
+              - img "Đồ uống" [ref=e83]
+              - generic [ref=e84]: Đồ uống
+          - group "6 / 6" [ref=e85]:
+            - link "Sức khỏe và làm đẹp Sức khỏe và làm đẹp" [ref=e87] [cursor=pointer]:
+              - /url: /home/Search/index.html?cate_id=6
+              - img "Sức khỏe và làm đẹp" [ref=e88]
+              - generic [ref=e89]: Sức khỏe và làm đẹp
+          - group "1 / 6" [ref=e90]:
+            - link [ref=e92] [cursor=pointer]:
+              - /url: /home/Search/index.html
+              - img "Tất cả sản phẩm" [ref=e93]
+              - generic [ref=e94]: Tất cả sản phẩm
+          - group "2 / 6" [ref=e95]:
+            - link "Sản phẩm OCOP Sản phẩm Ocop" [ref=e97] [cursor=pointer]:
+              - /url: https://nongsan.buudien.vn/home/Search/index.html?keyword=OCOP
+              - img "Sản phẩm OCOP" [ref=e98]
+              - generic [ref=e99]: Sản phẩm Ocop
+          - group "3 / 6" [ref=e100]:
+            - link "Thực phẩm và đặc sản Thực phẩm và đặc sản" [ref=e102] [cursor=pointer]:
+              - /url: /home/Search/index.html?cate_id=2
+              - img "Thực phẩm và đặc sản" [ref=e103]
+              - generic [ref=e104]: Thực phẩm và đặc sản
+        - text:  
+    - generic [ref=e106]:
+      - generic [ref=e109]:
+        - generic [ref=e110]:
+          - heading " FlashSale" [level=2] [ref=e111]:
+            - generic [ref=e112]: 
+            - text: FlashSale
+          - generic [ref=e114]:
+            - paragraph [ref=e115]:
+              - generic [ref=e116]:
+                - generic [ref=e120]:
+                  - generic [ref=e121]: "0"
+                  - generic [ref=e122]: "1"
+                - generic [ref=e126]:
+                  - generic [ref=e127]: "0"
+                  - generic [ref=e128]: "1"
+                  - generic [ref=e129]: "2"
+                  - generic [ref=e130]: "3"
+                  - generic [ref=e131]: "4"
+                  - generic [ref=e132]: "5"
+                  - generic [ref=e133]: "6"
+                  - generic [ref=e134]: "7"
+                  - generic [ref=e135]: "8"
+                  - generic [ref=e136]: "9"
+                  - generic [ref=e137]: "0"
+                  - generic [ref=e138]: "1"
+                  - generic [ref=e139]: "2"
+                  - generic [ref=e140]: "3"
+                  - generic [ref=e141]: "4"
+                  - generic [ref=e142]: "5"
+                  - generic [ref=e143]: "6"
+                  - generic [ref=e144]: "7"
+                - generic [ref=e148]:
+                  - generic [ref=e149]: "0"
+                  - generic [ref=e150]: "6"
+                  - generic [ref=e151]: "2"
+                  - generic [ref=e152]: "8"
+                  - generic [ref=e153]: "3"
+                  - generic [ref=e154]: "9"
+                  - generic [ref=e155]: "5"
+                  - generic [ref=e156]: "1"
+                  - generic [ref=e157]: "7"
+                  - generic [ref=e158]: "3"
+                  - generic [ref=e159]: "9"
+                  - generic [ref=e160]: "4"
+                  - generic [ref=e161]: "0"
+                  - generic [ref=e162]: "6"
+                  - generic [ref=e163]: "2"
+                  - generic [ref=e164]: "8"
+                  - generic [ref=e165]: "4"
+                  - generic [ref=e166]: "0"
+                  - generic [ref=e167]: "6"
+                  - generic [ref=e168]: "1"
+                  - generic [ref=e169]: "7"
+                  - generic [ref=e170]: "3"
+                  - generic [ref=e171]: "9"
+                  - generic [ref=e172]: "5"
+                  - generic [ref=e173]: "1"
+                  - generic [ref=e174]: "7"
+                  - generic [ref=e175]: "2"
+                  - generic [ref=e176]: "8"
+                  - generic [ref=e177]: "4"
+                  - generic [ref=e178]: "0"
+            - paragraph [ref=e179]:
+              - generic [ref=e180]:
+                - generic [ref=e181]: "0"
+                - generic [ref=e187]:
+                  - generic [ref=e188]: "0"
+                  - generic [ref=e189]: "1"
+                  - generic [ref=e190]: "2"
+                  - generic [ref=e191]: "3"
+                  - generic [ref=e192]: "4"
+                  - generic [ref=e193]: "5"
+                  - generic [ref=e194]: "6"
+                  - generic [ref=e195]: "7"
+                  - generic [ref=e196]: "8"
+                  - generic [ref=e197]: "9"
+            - paragraph [ref=e198]:
+              - generic [ref=e199]:
+                - generic [ref=e203]:
+                  - generic [ref=e204]: "0"
+                  - generic [ref=e205]: "1"
+                  - generic [ref=e206]: "2"
+                  - generic [ref=e207]: "3"
+                  - generic [ref=e208]: "4"
+                  - generic [ref=e209]: "5"
+                - generic [ref=e213]:
+                  - generic [ref=e214]: "0"
+                  - generic [ref=e215]: "2"
+                  - generic [ref=e216]: "4"
+                  - generic [ref=e217]: "6"
+                  - generic [ref=e218]: "8"
+                  - generic [ref=e219]: "9"
+                  - generic [ref=e220]: "1"
+                  - generic [ref=e221]: "3"
+                  - generic [ref=e222]: "5"
+                  - generic [ref=e223]: "7"
+                  - generic [ref=e224]: "9"
+                  - generic [ref=e225]: "1"
+                  - generic [ref=e226]: "3"
+                  - generic [ref=e227]: "5"
+                  - generic [ref=e228]: "7"
+                  - generic [ref=e229]: "8"
+                  - generic [ref=e230]: "0"
+                  - generic [ref=e231]: "2"
+                  - generic [ref=e232]: "4"
+                  - generic [ref=e233]: "6"
+                  - generic [ref=e234]: "8"
+                  - generic [ref=e235]: "0"
+                  - generic [ref=e236]: "2"
+                  - generic [ref=e237]: "4"
+                  - generic [ref=e238]: "6"
+                  - generic [ref=e239]: "7"
+                  - generic [ref=e240]: "9"
+                  - generic [ref=e241]: "1"
+                  - generic [ref=e242]: "3"
+                  - generic [ref=e243]: "5"
+            - paragraph [ref=e244]:
+              - generic [ref=e245]:
+                - generic [ref=e249]:
+                  - generic [ref=e250]: "0"
+                  - generic [ref=e251]: "1"
+                  - generic [ref=e252]: "2"
+                  - generic [ref=e253]: "3"
+                - generic [ref=e257]:
+                  - generic [ref=e258]: "0"
+                  - generic [ref=e259]: "1"
+                  - generic [ref=e260]: "2"
+                  - generic [ref=e261]: "4"
+                  - generic [ref=e262]: "5"
+                  - generic [ref=e263]: "6"
+                  - generic [ref=e264]: "7"
+                  - generic [ref=e265]: "8"
+                  - generic [ref=e266]: "0"
+                  - generic [ref=e267]: "1"
+                  - generic [ref=e268]: "2"
+                  - generic [ref=e269]: "3"
+                  - generic [ref=e270]: "4"
+                  - generic [ref=e271]: "6"
+                  - generic [ref=e272]: "7"
+                  - generic [ref=e273]: "8"
+                  - generic [ref=e274]: "9"
+                  - generic [ref=e275]: "1"
+                  - generic [ref=e276]: "2"
+                  - generic [ref=e277]: "3"
+                  - generic [ref=e278]: "4"
+                  - generic [ref=e279]: "5"
+                  - generic [ref=e280]: "7"
+                  - generic [ref=e281]: "8"
+                  - generic [ref=e282]: "9"
+                  - generic [ref=e283]: "0"
+                  - generic [ref=e284]: "1"
+                  - generic [ref=e285]: "3"
+                  - generic [ref=e286]: "4"
+                  - generic [ref=e287]: "5"
+        - link "Xem thêm sản phẩm" [ref=e289] [cursor=pointer]:
+          - /url: /home/Activity/detail.html?activity_id=15
+      - generic [ref=e293]:
+        - generic [ref=e295]:
+          - link [ref=e297] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=2795
+            - img "Combo thịt gác bếp Cao Lan" [ref=e298]
+          - generic [ref=e299]:
+            - link "Combo thịt gác bếp Cao Lan" [ref=e300] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=2795
+            - generic [ref=e301]:
+              - generic [ref=e302]: 345.000đ
+              - generic [ref=e303]: giảm 16%
+            - generic [ref=e304]: 289.000đ
+          - generic [ref=e305]:
+            - generic [ref=e306]: 
+            - text: FlashSale
+        - generic [ref=e308]:
+          - link [ref=e310] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=843
+            - img "OCOP - Đông Trùng Hạ Thảo Tam Đảo Sấy Thăng Hoa - Hũ 10g" [ref=e311]
+          - generic [ref=e312]:
+            - link "OCOP - Đông Trùng Hạ Thảo Tam Đảo Sấy Thăng Hoa - Hũ 10g" [ref=e313] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=843
+            - generic [ref=e314]:
+              - generic [ref=e315]: 275.000đ
+              - generic [ref=e316]: giảm 31%
+            - generic [ref=e317]: 190.000đ
+          - generic [ref=e318]:
+            - generic [ref=e319]: 
+            - text: FlashSale
+        - generic [ref=e321]:
+          - link [ref=e323] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=851
+            - img "OCOP - Mật Ong Đông Trùng Hạ Thảo Tam Đảo - Hũ 400g" [ref=e324]
+          - generic [ref=e325]:
+            - link "OCOP - Mật Ong Đông Trùng Hạ Thảo Tam Đảo - Hũ 400g" [ref=e326] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=851
+            - generic [ref=e327]:
+              - generic [ref=e328]: 380.000đ
+              - generic [ref=e329]: giảm 34%
+            - generic [ref=e330]: 250.000đ
+          - generic [ref=e331]:
+            - generic [ref=e332]: 
+            - text: FlashSale
+        - generic [ref=e334]:
+          - link [ref=e336] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=844
+            - img "OCOP - Đông Trùng Hạ Thảo Tam Đảo Sấy Thăng Hoa - Hũ 20g" [ref=e337]
+          - generic [ref=e338]:
+            - link "OCOP - Đông Trùng Hạ Thảo Tam Đảo Sấy Thăng Hoa - Hũ 20g" [ref=e339] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=844
+            - generic [ref=e340]:
+              - generic [ref=e341]: 528.000đ
+              - generic [ref=e342]: giảm 34%
+            - generic [ref=e343]: 350.000đ
+          - generic [ref=e344]:
+            - generic [ref=e345]: 
+            - text: FlashSale
+        - generic [ref=e347]:
+          - link [ref=e349] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=2855
+            - img "OCOP - Hành tím Vĩnh Châu Sóc Trăng - 5kg" [ref=e350]
+          - generic [ref=e351]:
+            - link "OCOP - Hành tím Vĩnh Châu Sóc Trăng - 5kg" [ref=e352] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=2855
+            - generic [ref=e353]:
+              - generic [ref=e354]: 190.000đ
+              - generic [ref=e355]: giảm 8%
+            - generic [ref=e356]: 175.000đ
+          - generic [ref=e357]:
+            - generic [ref=e358]: 
+            - text: FlashSale
+    - generic [ref=e361]:
+      - heading "Top bán chạy" [level=2] [ref=e362]
+      - generic [ref=e363]:
+        - generic [ref=e365]:
+          - link [ref=e367] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=772
+            - img "Gạo Séng Cù - Đặc Sản Lào Cai - Túi 5kg" [ref=e368]
+          - generic [ref=e369]:
+            - link "Gạo Séng Cù - Đặc Sản Lào Cai - Túi 5kg" [ref=e370] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=772
+            - generic [ref=e371]:
+              - generic [ref=e372]: 175.500đ
+              - generic [ref=e373]: giảm 0%
+            - generic [ref=e374]: 175.000đ
+            - generic [ref=e375]:
+              - generic "gorgeous" [ref=e376]:
+                - generic "gorgeous" [ref=e377]: 
+                - generic "gorgeous" [ref=e378]: 
+                - generic "gorgeous" [ref=e379]: 
+                - generic "gorgeous" [ref=e380]: 
+                - generic "gorgeous" [ref=e381]: 
+              - generic [ref=e382]: ( 749 )
+        - generic [ref=e384]:
+          - link [ref=e386] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=907
+            - img "Khoai Lang Giống Nhật 365 Fresh - Thùng 3kg (Bao Gồm Bao Bì)" [ref=e387]
+          - generic [ref=e388]:
+            - link "Khoai Lang Giống Nhật 365 Fresh - Thùng 3kg (Bao Gồm Bao Bì)" [ref=e389] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=907
+            - generic [ref=e390]: 168.000đ
+            - generic [ref=e391]:
+              - generic "gorgeous" [ref=e392]:
+                - generic "gorgeous" [ref=e393]: 
+                - generic "gorgeous" [ref=e394]: 
+                - generic "gorgeous" [ref=e395]: 
+                - generic "gorgeous" [ref=e396]: 
+                - generic "gorgeous" [ref=e397]: 
+              - generic [ref=e398]: ( 98 )
+        - generic [ref=e400]:
+          - link [ref=e402] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=892
+            - img "OCOP - Bánh Sữa Non Ba Vì - Gói 500g" [ref=e403]
+          - generic [ref=e404]:
+            - link "OCOP - Bánh Sữa Non Ba Vì - Gói 500g" [ref=e405] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=892
+            - generic [ref=e406]:
+              - generic [ref=e407]: 114.000đ
+              - generic [ref=e408]: giảm 28%
+            - generic [ref=e409]: 82.080đ
+            - generic [ref=e410]:
+              - generic "gorgeous" [ref=e411]:
+                - generic "gorgeous" [ref=e412]: 
+                - generic "gorgeous" [ref=e413]: 
+                - generic "gorgeous" [ref=e414]: 
+                - generic "gorgeous" [ref=e415]: 
+                - generic "gorgeous" [ref=e416]: 
+              - generic [ref=e417]: ( 94 )
+        - generic [ref=e419]:
+          - link [ref=e421] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=861
+            - img "Mỳ Gạo Chũ Bắc Giang Dương Kiên - Combo 2 Gói 500g" [ref=e422]
+          - generic [ref=e423]:
+            - link "Mỳ Gạo Chũ Bắc Giang Dương Kiên - Combo 2 Gói 500g" [ref=e424] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=861
+            - generic [ref=e425]: 76.000đ
+            - generic [ref=e426]:
+              - generic "gorgeous" [ref=e427]:
+                - generic "gorgeous" [ref=e428]: 
+                - generic "gorgeous" [ref=e429]: 
+                - generic "gorgeous" [ref=e430]: 
+                - generic "gorgeous" [ref=e431]: 
+                - generic "gorgeous" [ref=e432]: 
+              - generic [ref=e433]: ( 85 )
+        - generic [ref=e435]:
+          - link [ref=e437] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=2799
+            - img "OCOP - Miến Dong Hồng Phước - Đặc sản Điện Biên - Túi 1kg" [ref=e438]
+          - generic [ref=e439]:
+            - link "OCOP - Miến Dong Hồng Phước - Đặc sản Điện Biên - Túi 1kg" [ref=e440] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=2799
+            - generic [ref=e441]: 80.000đ
+            - generic [ref=e442]:
+              - generic "gorgeous" [ref=e443]:
+                - generic "gorgeous" [ref=e444]: 
+                - generic "gorgeous" [ref=e445]: 
+                - generic "gorgeous" [ref=e446]: 
+                - generic "gorgeous" [ref=e447]: 
+                - generic "gorgeous" [ref=e448]: 
+              - generic [ref=e449]: ( 70 )
+        - generic [ref=e451]:
+          - link [ref=e453] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=908
+            - img "OCOP - Thịt Gác Bếp Cao Lan - Gói 200g" [ref=e454]
+          - generic [ref=e455]:
+            - link "OCOP - Thịt Gác Bếp Cao Lan - Gói 200g" [ref=e456] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=908
+            - generic [ref=e457]: 139.000đ
+            - generic [ref=e458]:
+              - generic "gorgeous" [ref=e459]:
+                - generic "gorgeous" [ref=e460]: 
+                - generic "gorgeous" [ref=e461]: 
+                - generic "gorgeous" [ref=e462]: 
+                - generic "gorgeous" [ref=e463]: 
+                - generic "gorgeous" [ref=e464]: 
+              - generic [ref=e465]: ( 57 )
+        - generic [ref=e467]:
+          - link [ref=e469] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=859
+            - img "OCOP - Miến Dong Xuất Khẩu Dương Kiên - Combo 2 Gói 500g" [ref=e470]
+          - generic [ref=e471]:
+            - link "OCOP - Miến Dong Xuất Khẩu Dương Kiên - Combo 2 Gói 500g" [ref=e472] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=859
+            - generic [ref=e473]: 118.000đ
+            - generic [ref=e474]:
+              - generic "gorgeous" [ref=e475]:
+                - generic "gorgeous" [ref=e476]: 
+                - generic "gorgeous" [ref=e477]: 
+                - generic "gorgeous" [ref=e478]: 
+                - generic "gorgeous" [ref=e479]: 
+                - generic "gorgeous" [ref=e480]: 
+              - generic [ref=e481]: ( 56 )
+        - generic [ref=e483]:
+          - link [ref=e485] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=905
+            - img "Gạo ST25 Ông Cọp - Túi 5kg" [ref=e486]
+          - generic [ref=e487]:
+            - link "Gạo ST25 Ông Cọp - Túi 5kg" [ref=e488] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=905
+            - generic [ref=e489]: 250.000đ
+            - generic [ref=e490]:
+              - generic "gorgeous" [ref=e491]:
+                - generic "gorgeous" [ref=e492]: 
+                - generic "gorgeous" [ref=e493]: 
+                - generic "gorgeous" [ref=e494]: 
+                - generic "gorgeous" [ref=e495]: 
+                - generic "gorgeous" [ref=e496]: 
+              - generic [ref=e497]: ( 47 )
+        - generic [ref=e499]:
+          - link [ref=e501] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=931
+            - img "OCOP - Xoài Sấy Dẻo Quyết Thanh - Hộp Giấy 200gr" [ref=e502]
+          - generic [ref=e503]:
+            - link "OCOP - Xoài Sấy Dẻo Quyết Thanh - Hộp Giấy 200gr" [ref=e504] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=931
+            - generic [ref=e505]:
+              - generic [ref=e506]: 76.800đ
+              - generic [ref=e507]: giảm 37%
+            - generic [ref=e508]: 48.600đ
+            - generic [ref=e509]:
+              - generic "gorgeous" [ref=e510]:
+                - generic "gorgeous" [ref=e511]: 
+                - generic "gorgeous" [ref=e512]: 
+                - generic "gorgeous" [ref=e513]: 
+                - generic "gorgeous" [ref=e514]: 
+                - generic "gorgeous" [ref=e515]: 
+              - generic [ref=e516]: ( 39 )
+        - generic [ref=e518]:
+          - link [ref=e520] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=915
+            - img "OCOP - Thịt Gác Bếp Cao Lan -" [ref=e521]
+          - generic [ref=e522]:
+            - link "OCOP - Thịt Gác Bếp Cao Lan -" [ref=e523] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=915
+            - generic [ref=e524]: 159.000đ
+            - generic [ref=e525]:
+              - generic "gorgeous" [ref=e526]:
+                - generic "gorgeous" [ref=e527]: 
+                - generic "gorgeous" [ref=e528]: 
+                - generic "gorgeous" [ref=e529]: 
+                - generic "gorgeous" [ref=e530]: 
+                - generic "gorgeous" [ref=e531]: 
+              - generic [ref=e532]: ( 38 )
+      - link "Xem thêm sản phẩm" [ref=e534] [cursor=pointer]:
+        - /url: /home/Search/index.html?key=1&order=2
+    - generic [ref=e537]:
+      - heading "Sản phẩm OCOP" [level=2] [ref=e538]
+      - generic [ref=e539]:
+        - generic [ref=e541]:
+          - link [ref=e543] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=990
+            - img "OCOP - Mật Ong Hoa Nhãn Danh Vị - Chai Nhựa 1L" [ref=e544]
+          - generic [ref=e545]:
+            - link "OCOP - Mật Ong Hoa Nhãn Danh Vị - Chai Nhựa 1L" [ref=e546] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=990
+            - generic [ref=e547]: 230.000đ
+            - generic [ref=e548]:
+              - generic "gorgeous" [ref=e549]:
+                - generic "gorgeous" [ref=e550]: 
+                - generic "gorgeous" [ref=e551]: 
+                - generic "gorgeous" [ref=e552]: 
+                - generic "gorgeous" [ref=e553]: 
+                - generic "gorgeous" [ref=e554]: 
+              - generic [ref=e555]: ( 19 )
+        - generic [ref=e557]:
+          - link [ref=e559] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=2012
+            - img "Bánh Pía Khoai Môn Sầu Riêng - Tân Huê Viên" [ref=e560]
+          - generic [ref=e561]:
+            - link "Bánh Pía Khoai Môn Sầu Riêng - Tân Huê Viên" [ref=e562] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=2012
+            - generic [ref=e563]:
+              - generic [ref=e564]: 120.000đ
+              - generic [ref=e565]: giảm 15%
+            - generic [ref=e566]: 96.000đ
+            - generic [ref=e567]:
+              - generic "gorgeous" [ref=e568]:
+                - generic "gorgeous" [ref=e569]: 
+                - generic "gorgeous" [ref=e570]: 
+                - generic "gorgeous" [ref=e571]: 
+                - generic "gorgeous" [ref=e572]: 
+                - generic "gorgeous" [ref=e573]: 
+              - generic [ref=e574]: ( 0 )
+        - generic [ref=e576]:
+          - link [ref=e578] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=2340
+            - img "OCOP - Táo Sấy Dẻo Tách Hạt Thái Thuận" [ref=e579]
+          - generic [ref=e580]:
+            - link "OCOP - Táo Sấy Dẻo Tách Hạt Thái Thuận" [ref=e581] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=2340
+            - generic [ref=e582]: 120.000đ
+            - generic [ref=e583]:
+              - generic "gorgeous" [ref=e584]:
+                - generic "gorgeous" [ref=e585]: 
+                - generic "gorgeous" [ref=e586]: 
+                - generic "gorgeous" [ref=e587]: 
+                - generic "gorgeous" [ref=e588]: 
+                - generic "gorgeous" [ref=e589]: 
+              - generic [ref=e590]: ( 0 )
+        - generic [ref=e592]:
+          - link [ref=e594] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=2044
+            - img "Bánh Pía Đậu Xanh Sầu Riêng - Tân Huê Viên" [ref=e595]
+          - generic [ref=e596]:
+            - link "Bánh Pía Đậu Xanh Sầu Riêng - Tân Huê Viên" [ref=e597] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=2044
+            - generic [ref=e598]: 80.000đ
+            - generic [ref=e599]:
+              - generic "gorgeous" [ref=e600]:
+                - generic "gorgeous" [ref=e601]: 
+                - generic "gorgeous" [ref=e602]: 
+                - generic "gorgeous" [ref=e603]: 
+                - generic "gorgeous" [ref=e604]: 
+                - generic "gorgeous" [ref=e605]: 
+              - generic [ref=e606]: ( 0 )
+        - generic [ref=e608]:
+          - link [ref=e610] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=1988
+            - img "Bánh Pía Đậu Xanh Thịt Lạp - Tân Huê Viên - Túi 400g" [ref=e611]
+          - generic [ref=e612]:
+            - link "Bánh Pía Đậu Xanh Thịt Lạp - Tân Huê Viên - Túi 400g" [ref=e613] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=1988
+            - generic [ref=e614]: 93.000đ
+            - generic [ref=e615]:
+              - generic "gorgeous" [ref=e616]:
+                - generic "gorgeous" [ref=e617]: 
+                - generic "gorgeous" [ref=e618]: 
+                - generic "gorgeous" [ref=e619]: 
+                - generic "gorgeous" [ref=e620]: 
+                - generic "gorgeous" [ref=e621]: 
+              - generic [ref=e622]: ( 1 )
+        - generic [ref=e624]:
+          - link [ref=e626] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=2008
+            - img "Bánh Pía Khoai Môn Sầu Riêng - Tân Huê Viên" [ref=e627]
+          - generic [ref=e628]:
+            - link "Bánh Pía Khoai Môn Sầu Riêng - Tân Huê Viên" [ref=e629] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=2008
+            - generic [ref=e630]:
+              - generic [ref=e631]: 120.000đ
+              - generic [ref=e632]: giảm 20%
+            - generic [ref=e633]: 96.000đ
+            - generic [ref=e634]:
+              - generic "gorgeous" [ref=e635]:
+                - generic "gorgeous" [ref=e636]: 
+                - generic "gorgeous" [ref=e637]: 
+                - generic "gorgeous" [ref=e638]: 
+                - generic "gorgeous" [ref=e639]: 
+                - generic "gorgeous" [ref=e640]: 
+              - generic [ref=e641]: ( 2 )
+        - generic [ref=e643]:
+          - link [ref=e645] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=2096
+            - img "OCOP - Mắm Tép Chưng Thịt PTK - Hộp 180g" [ref=e646]
+          - generic [ref=e647]:
+            - link "OCOP - Mắm Tép Chưng Thịt PTK - Hộp 180g" [ref=e648] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=2096
+            - generic [ref=e649]: 89.000đ
+            - generic [ref=e650]:
+              - generic "gorgeous" [ref=e651]:
+                - generic "gorgeous" [ref=e652]: 
+                - generic "gorgeous" [ref=e653]: 
+                - generic "gorgeous" [ref=e654]: 
+                - generic "gorgeous" [ref=e655]: 
+                - generic "gorgeous" [ref=e656]: 
+              - generic [ref=e657]: ( 0 )
+        - generic [ref=e659]:
+          - link [ref=e661] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=2847
+            - img "OCOP - Mật Mía Miền Xanh Chai 500ml" [ref=e662]
+          - generic [ref=e663]:
+            - link "OCOP - Mật Mía Miền Xanh Chai 500ml" [ref=e664] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=2847
+            - generic [ref=e665]: 70.000đ
+            - generic [ref=e666]:
+              - generic "gorgeous" [ref=e667]:
+                - generic "gorgeous" [ref=e668]: 
+                - generic "gorgeous" [ref=e669]: 
+                - generic "gorgeous" [ref=e670]: 
+                - generic "gorgeous" [ref=e671]: 
+                - generic "gorgeous" [ref=e672]: 
+              - generic [ref=e673]: ( 4 )
+        - generic [ref=e675]:
+          - link [ref=e677] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=1014
+            - img "OCOP - Nano Curcumin Hoàng Minh Châu HMC0007 - Hộp 2 Lọ (60 Viên/Lọ)" [ref=e678]
+          - generic [ref=e679]:
+            - link "OCOP - Nano Curcumin Hoàng Minh Châu HMC0007 - Hộp 2 Lọ (60 Viên/Lọ)" [ref=e680] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=1014
+            - generic [ref=e681]:
+              - generic [ref=e682]: 700.000đ
+              - generic [ref=e683]: giảm 3%
+            - generic [ref=e684]: 679.000đ
+            - generic [ref=e685]:
+              - generic "gorgeous" [ref=e686]:
+                - generic "gorgeous" [ref=e687]: 
+                - generic "gorgeous" [ref=e688]: 
+                - generic "gorgeous" [ref=e689]: 
+                - generic "gorgeous" [ref=e690]: 
+                - generic "gorgeous" [ref=e691]: 
+              - generic [ref=e692]: ( 0 )
+        - generic [ref=e694]:
+          - link [ref=e696] [cursor=pointer]:
+            - /url: /home/Goods/index.html?goods_id=2060
+            - img "Bánh Pía Đậu Xanh Sầu Riêng - Tân Huê Viên" [ref=e697]
+          - generic [ref=e698]:
+            - link "Bánh Pía Đậu Xanh Sầu Riêng - Tân Huê Viên" [ref=e699] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=2060
+            - generic [ref=e700]: 80.000đ
+            - generic [ref=e701]:
+              - generic "gorgeous" [ref=e702]:
+                - generic "gorgeous" [ref=e703]: 
+                - generic "gorgeous" [ref=e704]: 
+                - generic "gorgeous" [ref=e705]: 
+                - generic "gorgeous" [ref=e706]: 
+                - generic "gorgeous" [ref=e707]: 
+              - generic [ref=e708]: ( 0 )
+      - link "Xem thêm sản phẩm" [ref=e710] [cursor=pointer]:
+        - /url: /home/Search/index.html?keyword=ocop
+    - generic [ref=e711]:
+      - generic [ref=e712]:
+        - img "default banner" [ref=e713]
+        - heading "Thực phẩm và đặc sản" [level=3] [ref=e716]
+      - generic [ref=e718]:
+        - generic [ref=e719]:
+          - generic [ref=e721]:
+            - link [ref=e723] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=2847
+              - img "OCOP - Mật Mía Miền Xanh Chai 500ml" [ref=e724]
+            - generic [ref=e725]:
+              - link "OCOP - Mật Mía Miền Xanh Chai 500ml" [ref=e726] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=2847
+              - generic [ref=e727]: 70.000đ
+              - generic [ref=e728]:
+                - generic "gorgeous" [ref=e729]:
+                  - generic "gorgeous" [ref=e730]: 
+                  - generic "gorgeous" [ref=e731]: 
+                  - generic "gorgeous" [ref=e732]: 
+                  - generic "gorgeous" [ref=e733]: 
+                  - generic "gorgeous" [ref=e734]: 
+                - generic [ref=e735]: ( 4 )
+          - generic [ref=e737]:
+            - link [ref=e739] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=2779
+              - img "Bưởi Đoan Hùng - Thùng 10 quả - Mua 10 tặng 1" [ref=e740]
+            - generic [ref=e741]:
+              - link "Bưởi Đoan Hùng - Thùng 10 quả - Mua 10 tặng 1" [ref=e742] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=2779
+              - generic [ref=e743]:
+                - generic [ref=e744]: 300.000đ
+                - generic [ref=e745]: giảm 27%
+              - generic [ref=e746]: 220.000đ
+              - generic [ref=e747]:
+                - generic "gorgeous" [ref=e748]:
+                  - generic "gorgeous" [ref=e749]: 
+                  - generic "gorgeous" [ref=e750]: 
+                  - generic "gorgeous" [ref=e751]: 
+                  - generic "gorgeous" [ref=e752]: 
+                  - generic "gorgeous" [ref=e753]: 
+                - generic [ref=e754]: ( 2 )
+          - generic [ref=e756]:
+            - link [ref=e758] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=2332
+              - img "OCOP - Táo Sấy Dẻo Tách Hạt Thái Thuận - Túi 418g" [ref=e759]
+            - generic [ref=e760]:
+              - link "OCOP - Táo Sấy Dẻo Tách Hạt Thái Thuận - Túi 418g" [ref=e761] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=2332
+              - generic [ref=e762]: 96.000đ
+              - generic [ref=e763]:
+                - generic "gorgeous" [ref=e764]:
+                  - generic "gorgeous" [ref=e765]: 
+                  - generic "gorgeous" [ref=e766]: 
+                  - generic "gorgeous" [ref=e767]: 
+                  - generic "gorgeous" [ref=e768]: 
+                  - generic "gorgeous" [ref=e769]: 
+                - generic [ref=e770]: ( 0 )
+          - generic [ref=e772]:
+            - link [ref=e774] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=2795
+              - img "Combo thịt gác bếp Cao Lan" [ref=e775]
+            - generic [ref=e776]:
+              - link "Combo thịt gác bếp Cao Lan" [ref=e777] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=2795
+              - generic [ref=e778]:
+                - generic [ref=e779]: 345.000đ
+                - generic [ref=e780]: giảm 16%
+              - generic [ref=e781]: 289.000đ
+              - generic [ref=e782]:
+                - generic "gorgeous" [ref=e783]:
+                  - generic "gorgeous" [ref=e784]: 
+                  - generic "gorgeous" [ref=e785]: 
+                  - generic "gorgeous" [ref=e786]: 
+                  - generic "gorgeous" [ref=e787]: 
+                  - generic "gorgeous" [ref=e788]: 
+                - generic [ref=e789]: ( 15 )
+          - generic [ref=e791]:
+            - link [ref=e793] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=2316
+              - img "Set Quà Tặng - Hương Vị Núi Rừng" [ref=e794]
+            - generic [ref=e795]:
+              - link "Set Quà Tặng - Hương Vị Núi Rừng" [ref=e796] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=2316
+              - generic [ref=e797]: 140.000đ
+              - generic [ref=e798]:
+                - generic "gorgeous" [ref=e799]:
+                  - generic "gorgeous" [ref=e800]: 
+                  - generic "gorgeous" [ref=e801]: 
+                  - generic "gorgeous" [ref=e802]: 
+                  - generic "gorgeous" [ref=e803]: 
+                  - generic "gorgeous" [ref=e804]: 
+                - generic [ref=e805]: ( 0 )
+          - generic [ref=e807]:
+            - link [ref=e809] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=2284
+              - img "Bột Sắn Dây Miền Bắc 3 Sạch - Gói 500g" [ref=e810]
+            - generic [ref=e811]:
+              - link "Bột Sắn Dây Miền Bắc 3 Sạch - Gói 500g" [ref=e812] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=2284
+              - generic [ref=e813]: 77.000đ
+              - generic [ref=e814]:
+                - generic "gorgeous" [ref=e815]:
+                  - generic "gorgeous" [ref=e816]: 
+                  - generic "gorgeous" [ref=e817]: 
+                  - generic "gorgeous" [ref=e818]: 
+                  - generic "gorgeous" [ref=e819]: 
+                  - generic "gorgeous" [ref=e820]: 
+                - generic [ref=e821]: ( 28 )
+          - generic [ref=e823]:
+            - link [ref=e825] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=2308
+              - img "Dưa Lưới Ninh Thuận" [ref=e826]
+            - generic [ref=e827]:
+              - link "Dưa Lưới Ninh Thuận" [ref=e828] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=2308
+              - generic [ref=e829]: 289.000đ
+              - generic [ref=e830]:
+                - generic "gorgeous" [ref=e831]:
+                  - generic "gorgeous" [ref=e832]: 
+                  - generic "gorgeous" [ref=e833]: 
+                  - generic "gorgeous" [ref=e834]: 
+                  - generic "gorgeous" [ref=e835]: 
+                  - generic "gorgeous" [ref=e836]: 
+                - generic [ref=e837]: ( 1 )
+          - generic [ref=e839]:
+            - link [ref=e841] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=2324
+              - img "Set Quà Tặng - Lộc vàng đất Bắc" [ref=e842]
+            - generic [ref=e843]:
+              - link "Set Quà Tặng - Lộc vàng đất Bắc" [ref=e844] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=2324
+              - generic [ref=e845]: 1.500.000đ
+              - generic [ref=e846]:
+                - generic "gorgeous" [ref=e847]:
+                  - generic "gorgeous" [ref=e848]: 
+                  - generic "gorgeous" [ref=e849]: 
+                  - generic "gorgeous" [ref=e850]: 
+                  - generic "gorgeous" [ref=e851]: 
+                  - generic "gorgeous" [ref=e852]: 
+                - generic [ref=e853]: ( 0 )
+          - generic [ref=e855]:
+            - link [ref=e857] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=2799
+              - img "OCOP - Miến Dong Hồng Phước - Đặc sản Điện Biên - Túi 1kg" [ref=e858]
+            - generic [ref=e859]:
+              - link "OCOP - Miến Dong Hồng Phước - Đặc sản Điện Biên - Túi 1kg" [ref=e860] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=2799
+              - generic [ref=e861]: 80.000đ
+              - generic [ref=e862]:
+                - generic "gorgeous" [ref=e863]:
+                  - generic "gorgeous" [ref=e864]: 
+                  - generic "gorgeous" [ref=e865]: 
+                  - generic "gorgeous" [ref=e866]: 
+                  - generic "gorgeous" [ref=e867]: 
+                  - generic "gorgeous" [ref=e868]: 
+                - generic [ref=e869]: ( 70 )
+          - generic [ref=e871]:
+            - link [ref=e873] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=2871
+              - img "Gạo Séng Cù Chắc Đành - Túi 10kg" [ref=e874]
+            - generic [ref=e875]:
+              - link "Gạo Séng Cù Chắc Đành - Túi 10kg" [ref=e876] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=2871
+              - generic [ref=e877]: 260.000đ
+              - generic [ref=e878]:
+                - generic "gorgeous" [ref=e879]:
+                  - generic "gorgeous" [ref=e880]: 
+                  - generic "gorgeous" [ref=e881]: 
+                  - generic "gorgeous" [ref=e882]: 
+                  - generic "gorgeous" [ref=e883]: 
+                  - generic "gorgeous" [ref=e884]: 
+                - generic [ref=e885]: ( 0 )
+        - link "Xem thêm sản phẩm" [ref=e887] [cursor=pointer]:
+          - /url: /home/Search/index.html?cate_id=2
+    - generic [ref=e888]:
+      - generic [ref=e889]:
+        - img "default banner" [ref=e890]
+        - heading "Đồ uống" [level=3] [ref=e893]
+      - generic [ref=e895]:
+        - generic [ref=e896]:
+          - generic [ref=e898]:
+            - link [ref=e900] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=1324
+              - img "Cà Phê Rang Xay K Black Phúc Sinh" [ref=e901]
+            - generic [ref=e902]:
+              - link "Cà Phê Rang Xay K Black Phúc Sinh" [ref=e903] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=1324
+              - generic [ref=e904]:
+                - generic [ref=e905]: 132.000đ
+                - generic [ref=e906]: giảm
+              - generic [ref=e907]: 110.000đ
+              - generic [ref=e908]:
+                - generic "gorgeous" [ref=e909]:
+                  - generic "gorgeous" [ref=e910]: 
+                  - generic "gorgeous" [ref=e911]: 
+                  - generic "gorgeous" [ref=e912]: 
+                  - generic "gorgeous" [ref=e913]: 
+                  - generic "gorgeous" [ref=e914]: 
+                - generic [ref=e915]: ( 0 )
+          - generic [ref=e917]:
+            - link [ref=e919] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=1652
+              - img "Trà cascara BLUE SONLA Hộp GIẤY 15 Phúc Sinh - Hộp 67.5gr" [ref=e920]
+            - generic [ref=e921]:
+              - link "Trà cascara BLUE SONLA Hộp GIẤY 15 Phúc Sinh - Hộp 67.5gr" [ref=e922] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=1652
+              - generic [ref=e923]:
+                - generic [ref=e924]: 125.000đ
+                - generic [ref=e925]: giảm
+              - generic [ref=e926]: 104.000đ
+              - generic [ref=e927]:
+                - generic "gorgeous" [ref=e928]:
+                  - generic "gorgeous" [ref=e929]: 
+                  - generic "gorgeous" [ref=e930]: 
+                  - generic "gorgeous" [ref=e931]: 
+                  - generic "gorgeous" [ref=e932]: 
+                  - generic "gorgeous" [ref=e933]: 
+                - generic [ref=e934]: ( 0 )
+          - generic [ref=e936]:
+            - link [ref=e938] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=1356
+              - img "Cà Phê Rang Xay K Happy Phúc Sinh" [ref=e939]
+            - generic [ref=e940]:
+              - link "Cà Phê Rang Xay K Happy Phúc Sinh" [ref=e941] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=1356
+              - generic [ref=e942]:
+                - generic [ref=e943]: 115.000đ
+                - generic [ref=e944]: giảm
+              - generic [ref=e945]: 94.000đ
+              - generic [ref=e946]:
+                - generic "gorgeous" [ref=e947]:
+                  - generic "gorgeous" [ref=e948]: 
+                  - generic "gorgeous" [ref=e949]: 
+                  - generic "gorgeous" [ref=e950]: 
+                  - generic "gorgeous" [ref=e951]: 
+                  - generic "gorgeous" [ref=e952]: 
+                - generic [ref=e953]: ( 0 )
+          - generic [ref=e955]:
+            - link [ref=e957] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=1384
+              - img "Trà Cascara BLUE SONLA Hộp Thiếc NHỎ 15 Phúc Sinh" [ref=e958]
+            - generic [ref=e959]:
+              - link "Trà Cascara BLUE SONLA Hộp Thiếc NHỎ 15 Phúc Sinh" [ref=e960] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=1384
+              - generic [ref=e961]:
+                - generic [ref=e962]: 125.000đ
+                - generic [ref=e963]: giảm 17%
+              - generic [ref=e964]: 104.000đ
+              - generic [ref=e965]:
+                - generic "gorgeous" [ref=e966]:
+                  - generic "gorgeous" [ref=e967]: 
+                  - generic "gorgeous" [ref=e968]: 
+                  - generic "gorgeous" [ref=e969]: 
+                  - generic "gorgeous" [ref=e970]: 
+                  - generic "gorgeous" [ref=e971]: 
+                - generic [ref=e972]: ( 0 )
+          - generic [ref=e974]:
+            - link [ref=e976] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=1364
+              - img "Cà Phê Rang Xay K Life Phúc Sinh" [ref=e977]
+            - generic [ref=e978]:
+              - link "Cà Phê Rang Xay K Life Phúc Sinh" [ref=e979] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=1364
+              - generic [ref=e980]:
+                - generic [ref=e981]: 115.000đ
+                - generic [ref=e982]: giảm
+              - generic [ref=e983]: 94.000đ
+              - generic [ref=e984]:
+                - generic "gorgeous" [ref=e985]:
+                  - generic "gorgeous" [ref=e986]: 
+                  - generic "gorgeous" [ref=e987]: 
+                  - generic "gorgeous" [ref=e988]: 
+                  - generic "gorgeous" [ref=e989]: 
+                  - generic "gorgeous" [ref=e990]: 
+                - generic [ref=e991]: ( 0 )
+          - generic [ref=e993]:
+            - link [ref=e995] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=1668
+              - img "Cà Phê K Filter Phúc Sinh - Hộp 105gr" [ref=e996]
+            - generic [ref=e997]:
+              - link "Cà Phê K Filter Phúc Sinh - Hộp 105gr" [ref=e998] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=1668
+              - generic [ref=e999]:
+                - generic [ref=e1000]: 97.000đ
+                - generic [ref=e1001]: giảm 22%
+              - generic [ref=e1002]: 76.000đ
+              - generic [ref=e1003]:
+                - generic "gorgeous" [ref=e1004]:
+                  - generic "gorgeous" [ref=e1005]: 
+                  - generic "gorgeous" [ref=e1006]: 
+                  - generic "gorgeous" [ref=e1007]: 
+                  - generic "gorgeous" [ref=e1008]: 
+                  - generic "gorgeous" [ref=e1009]: 
+                - generic [ref=e1010]: ( 0 )
+          - generic [ref=e1012]:
+            - link [ref=e1014] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=1628
+              - img "Cà Phê Rang Xay - A Ma Thuột - Gói 500gr" [ref=e1015]
+            - generic [ref=e1016]:
+              - link "Cà Phê Rang Xay - A Ma Thuột - Gói 500gr" [ref=e1017] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=1628
+              - generic [ref=e1018]:
+                - generic [ref=e1019]: 160.000đ
+                - generic [ref=e1020]: giảm 10%
+              - generic [ref=e1021]: 144.000đ
+              - generic [ref=e1022]:
+                - generic "gorgeous" [ref=e1023]:
+                  - generic "gorgeous" [ref=e1024]: 
+                  - generic "gorgeous" [ref=e1025]: 
+                  - generic "gorgeous" [ref=e1026]: 
+                  - generic "gorgeous" [ref=e1027]: 
+                  - generic "gorgeous" [ref=e1028]: 
+                - generic [ref=e1029]: ( 6 )
+          - generic [ref=e1031]:
+            - link [ref=e1033] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=1328
+              - img "Cà Phê Rang Xay K Black Phúc Sinh" [ref=e1034]
+            - generic [ref=e1035]:
+              - link "Cà Phê Rang Xay K Black Phúc Sinh" [ref=e1036] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=1328
+              - generic [ref=e1037]:
+                - generic [ref=e1038]: 132.000đ
+                - generic [ref=e1039]: giảm
+              - generic [ref=e1040]: 110.000đ
+              - generic [ref=e1041]:
+                - generic "gorgeous" [ref=e1042]:
+                  - generic "gorgeous" [ref=e1043]: 
+                  - generic "gorgeous" [ref=e1044]: 
+                  - generic "gorgeous" [ref=e1045]: 
+                  - generic "gorgeous" [ref=e1046]: 
+                  - generic "gorgeous" [ref=e1047]: 
+                - generic [ref=e1048]: ( 0 )
+          - generic [ref=e1050]:
+            - link [ref=e1052] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=1316
+              - img "Cà Phê Rang Xay K Phúc Sinh - Gói 908gr" [ref=e1053]
+            - generic [ref=e1054]:
+              - link "Cà Phê Rang Xay K Phúc Sinh - Gói 908gr" [ref=e1055] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=1316
+              - generic [ref=e1056]:
+                - generic [ref=e1057]: 416.000đ
+                - generic [ref=e1058]: giảm 5%
+              - generic [ref=e1059]: 395.000đ
+              - generic [ref=e1060]:
+                - generic "gorgeous" [ref=e1061]:
+                  - generic "gorgeous" [ref=e1062]: 
+                  - generic "gorgeous" [ref=e1063]: 
+                  - generic "gorgeous" [ref=e1064]: 
+                  - generic "gorgeous" [ref=e1065]: 
+                  - generic "gorgeous" [ref=e1066]: 
+                - generic [ref=e1067]: ( 0 )
+          - generic [ref=e1069]:
+            - link [ref=e1071] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=1352
+              - img "Cà Phê Rang Xay K Happy Phúc Sinh" [ref=e1072]
+            - generic [ref=e1073]:
+              - link "Cà Phê Rang Xay K Happy Phúc Sinh" [ref=e1074] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=1352
+              - generic [ref=e1075]:
+                - generic [ref=e1076]: 115.000đ
+                - generic [ref=e1077]: giảm 18%
+              - generic [ref=e1078]: 94.000đ
+              - generic [ref=e1079]:
+                - generic "gorgeous" [ref=e1080]:
+                  - generic "gorgeous" [ref=e1081]: 
+                  - generic "gorgeous" [ref=e1082]: 
+                  - generic "gorgeous" [ref=e1083]: 
+                  - generic "gorgeous" [ref=e1084]: 
+                  - generic "gorgeous" [ref=e1085]: 
+                - generic [ref=e1086]: ( 0 )
+        - link "Xem thêm sản phẩm" [ref=e1088] [cursor=pointer]:
+          - /url: /home/Search/index.html?cate_id=4
+    - generic [ref=e1089]:
+      - generic [ref=e1090]:
+        - img "default banner" [ref=e1091]
+        - heading "Sức khỏe và làm đẹp" [level=3] [ref=e1094]
+      - generic [ref=e1096]:
+        - generic [ref=e1097]:
+          - generic [ref=e1099]:
+            - link [ref=e1101] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=1007
+              - img "Tinh Bột Nghệ Hoàng Minh Châu HMC0001 - Lọ 100gr" [ref=e1102]
+            - generic [ref=e1103]:
+              - link "Tinh Bột Nghệ Hoàng Minh Châu HMC0001 - Lọ 100gr" [ref=e1104] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=1007
+              - generic [ref=e1105]:
+                - generic [ref=e1106]: 100.000đ
+                - generic [ref=e1107]: giảm 21%
+              - generic [ref=e1108]: 79.000đ
+              - generic [ref=e1109]:
+                - generic "gorgeous" [ref=e1110]:
+                  - generic "gorgeous" [ref=e1111]: 
+                  - generic "gorgeous" [ref=e1112]: 
+                  - generic "gorgeous" [ref=e1113]: 
+                  - generic "gorgeous" [ref=e1114]: 
+                  - generic "gorgeous" [ref=e1115]: 
+                - generic [ref=e1116]: ( 4 )
+          - generic [ref=e1118]:
+            - link [ref=e1120] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=1016
+              - img "Nano Curcumin Gel Hoàng Minh Châu HMC0009 - Hộp 20 Gói" [ref=e1121]
+            - generic [ref=e1122]:
+              - link "Nano Curcumin Gel Hoàng Minh Châu HMC0009 - Hộp 20 Gói" [ref=e1123] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=1016
+              - generic [ref=e1124]:
+                - generic [ref=e1125]: 380.000đ
+                - generic [ref=e1126]: giảm 6%
+              - generic [ref=e1127]: 359.000đ
+              - generic [ref=e1128]:
+                - generic "gorgeous" [ref=e1129]:
+                  - generic "gorgeous" [ref=e1130]: 
+                  - generic "gorgeous" [ref=e1131]: 
+                  - generic "gorgeous" [ref=e1132]: 
+                  - generic "gorgeous" [ref=e1133]: 
+                  - generic "gorgeous" [ref=e1134]: 
+                - generic [ref=e1135]: ( 6 )
+          - generic [ref=e1137]:
+            - link [ref=e1139] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=1010
+              - img "OCOP - Tinh Bột Nghệ Hoàng Minh Châu HMC0004 - Túi 500gr" [ref=e1140]
+            - generic [ref=e1141]:
+              - link "OCOP - Tinh Bột Nghệ Hoàng Minh Châu HMC0004 - Túi 500gr" [ref=e1142] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=1010
+              - generic [ref=e1143]:
+                - generic [ref=e1144]: 400.000đ
+                - generic [ref=e1145]: giảm 5%
+              - generic [ref=e1146]: 379.000đ
+              - generic [ref=e1147]:
+                - generic "gorgeous" [ref=e1148]:
+                  - generic "gorgeous" [ref=e1149]: 
+                  - generic "gorgeous" [ref=e1150]: 
+                  - generic "gorgeous" [ref=e1151]: 
+                  - generic "gorgeous" [ref=e1152]: 
+                  - generic "gorgeous" [ref=e1153]: 
+                - generic [ref=e1154]: ( 2 )
+          - generic [ref=e1156]:
+            - link [ref=e1158] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=854
+              - 'img "Hộp Quà Đông Trùng Hạ Thảo Tam Đảo: 1 Hộp Đông Trùng Hạ Thảo Sấy 10g + 1 Hộp Trà Hồng Chi + 1 Hộp Mật Ong" [ref=e1159]'
+            - generic [ref=e1160]:
+              - 'link "Hộp Quà Đông Trùng Hạ Thảo Tam Đảo: 1 Hộp Đông Trùng Hạ Thảo Sấy 10g + 1 Hộp Trà Hồng Chi + 1 Hộp Mật Ong" [ref=e1161] [cursor=pointer]':
+                - /url: /home/Goods/index.html?goods_id=854
+              - generic [ref=e1162]:
+                - generic [ref=e1163]: 570.000đ
+                - generic [ref=e1164]: giảm 34%
+              - generic [ref=e1165]: 375.000đ
+              - generic [ref=e1166]:
+                - generic "gorgeous" [ref=e1167]:
+                  - generic "gorgeous" [ref=e1168]: 
+                  - generic "gorgeous" [ref=e1169]: 
+                  - generic "gorgeous" [ref=e1170]: 
+                  - generic "gorgeous" [ref=e1171]: 
+                  - generic "gorgeous" [ref=e1172]: 
+                - generic [ref=e1173]: ( 3 )
+          - generic [ref=e1175]:
+            - link [ref=e1177] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=855
+              - img "OCOP - Đông Trùng Hạ Thảo Tam Đảo Sấy Thăng Hoa - Hộp 5g" [ref=e1178]
+            - generic [ref=e1179]:
+              - link "OCOP - Đông Trùng Hạ Thảo Tam Đảo Sấy Thăng Hoa - Hộp 5g" [ref=e1180] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=855
+              - generic [ref=e1181]:
+                - generic [ref=e1182]: 150.000đ
+                - generic [ref=e1183]: giảm 23%
+              - generic [ref=e1184]: 115.000đ
+              - generic [ref=e1185]:
+                - generic "gorgeous" [ref=e1186]:
+                  - generic "gorgeous" [ref=e1187]: 
+                  - generic "gorgeous" [ref=e1188]: 
+                  - generic "gorgeous" [ref=e1189]: 
+                  - generic "gorgeous" [ref=e1190]: 
+                  - generic "gorgeous" [ref=e1191]: 
+                - generic [ref=e1192]: ( 18 )
+          - generic [ref=e1194]:
+            - link [ref=e1196] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=848
+              - img "OCOP - Đông Trùng Hạ Thảo Tam Đảo Ký Chủ Nhộng Trường Thọ V.I.P 20 Con x 2 Lọ" [ref=e1197]
+            - generic [ref=e1198]:
+              - link "OCOP - Đông Trùng Hạ Thảo Tam Đảo Ký Chủ Nhộng Trường Thọ V.I.P 20 Con x 2 Lọ" [ref=e1199] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=848
+              - generic [ref=e1200]:
+                - generic [ref=e1201]: 1.980.000đ
+                - generic [ref=e1202]: giảm 35%
+              - generic [ref=e1203]: 1.287.000đ
+              - generic [ref=e1204]:
+                - generic "gorgeous" [ref=e1205]:
+                  - generic "gorgeous" [ref=e1206]: 
+                  - generic "gorgeous" [ref=e1207]: 
+                  - generic "gorgeous" [ref=e1208]: 
+                  - generic "gorgeous" [ref=e1209]: 
+                  - generic "gorgeous" [ref=e1210]: 
+                - generic [ref=e1211]: ( 1 )
+          - generic [ref=e1213]:
+            - link [ref=e1215] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=1015
+              - img "Curcumin Bột Nguyên Chất Hoàng Minh Châu HMC0008 - Hộp 50gr" [ref=e1216]
+            - generic [ref=e1217]:
+              - link "Curcumin Bột Nguyên Chất Hoàng Minh Châu HMC0008 - Hộp 50gr" [ref=e1218] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=1015
+              - generic [ref=e1219]:
+                - generic [ref=e1220]: 400.000đ
+                - generic [ref=e1221]: giảm 5%
+              - generic [ref=e1222]: 379.000đ
+              - generic [ref=e1223]:
+                - generic "gorgeous" [ref=e1224]:
+                  - generic "gorgeous" [ref=e1225]: 
+                  - generic "gorgeous" [ref=e1226]: 
+                  - generic "gorgeous" [ref=e1227]: 
+                  - generic "gorgeous" [ref=e1228]: 
+                  - generic "gorgeous" [ref=e1229]: 
+                - generic [ref=e1230]: ( 0 )
+          - generic [ref=e1232]:
+            - link [ref=e1234] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=847
+              - img "OCOP - Đông trùng hạ thảo Tam Đảo Ký chủ nhộng trường thọ V.I.P 15 con x 2 Lọ" [ref=e1235]
+            - generic [ref=e1236]:
+              - link "OCOP - Đông trùng hạ thảo Tam Đảo Ký chủ nhộng trường thọ V.I.P 15 con x 2 Lọ" [ref=e1237] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=847
+              - generic [ref=e1238]:
+                - generic [ref=e1239]: 1.518.000đ
+                - generic [ref=e1240]: giảm 35%
+              - generic [ref=e1241]: 988.000đ
+              - generic [ref=e1242]:
+                - generic "gorgeous" [ref=e1243]:
+                  - generic "gorgeous" [ref=e1244]: 
+                  - generic "gorgeous" [ref=e1245]: 
+                  - generic "gorgeous" [ref=e1246]: 
+                  - generic "gorgeous" [ref=e1247]: 
+                  - generic "gorgeous" [ref=e1248]: 
+                - generic [ref=e1249]: ( 1 )
+          - generic [ref=e1251]:
+            - link [ref=e1253] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=846
+              - img "OCOP - Đông Trùng Hạ Thảo Tam Đảo Sấy Thăng Hoa - Hộp Luxury 20g x 2 Hộp" [ref=e1254]
+            - generic [ref=e1255]:
+              - link "OCOP - Đông Trùng Hạ Thảo Tam Đảo Sấy Thăng Hoa - Hộp Luxury 20g x 2 Hộp" [ref=e1256] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=846
+              - generic [ref=e1257]:
+                - generic [ref=e1258]: 1.320.000đ
+                - generic [ref=e1259]: giảm 36%
+              - generic [ref=e1260]: 838.560đ
+              - generic [ref=e1261]:
+                - generic "gorgeous" [ref=e1262]:
+                  - generic "gorgeous" [ref=e1263]: 
+                  - generic "gorgeous" [ref=e1264]: 
+                  - generic "gorgeous" [ref=e1265]: 
+                  - generic "gorgeous" [ref=e1266]: 
+                  - generic "gorgeous" [ref=e1267]: 
+                - generic [ref=e1268]: ( 3 )
+          - generic [ref=e1270]:
+            - link [ref=e1272] [cursor=pointer]:
+              - /url: /home/Goods/index.html?goods_id=1013
+              - img "Nano Curcumin Hoàng Minh Châu HMC0006 - Hộp 60 Viên" [ref=e1273]
+            - generic [ref=e1274]:
+              - link "Nano Curcumin Hoàng Minh Châu HMC0006 - Hộp 60 Viên" [ref=e1275] [cursor=pointer]:
+                - /url: /home/Goods/index.html?goods_id=1013
+              - generic [ref=e1276]:
+                - generic [ref=e1277]: 390.000đ
+                - generic [ref=e1278]: giảm 5%
+              - generic [ref=e1279]: 369.000đ
+              - generic [ref=e1280]:
+                - generic "gorgeous" [ref=e1281]:
+                  - generic "gorgeous" [ref=e1282]: 
+                  - generic "gorgeous" [ref=e1283]: 
+                  - generic "gorgeous" [ref=e1284]: 
+                  - generic "gorgeous" [ref=e1285]: 
+                  - generic "gorgeous" [ref=e1286]: 
+                - generic [ref=e1287]: ( 0 )
+        - link "Xem thêm sản phẩm" [ref=e1289] [cursor=pointer]:
+          - /url: /home/Search/index.html?cate_id=6
+    - dialog "Sàn Nông Sản Bưu Điện Việt Nam" [active] [ref=e1291]:
+      - generic [ref=e1292]:
+        - button "Close" [ref=e1293] [cursor=pointer]: ×
+        - link [ref=e1294] [cursor=pointer]:
+          - /url: https://nongsan.buudien.vn/home/Goods/index.html?goods_id=2855
+          - img "Banner popup" [ref=e1295]
+  - contentinfo [ref=e1298]:
+    - generic [ref=e1300]:
+      - generic [ref=e1302]:
+        - generic [ref=e1304]:
+          - img "buudien footer logo" [ref=e1306]
+          - paragraph [ref=e1307]: TỔNG CÔNG TY BƯU ĐIỆN VIỆT NAM
+          - paragraph [ref=e1308]: "Giấy chứng nhận đăng ký doanh nghiệp số: 0102595740 do Phòng Đăng ký kinh doanh - Sở Kế hoạch và đầu tư Thành phố Hà Nội cấp đăng ký lần đầu ngày 08/10/2010. Địa chỉ: Số 5 Phạm Hùng, Phường Cầu Giấy, TP Hà Nội Tổng đài hỗ trợ: 1900565657 Email: nongsantmdt@vnpost.vn"
+        - list [ref=e1311]:
+          - listitem [ref=e1312]:
+            - link "Sản phẩm Ocop" [ref=e1313] [cursor=pointer]:
+              - /url: https://nongsan.buudien.vn/home/Search/index.html?keyword=OCOP
+          - listitem [ref=e1314]:
+            - link "Thực phẩm và đặc sản" [ref=e1315] [cursor=pointer]:
+              - /url: /home/Search/index.html?cate_id=2
+          - listitem [ref=e1316]:
+            - link "Thực phẩm bổ dưỡng" [ref=e1317] [cursor=pointer]:
+              - /url: /home/Search/index.html?cate_id=3
+          - listitem [ref=e1318]:
+            - link "Đồ uống" [ref=e1319] [cursor=pointer]:
+              - /url: /home/Search/index.html?cate_id=4
+          - listitem [ref=e1320]:
+            - link "Sức khỏe và làm đẹp" [ref=e1321] [cursor=pointer]:
+              - /url: /home/Search/index.html?cate_id=6
+      - generic [ref=e1323]:
+        - generic [ref=e1325]:
+          - generic [ref=e1327]:
+            - heading "Hỗ trợ" [level=3] [ref=e1328]
+            - link "Quyền và Nghĩa vụ các bên" [ref=e1329] [cursor=pointer]:
+              - /url: /home/Article/show.html?article_id=51
+            - link "Quy định đóng gói hàng hóa" [ref=e1330] [cursor=pointer]:
+              - /url: /home/Article/show.html?article_id=50
+            - link "Đăng ký thành viên" [ref=e1331] [cursor=pointer]:
+              - /url: /home/Article/show.html?article_id=6
+          - generic [ref=e1333]:
+            - heading "Hướng dẫn" [level=3] [ref=e1334]
+            - link "Hướng dẫn bán hàng" [ref=e1335] [cursor=pointer]:
+              - /url: /home/Article/show.html?article_id=15
+            - link "Hướng dẫn mua hàng" [ref=e1336] [cursor=pointer]:
+              - /url: /home/Article/show.html?article_id=14
+          - generic [ref=e1338]:
+            - heading "Đối tác" [level=3] [ref=e1339]
+            - link "Quy chế sàn TMĐT Nông sản Bưu Điện" [ref=e1340] [cursor=pointer]:
+              - /url: /home/Article/show.html?article_id=52
+            - link "Điều khoản chung" [ref=e1341] [cursor=pointer]:
+              - /url: /home/Article/show.html?article_id=47
+            - link "Đăng ký Ví điện tử Postpay" [ref=e1342] [cursor=pointer]:
+              - /url: /home/Article/show.html?article_id=49
+          - generic [ref=e1344]:
+            - heading "Chính sách" [level=3] [ref=e1345]
+            - link "Chính sách đổi trả và hoàn tiền" [ref=e1346] [cursor=pointer]:
+              - /url: /home/Article/show.html?article_id=43
+            - link "Chính sách giải quyết khiếu nại" [ref=e1347] [cursor=pointer]:
+              - /url: /home/Article/show.html?article_id=42
+            - link "Chính sách bảo hành" [ref=e1348] [cursor=pointer]:
+              - /url: /home/Article/show.html?article_id=33
+            - link "Quy định hàng hóa cấm" [ref=e1349] [cursor=pointer]:
+              - /url: /home/Article/show.html?article_id=45
+            - link "Chính sách bảo mật" [ref=e1350] [cursor=pointer]:
+              - /url: /home/Article/show.html?article_id=46
+        - generic [ref=e1352]:
+          - generic [ref=e1353]:
+            - paragraph [ref=e1354]: Cài đặt ứng dụng tại
+            - link [ref=e1355] [cursor=pointer]:
+              - /url: https://apps.apple.com/vn/app/b%C6%B0u-%C4%91i%E1%BB%87n-s%C3%A0n-n%C3%B4ng-s%E1%BA%A3n-vi%E1%BB%87t/id6502325999?l=vi
+              - img "appstore" [ref=e1356]
+            - link [ref=e1357] [cursor=pointer]:
+              - /url: https://play.google.com/store/apps/details?id=com.vn.vnpost.bdvn&pcampaignid=web_share
+              - img "ch play" [ref=e1358]
+          - img "app qr" [ref=e1360]
+    - generic [ref=e1363]:
+      - generic [ref=e1364]:
+        - link [ref=e1365] [cursor=pointer]:
+          - /url: http://online.gov.vn/Home/WebDetails/115296
+          - img "logoCCDV" [ref=e1366]
+        - generic [ref=e1367]: © 2024 buudien.vn . All rights reserved.
+      - generic [ref=e1368]:
+        - generic [ref=e1369]: "Kết nối với chúng tôi:"
+        - link "" [ref=e1370] [cursor=pointer]:
+          - /url: https://www.facebook.com/tmdtnongsanbuudien
+        - link "" [ref=e1372] [cursor=pointer]:
+          - /url: https://www.facebook.com/messages/t/249980598206899
+        - link "" [ref=e1374] [cursor=pointer]:
+          - /url: https://www.youtube.com/@N%C3%B4ngs%E1%BA%A3nB%C6%B0u%C4%91i%E1%BB%87n
+  - link [ref=e1377] [cursor=pointer]:
+    - /url: ""
+    - generic [ref=e1378]: 
+  - generic [ref=e1379]:
+    - button "" [ref=e1381] [cursor=pointer]
+    - list [ref=e1385]:
+      - listitem [ref=e1386]:
+        - link "Gian hàng" [ref=e1387] [cursor=pointer]:
+          - /url: https://nongsan.buudien.vn/home/storelist
+      - listitem [ref=e1388]:
+        - link "Mã giảm giá" [ref=e1389] [cursor=pointer]:
+          - /url: https://nongsan.buudien.vn/home/pointmallvoucher
+  - link [ref=e1394] [cursor=pointer]:
+    - /url: javascript:sbz_toggleButtons()

@@ -11,6 +11,7 @@ import Cart from '../pages/user/HomePage/Cart/Cart'
 import Storelist from '../pages/user/Storelist/Storelist'
 import StoreDetail from '../pages/user/StoreDetail/StoreDetail'
 import ProductDetail from '../pages/user/ProductDetail/ProductDetail'
+import BannerDetail from '../pages/user/BannerDetail/BannerDetail'
 import LoginPage from '../pages/auth/LoginPage/LoginPage'
 import RegisterPage from '../pages/auth/RegisterPage/RegisterPage'
 import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage/ForgotPasswordPage'
@@ -76,6 +77,7 @@ const router = createBrowserRouter([
       { path: 'store-list', element: <Storelist /> },
       { path: 'store/:id', element: <StoreDetail /> },
       { path: 'product/:id', element: <ProductDetail /> },
+      { path: 'banner/:id', element: <BannerDetail /> },
     ],
   },
 

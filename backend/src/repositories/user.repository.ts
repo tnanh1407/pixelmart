@@ -34,6 +34,10 @@ class UserRepository {
     return await User.findById(id);
   }
 
+  async findByIdWithPassword(id: string): Promise<IUserDocument | null> {
+    return await User.findById(id).select("+password");
+  }
+
   async findByGoogleId(googleId: string): Promise<IUserDocument | null> {
     return await User.findOne({ googleId });
   }

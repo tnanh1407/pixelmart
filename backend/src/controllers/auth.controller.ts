@@ -9,6 +9,7 @@ import {
   verifyEmailSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
+  changePasswordSchema,
 } from "../validators/user.validator.js";
 
 const isProduction = env.NODE_ENV === "production";
@@ -116,7 +117,10 @@ export class AuthController {
 
     res.json({
       success: true,
-      data: user,
+      data: {
+        ...user.toJSON(),
+        hasPassword: Boolean(user.password),
+      },
     });
   }
 
@@ -168,6 +172,17 @@ export class AuthController {
     res.json({
       success: true,
       message: "Password reset successfully",
+    });
+  }
+
+  async changePassword(req: Request, res: Response) {
+    const userId = String(req.user?.userId);
+    const { currentPassword, newPassword } = changePasswordSchema.parse(req.body);
+    await authService.changePassword(userId, currentPassword, newPassword);
+
+    res.json({
+      success: true,
+      message: "Đổi mật khẩu thành công",
     });
   }
 }

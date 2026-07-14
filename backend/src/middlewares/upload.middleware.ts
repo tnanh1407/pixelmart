@@ -37,3 +37,18 @@ export const uploadAvatar = [
     next();
   },
 ];
+
+export const uploadBannerImage = [
+  upload.single("image"),
+  async (req: Request, _res: Response, next: NextFunction) => {
+    const file = req.file;
+    if (!file) return next();
+
+    const type = await fileTypeFromBuffer(file.buffer);
+    if (!type || !allowed.includes(type.mime)) {
+      return next(new AppError("Invalid image file", 400));
+    }
+
+    next();
+  },
+];

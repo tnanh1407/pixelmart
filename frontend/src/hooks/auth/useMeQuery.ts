@@ -14,8 +14,6 @@ export function useMeQuery() {
         setUser(user)
         return user
       } catch (err: any) {
-        // Chỉ logout khi realmente 401 (token hết hạn)
-        // Network error hoặc 500 sẽ không logout ngay
         if (err?.response?.status === 401) {
           logout()
         }

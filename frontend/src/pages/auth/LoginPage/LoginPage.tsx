@@ -7,8 +7,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { GoogleLogin } from '@react-oauth/google'
 import Swal from 'sweetalert2'
-import { useLoginMutation } from '@/hooks/useAuthMutations'
-import { useGoogleAuth } from '@/hooks/useGoogleAuth'
+import { useLoginMutation } from '@/hooks/auth'
+import { useGoogleAuth } from '@/hooks/auth'
 
 const loginSchema = z.object({
   email: z.string().min(1, 'Email không được để trống').email('Email không hợp lệ'),

@@ -18,5 +18,6 @@ router.post("/resend-verification", auth, asyncHandler(authController.resendVeri
 
 router.post("/forgot-password", asyncHandler(authController.forgotPassword.bind(authController)));
 router.post("/reset-password", asyncHandler(authController.resetPassword.bind(authController)));
+router.post("/change-password", auth, asyncHandler(authController.changePassword.bind(authController)));
 
 export default router;

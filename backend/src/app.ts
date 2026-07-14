@@ -8,6 +8,11 @@ import { errorHandler } from "./middlewares/error.middleware.ts";
 import { auth } from "./middlewares/auth.middleware.ts";
 import authRoutes from "./routes/v1/auth.routes.ts";
 import userRoutes from "./routes/v1/user.routes.ts";
+import addressRoutes from "./routes/v1/address.routes.ts";
+import categoryRoutes from "./routes/v1/category.routes.ts";
+import storeRoutes from "./routes/v1/store.routes.ts";
+import productRoutes from "./routes/v1/product.routes.ts";
+import bannerRoutes from "./routes/v1/banner.routes.ts";
 
 const app = express();
 
@@ -41,6 +46,11 @@ app.get("/health", (req, res) => {
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", auth, userRoutes);
+app.use("/api/v1/addresses", addressRoutes);
+app.use("/api/v1/categories", categoryRoutes);
+app.use("/api/v1/stores", storeRoutes);
+app.use("/api/v1/products", productRoutes);
+app.use("/api/v1/banners", bannerRoutes);
 
 app.use(errorHandler);
 

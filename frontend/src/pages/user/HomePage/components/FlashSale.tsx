@@ -9,44 +9,38 @@ import ProductCard from '../../../../components/ProductCard'
 import { flashSaleProducts } from '../../../../data/products'
 
 const CountdownTimer = () => {
-  const [time, setTime] = useState({ days: 181, hours: 21, minutes: 53, seconds: 39 })
+  const [time, setTime] = useState({ hours: 170, minutes: 9, seconds: 55, ms: 27 })
 
   useEffect(() => {
     const timer = setInterval(() => {
       setTime((prev) => {
-        if (prev.seconds > 0) {
-          return { ...prev, seconds: prev.seconds - 1 }
+        if (prev.ms > 0) {
+          return { ...prev, ms: prev.ms - 1 }
+        } else if (prev.seconds > 0) {
+          return { ...prev, seconds: prev.seconds - 1, ms: 99 }
         } else if (prev.minutes > 0) {
-          return { ...prev, minutes: prev.minutes - 1, seconds: 59 }
+          return { ...prev, minutes: prev.minutes - 1, seconds: 59, ms: 99 }
         } else if (prev.hours > 0) {
-          return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 }
-        } else if (prev.days > 0) {
-          return { ...prev, days: prev.days - 1, hours: 23, minutes: 59, seconds: 59 }
+          return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59, ms: 99 }
         }
         return prev
       })
-    }, 1000)
+    }, 10)
     return () => clearInterval(timer)
   }, [])
 
-  const TimeBlock = ({ value, label }: { value: number; label: string }) => (
-    <div className="flex flex-col items-center">
-      <div className="bg-white text-red-600 font-bold px-3 py-1.5  text-base min-w-12 text-center shadow-md">
-        {String(value).padStart(2, '0')}
-      </div>
-      <span className="text-white text-md mt-1 opacity-80">{label}</span>
+  const TimeBlock = ({ value }: { value: number }) => (
+    <div className="w-9 h-9 bg-[#292929] text-white font-bold text-sm rounded flex items-center justify-center shadow-xs">
+      {String(value).padStart(2, '0')}
     </div>
   )
 
   return (
-    <div className="flex items-center gap-2">
-      <TimeBlock value={time.days} label="Ngày" />
-      <span className="text-white font-bold text-lg">:</span>
-      <TimeBlock value={time.hours} label="Giờ" />
-      <span className="text-white font-bold text-lg">:</span>
-      <TimeBlock value={time.minutes} label="Phút" />
-      <span className="text-white font-bold text-lg">:</span>
-      <TimeBlock value={time.seconds} label="Giây" />
+    <div className="flex items-center gap-1.5 ml-4 md:ml-6">
+      <TimeBlock value={time.hours} />
+      <TimeBlock value={time.minutes} />
+      <TimeBlock value={time.seconds} />
+      <TimeBlock value={time.ms} />
     </div>
   )
 }
@@ -55,17 +49,14 @@ export default function FlashSale() {
   const flashSaleSwiperRef = useRef<any>(null)
 
   return (
-    <section className="w-full max-w-350 mx-auto mt-10">
-       <h2 className="text-2xl font-bold text-primary mb-6 capitalize">Giảm giá mạnh</h2>
+    <section className="w-full max-w-350 mx-auto mt-10 px-4">
       {/* Header */}
-      <div className="bg-linear-to-r from-red-600 via-red-500 to-orange-500 rounded-t-2xl px-6 py-5 flex items-center justify-between">
-        <div className="flex items-center gap-8">
+      <div className="bg-[#de0000] rounded-t-2xl px-6 py-4 flex items-center justify-between flex-wrap gap-4">
+        <div className="flex items-center flex-wrap gap-4">
           {/* Logo FlashSale */}
-          <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl">
-            <div className="bg-white p-1.5 rounded-lg">
-              <Zap size={24} className="text-red-600 fill-red-600" />
-            </div>
-            <span className="text-3xl font-extrabold text-white tracking-wide">FlashSale</span>
+          <div className="flex items-center gap-1.5 text-white font-extrabold italic text-2xl tracking-tight select-none">
+            <Zap size={24} className="text-white fill-white rotate-6" />
+            <span>FlashSale</span>
           </div>
 
           {/* Countdown */}
@@ -75,27 +66,28 @@ export default function FlashSale() {
         {/* Link */}
         <Link
           to="/flash-sale"
-          className="flex items-center gap-2 text-white font-medium hover:bg-white/20 px-4 py-2 rounded-lg transition-colors duration-200"
+          className="flex items-center gap-0.5 text-white hover:underline text-sm font-medium transition-colors cursor-pointer"
         >
           <span>Xem thêm sản phẩm</span>
-          <ChevronRight size={18} />
+          <ChevronRight size={16} />
         </Link>
       </div>
 
-      {/* Products */}
-      <div className="bg-white rounded-b-2xl p-6 shadow-sm">
+      {/* Products Slider */}
+      <div className="bg-white border-x border-b border-gray-100 rounded-b-2xl p-6 shadow-xs">
         <div className="relative">
+          {/* Custom navigation buttons */}
           <button
             onClick={() => flashSaleSwiperRef.current?.slidePrev()}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-5 z-10 w-10 h-10 bg-white border-2 border-red-500 rounded-full flex items-center justify-center text-red-500 shadow-md hover:bg-red-500 hover:text-white transition-colors duration-200"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-5 z-10 w-9 h-9 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-500 shadow-sm transition-all duration-200 cursor-pointer"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={18} />
           </button>
           <button
             onClick={() => flashSaleSwiperRef.current?.slideNext()}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-5 z-10 w-10 h-10 bg-white border-2 border-red-500 rounded-full flex items-center justify-center text-red-500 shadow-md hover:bg-red-500 hover:text-white transition-colors duration-200"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-5 z-10 w-9 h-9 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-500 shadow-sm transition-all duration-200 cursor-pointer"
           >
-            <ChevronRight size={20} />
+            <ChevronRight size={18} />
           </button>
 
           <Swiper

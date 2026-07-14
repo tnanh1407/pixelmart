@@ -2,78 +2,136 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation } from 'swiper/modules'
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
+import api from '@/services/api'
 import 'swiper/css'
 import 'swiper/css/navigation'
 
-const categories = [
-  { id: 1, name: 'Đồ uống', image: '/homeLayout/homePage/category/category (ocop).png', color: 'bg-sky-300', link: '/products?category=drinks' },
-  { id: 2, name: 'Sức khỏe và làm đẹp', image: null, color: 'bg-pink-300', link: '/products?category=health' },
-  { id: 4, name: 'Sản phẩm Ocop', image: '/homeLayout/homePage/category/category (ocop).png', color: 'bg-yellow-300', link: '/products?category=ocop' },
-  { id: 5, name: 'Thực phẩm và đặc sản', image: null, color: 'bg-orange-300', link: '/products?category=food' },
-  { id: 6, name: 'Nông sản tươi', image: null, color: 'bg-lime-300', link: '/products?category=fresh' },
-  { id: 7, name: 'Gạo & Ngũ cốc', image: null, color: 'bg-teal-300', link: '/products?category=grain' },
-  { id: 8, name: 'Trái cây', image: null, color: 'bg-rose-300', link: '/products?category=fruit' },
-  { id: 9, name: 'Rau củ quả', image: null, color: 'bg-green-300', link: '/products?category=vegetable' },
-  { id: 10, name: 'Hải sản', image: null, color: 'bg-cyan-300', link: '/products?category=seafood' },
-]
+interface CategoryItem {
+  _id: string;
+  name: string;
+  slug: string;
+  image?: string | null;
+  parentId?: string | null;
+}
+
+const getCategoryImageUrl = (slug: string, dbImage: string | null | undefined) => {
+  if (dbImage) return dbImage;
+  
+  switch (slug) {
+    case 'san-pham-ocop':
+      return 'https://nongsan.buudien.vn/static/buudien/images/category%20(ocop).png';
+    case 'thuc-pham-bo-duong':
+      return 'https://gateway.vnpost.vn/prod/minio/nsbd/nongsan/home/common/s3_2024102816160476256.png';
+    case 'suc-khoe-va-lam-dep':
+      return 'https://gateway.vnpost.vn/prod/minio/nsbd/nongsan/home/common/s3_2024102816175780973.png';
+    case 'thuc-pham-va-dac-san':
+      return 'https://gateway.vnpost.vn/prod/minio/nsbd/nongsan/home/common/s3_2024102409274627225.png';
+    case 'do-uong':
+      return 'https://gateway.vnpost.vn/prod/minio/nsbd/nongsan/home/common/s3_2024102816170139012.png';
+    default:
+      return 'https://nongsan.buudien.vn/static/buudien/images/category%20(1).png';
+  }
+}
 
 export default function Category() {
   const swiperRef = useRef<any>(null)
+  const [categories, setCategories] = useState<CategoryItem[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await api.get('/categories')
+        if (response.data?.success) {
+          const rootCategories = response.data.data.filter((cat: CategoryItem) => !cat.parentId)
+          setCategories(rootCategories)
+        }
+      } catch (error) {
+        console.error('Failed to fetch categories:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchCategories()
+  }, [])
+
+  if (loading) {
+    return (
+      <section className="w-full max-w-350 mx-auto mt-10 px-4">
+        <h2 className="text-xl font-bold text-[#009b4d] mb-6">Danh mục</h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="aspect-[221/131] w-full bg-gray-100 rounded-xl animate-pulse"></div>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  if (categories.length === 0) {
+    return null
+  }
 
   return (
-    <section className="w-full max-w-350 mx-auto mt-10">
-      <h2 className="text-2xl font-bold text-primary mb-6 capitalize">Danh mục</h2>
-
-      <div className="bg-[url('/core/background.jpg')]  p-6 shadow-sm rounded-xl ">
-        <div className="relative">
+    <section className="w-full max-w-350 mx-auto mt-10 px-4">
+      {/* Title with nav */}
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-bold text-[#009b4d]">Danh mục</h2>
+        
+        <div className="flex items-center gap-1.5">
           <button
             onClick={() => swiperRef.current?.slidePrev()}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-5 z-10 w-10 h-10 bg-white border-2 border-[#009b4d] rounded-full flex items-center justify-center text-[#009b4d] shadow-md hover:bg-[#009b4d] hover:text-white transition-colors duration-200"
+            className="w-8 h-8 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary cursor-pointer transition-all duration-200"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={16} />
           </button>
           <button
             onClick={() => swiperRef.current?.slideNext()}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-5 z-10 w-10 h-10 bg-white border-2 border-[#009b4d] rounded-full flex items-center justify-center text-[#009b4d] shadow-md hover:bg-[#009b4d] hover:text-white transition-colors duration-200"
+            className="w-8 h-8 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary cursor-pointer transition-all duration-200"
           >
-            <ChevronRight size={20} />
+            <ChevronRight size={16} />
           </button>
-
-          <Swiper
-            onSwiper={(swiper) => (swiperRef.current = swiper)}
-            modules={[Navigation]}
-            spaceBetween={16}
-            slidesPerView={2}
-            breakpoints={{
-              640: { slidesPerView: 3 },
-              768: { slidesPerView: 4 },
-              1024: { slidesPerView: 5 },
-            }}
-            className="pb-2 px-2"
-          >
-            {categories.map((cat) => (
-              <SwiperSlide key={cat.id}>
-                <Link to={cat.link} className="block group/cat">
-                  <div className={`relative h-35 rounded-xl overflow-hidden ${cat.color} shadow-md hover:shadow-xl transition-all duration-300`}>
-                    {cat.image && (
-                      <img
-                        src={cat.image}
-                        alt={cat.name}
-                        className="absolute inset-0 w-full h-full object-cover group-hover/cat:scale-110 transition-transform duration-500"
-                      />
-                    )}
-                    <div className="absolute inset-0 bg-linear-to-r from-black/60 via-black/30 to-transparent"></div>
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10">
-                      <h3 className="text-white font-bold text-base leading-tight max-w-25 drop-shadow-md capitalize">{cat.name}</h3>
-                    </div>
-                  </div>
-                </Link>
-              </SwiperSlide>
-            ))}
-          </Swiper>
         </div>
       </div>
+
+      <Swiper
+        onSwiper={(swiper) => (swiperRef.current = swiper)}
+        modules={[Navigation]}
+        spaceBetween={16}
+        slidesPerView={2}
+        breakpoints={{
+          640: { slidesPerView: 3 },
+          1024: { slidesPerView: 4 },
+          1200: { slidesPerView: 5 },
+        }}
+        className="pb-2"
+      >
+        {categories.map((cat) => {
+          const link = `/products?category=${cat.slug}`
+          return (
+            <SwiperSlide key={cat._id}>
+              <Link to={link} className="block overflow-hidden rounded-xl group shadow-sm hover:shadow-md transition-shadow duration-300">
+                <div className="relative aspect-[221/131] w-full overflow-hidden bg-gray-50">
+                  <img
+                    src={getCategoryImageUrl(cat.slug, cat.image)}
+                    alt={cat.name}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  {/* Overlay background gradient to make white text popped */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                  
+                  <div className="absolute left-4 bottom-4 right-4 z-10">
+                    <h3 className="text-white font-bold text-[14px] md:text-[15px] leading-tight text-left max-w-[70%] drop-shadow-md capitalize">
+                      {cat.name}
+                    </h3>
+                  </div>
+                </div>
+              </Link>
+            </SwiperSlide>
+          )
+        })}
+      </Swiper>
     </section>
   )
 }

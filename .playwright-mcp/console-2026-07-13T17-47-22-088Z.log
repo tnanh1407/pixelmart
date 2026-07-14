@@ -1,0 +1,2 @@
+[    3570ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://api.sbz.vn/4.0/accounts/acrgwpijnddohugcufdm/users/hwkgdxxvsrrtkgjkidshvvmlxphdfrwrnegobtdc?v=6&x-user-ref=hwkgdxxvsrrtkgjkidshvvmlxphdfrwrnegobtdc:0
+[    3576ms] [ERROR] {error: locked_account} @ https://vcdn.subiz-cdn.com/widget-v4/public/19e813fb616.app.js:0

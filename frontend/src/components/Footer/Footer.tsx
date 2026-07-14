@@ -102,7 +102,7 @@ export default function Footer() {
       </div>
 
       {/* PHẦN DƯỚI */}
-      <div className="bg-[#004e27] text-gray-300 py-3">
+      <div className="bg-pr-green-bold text-gray-300 py-3">
         <div className="max-w-350 mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-3">
           <span>© 2024 buudien.vn. All rights reserved.</span>
 

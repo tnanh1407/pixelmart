@@ -7,8 +7,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { GoogleLogin } from '@react-oauth/google'
 import Swal from 'sweetalert2'
-import { useRegisterMutation } from '@/hooks/useAuthMutations'
-import { useGoogleAuth } from '@/hooks/useGoogleAuth'
+import { useRegisterMutation } from '@/hooks/auth'
+import { useGoogleAuth } from '@/hooks/auth'
 
 const registerSchema = z
   .object({

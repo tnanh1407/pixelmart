@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { type CredentialResponse } from '@react-oauth/google'
 import { jwtDecode } from 'jwt-decode'
 import Swal from 'sweetalert2'
-import { useGoogleLoginMutation } from '@/hooks/useAuthMutations'
+import { useGoogleLoginMutation } from './useAuthMutations'
 
 interface GoogleJwtPayload {
   sub: string
