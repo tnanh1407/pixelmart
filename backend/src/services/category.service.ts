@@ -16,7 +16,7 @@ class CategoryService {
   }
 
   async createCategory(data: Partial<ICategory>) {
-    const { name, slug, parentId } = data;
+    const { name, slug } = data;
 
     if (!name) {
       throw new AppError("Tên danh mục là bắt buộc", 400);
@@ -32,14 +32,6 @@ class CategoryService {
       throw new AppError("Tên hoặc Slug danh mục đã tồn tại", 400);
     }
 
-    // Verify parent if provided
-    if (parentId) {
-      const parent = await Category.findById(parentId);
-      if (!parent) {
-        throw new AppError("Danh mục cha không tồn tại", 400);
-      }
-    }
-
     return await Category.create({
       ...data,
       slug: categorySlug
@@ -48,7 +40,7 @@ class CategoryService {
 
   async updateCategory(id: string, data: Partial<ICategory>) {
     const category = await this.getCategoryById(id);
-    const { name, slug, parentId } = data;
+    const { name, slug } = data;
 
     if (name && name !== category.name) {
       const existing = await Category.findOne({ name });
@@ -68,19 +60,6 @@ class CategoryService {
       category.slug = this.generateSlug(name);
     }
 
-    if (parentId !== undefined) {
-      if (parentId === id) {
-        throw new AppError("Danh mục cha không thể chính là nó", 400);
-      }
-      if (parentId) {
-        const parent = await Category.findById(parentId);
-        if (!parent) {
-          throw new AppError("Danh mục cha không tồn tại", 400);
-        }
-      }
-      category.parentId = parentId;
-    }
-
     if (data.description !== undefined) category.description = data.description;
     if (data.image !== undefined) category.image = data.image;
     if (data.isActive !== undefined) category.isActive = data.isActive;
@@ -89,16 +68,9 @@ class CategoryService {
   }
 
   async deleteCategory(id: string) {
-    const category = await this.getCategoryById(id);
+    await this.getCategoryById(id);
 
-    // Check if category has subcategories
-    const hasChildren = await Category.findOne({ parentId: id });
-    if (hasChildren) {
-      throw new AppError("Không thể xóa danh mục đang có danh mục con", 400);
-    }
-
-    // Note: We could check for active products using categoryId here too.
-    await category.deleteOne();
+    await Category.findByIdAndDelete(id);
     return { message: "Xóa danh mục thành công" };
   }
 

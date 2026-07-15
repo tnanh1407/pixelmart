@@ -2,6 +2,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, Calendar, Tag, ExternalLink, Sparkles, AlertCircle } from 'lucide-react'
 import { useBanner } from '@/hooks/banner/useBanners'
 import dayjs from 'dayjs'
+import AppBreadcrumb from '@/components/AppBreadcrumb'
 
 export default function BannerDetail() {
   const { id } = useParams<{ id: string }>()
@@ -10,7 +11,7 @@ export default function BannerDetail() {
 
   if (isLoading) {
     return (
-      <div className="w-full max-w-4xl mx-auto py-12 px-4">
+      <div className="w-full max-w-7xl mx-auto py-12 px-4">
         {/* Breadcrumb Skeleton */}
         <div className="h-4 w-48 bg-gray-100 rounded animate-pulse mb-6" />
         
@@ -56,19 +57,15 @@ export default function BannerDetail() {
   const hasDates = banner.startDate || banner.endDate
 
   return (
-    <div className="w-full max-w-4xl mx-auto py-8 px-4 sm:px-6">
+    <div className="w-full max-w-7xl mx-auto py-8 px-4 sm:px-6">
       {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 mb-6">
-        <Link to="/" className="hover:text-primary transition-colors">
-          Trang chủ
-        </Link>
-        <span>/</span>
-        <span className="text-gray-400">Chi tiết chiến dịch</span>
-        <span>/</span>
-        <span className="text-gray-900 font-medium truncate max-w-xs sm:max-w-md">
-          {banner.title}
-        </span>
-      </div>
+      <AppBreadcrumb
+        className="mb-6"
+        items={[
+          { label: 'Chi tiết chiến dịch' },
+          { label: banner.title }
+        ]}
+      />
 
       {/* Hero Banner Section */}
       <div className="group relative w-full h-80 sm:h-96 rounded-3xl overflow-hidden shadow-lg border border-gray-100/50 mb-8 bg-slate-50">
@@ -91,12 +88,7 @@ export default function BannerDetail() {
               Đang diễn ra
             </span>
           )}
-          
-          {banner.position && (
-            <span className="bg-white/95 text-gray-700 text-xs font-semibold px-3 py-1 rounded-full shadow-sm border border-gray-200 capitalize">
-              Vị trí: {banner.position}
-            </span>
-          )}
+
         </div>
       </div>
 

@@ -103,11 +103,6 @@ const productSchema = new mongoose.Schema<IProductDocument>(
       sparse: true,
       trim: true,
     },
-    brand: {
-      type: String,
-      trim: true,
-      default: "",
-    },
     description: {
       type: String,
       required: [true, "Mô tả sản phẩm là bắt buộc"],

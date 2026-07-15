@@ -2,7 +2,10 @@ import { NavLink } from 'react-router-dom'
 import {
   LayoutDashboard,
   Users,
-  Settings,
+  Package,
+  Store,
+  Tag,
+  Image,
   ChevronLeft,
   LogOut,
 } from 'lucide-react'
@@ -15,8 +18,11 @@ interface AdminSidebarProps {
 
 const menuItems = [
   { name: 'Dashboard', path: '/admin', icon: LayoutDashboard, end: true },
-  { name: 'Users', path: '/admin/users', icon: Users },
-  { name: 'Settings', path: '/admin/settings', icon: Settings },
+  { name: 'Người dùng', path: '/admin/users', icon: Users },
+  { name: 'Sản phẩm', path: '/admin/products', icon: Package },
+  { name: 'Cửa hàng', path: '/admin/stores', icon: Store },
+  { name: 'Danh mục', path: '/admin/categories', icon: Tag },
+  { name: 'Banner', path: '/admin/banners', icon: Image },
 ]
 
 export default function AdminSidebar({ collapsed, onToggle }: AdminSidebarProps) {
@@ -29,7 +35,7 @@ export default function AdminSidebar({ collapsed, onToggle }: AdminSidebarProps)
     >
       <div className="h-16 flex items-center justify-between px-4 border-b border-gray-700">
         {!collapsed && (
-          <span className="text-xl font-bold text-indigo-400">Admin</span>
+          <span className="text-xl font-bold text-indigo-400 uppercase">Dashboard</span>
         )}
         <button
           onClick={onToggle}
@@ -64,10 +70,13 @@ export default function AdminSidebar({ collapsed, onToggle }: AdminSidebarProps)
       </nav>
 
       <div className="p-2 border-t border-gray-700">
-        <button className="flex items-center gap-3 px-3 py-2.5 w-full text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors">
+        <NavLink
+          to="/"
+          className="flex items-center gap-3 px-3 py-2.5 w-full text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors"
+        >
           <LogOut size={20} />
-          {!collapsed && <span>Logout</span>}
-        </button>
+          {!collapsed && <span>Về trang chủ</span>}
+        </NavLink>
       </div>
     </aside>
   )

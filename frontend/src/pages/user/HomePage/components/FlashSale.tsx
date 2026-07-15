@@ -5,27 +5,33 @@ import { Navigation } from 'swiper/modules'
 import { useRef, useState, useEffect } from 'react'
 import 'swiper/css'
 import 'swiper/css/navigation'
-import ProductCard from '../../../../components/ProductCard'
-import { flashSaleProducts } from '../../../../data/products'
+
+import ProductCard from '@/components/ProductCard'
+import { useQuery } from '@tanstack/react-query'
+import { productService } from '@/services/product.service'
 
 const CountdownTimer = () => {
-  const [time, setTime] = useState({ hours: 170, minutes: 9, seconds: 55, ms: 27 })
+  const [time, setTime] = useState({ hours: 2, minutes: 0, seconds: 0 })
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTime((prev) => {
-        if (prev.ms > 0) {
-          return { ...prev, ms: prev.ms - 1 }
-        } else if (prev.seconds > 0) {
-          return { ...prev, seconds: prev.seconds - 1, ms: 99 }
-        } else if (prev.minutes > 0) {
-          return { ...prev, minutes: prev.minutes - 1, seconds: 59, ms: 99 }
-        } else if (prev.hours > 0) {
-          return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59, ms: 99 }
-        }
-        return prev
-      })
-    }, 10)
+    // Calculate time remaining until next 3-hour flash sale block (e.g. 12:00, 15:00, 18:00...)
+    const updateTime = () => {
+      const now = new Date()
+      const currentHour = now.getHours()
+      const nextHour = currentHour + (3 - (currentHour % 3))
+      const target = new Date(now)
+      target.setHours(nextHour, 0, 0, 0)
+      
+      const diff = target.getTime() - now.getTime()
+      const hours = Math.floor(diff / (1000 * 60 * 60))
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+      
+      setTime({ hours, minutes, seconds })
+    }
+
+    updateTime()
+    const timer = setInterval(updateTime, 1000)
     return () => clearInterval(timer)
   }, [])
 
@@ -38,15 +44,37 @@ const CountdownTimer = () => {
   return (
     <div className="flex items-center gap-1.5 ml-4 md:ml-6">
       <TimeBlock value={time.hours} />
+      <span className="text-white font-bold">:</span>
       <TimeBlock value={time.minutes} />
+      <span className="text-white font-bold">:</span>
       <TimeBlock value={time.seconds} />
-      <TimeBlock value={time.ms} />
     </div>
   )
 }
 
 export default function FlashSale() {
   const flashSaleSwiperRef = useRef<any>(null)
+
+  // Query real active flash sale products from the database
+  const { data: flashSaleResponse, isLoading } = useQuery({
+    queryKey: ['flash-sale-products'],
+    queryFn: () => productService.getProducts({ flashSaleActive: true, limit: 10 }),
+    staleTime: 5 * 60 * 1000,
+  })
+  const products = flashSaleResponse?.products || []
+
+  if (isLoading) {
+    return (
+      <section className="w-full max-w-350 mx-auto mt-10 px-4 animate-pulse">
+        <div className="bg-[#de0000]/80 rounded-t-2xl px-6 py-4 h-16" />
+        <div className="bg-white border-x border-b border-gray-100 rounded-b-2xl p-6 h-80" />
+      </section>
+    )
+  }
+
+  if (products.length === 0) {
+    return null
+  }
 
   return (
     <section className="w-full max-w-350 mx-auto mt-10 px-4">
@@ -65,7 +93,7 @@ export default function FlashSale() {
 
         {/* Link */}
         <Link
-          to="/flash-sale"
+          to="/products?flashSaleActive=true"
           className="flex items-center gap-0.5 text-white hover:underline text-sm font-medium transition-colors cursor-pointer"
         >
           <span>Xem thêm sản phẩm</span>
@@ -102,8 +130,8 @@ export default function FlashSale() {
             }}
             className="pb-2 px-2"
           >
-            {flashSaleProducts.map((product) => (
-              <SwiperSlide key={product.id}>
+            {products.map((product) => (
+              <SwiperSlide key={product._id}>
                 <ProductCard product={product} />
               </SwiperSlide>
             ))}

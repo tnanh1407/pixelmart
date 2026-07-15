@@ -6,7 +6,7 @@ import { useBanners } from '@/hooks/banner/useBanners'
 import 'swiper/css'
 import 'swiper/css/pagination'
 export default function Banner() {
-  const { data: banners, isLoading } = useBanners('home')
+  const { data: banners, isLoading } = useBanners()
 
   const displayBanners = banners && banners.length > 0 ? banners : null
 

@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import { bannerService } from '@/services/banner.service'
 
-export function useBanners(position?: string) {
+export function useBanners() {
   return useQuery({
-    queryKey: ['banners', position],
-    queryFn: () => bannerService.getActiveBanners(position),
+    queryKey: ['banners'],
+    queryFn: () => bannerService.getActiveBanners(),
     staleTime: 5 * 60 * 1000,
   })
 }

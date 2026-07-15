@@ -12,6 +12,8 @@ import Storelist from '../pages/user/Storelist/Storelist'
 import StoreDetail from '../pages/user/StoreDetail/StoreDetail'
 import ProductDetail from '../pages/user/ProductDetail/ProductDetail'
 import BannerDetail from '../pages/user/BannerDetail/BannerDetail'
+import BannerList from '../pages/user/BannerList/BannerList'
+import Search from '../pages/user/Search/Search'
 import LoginPage from '../pages/auth/LoginPage/LoginPage'
 import RegisterPage from '../pages/auth/RegisterPage/RegisterPage'
 import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage/ForgotPasswordPage'
@@ -21,6 +23,10 @@ import UserLayout from '../layouts/UserLayout'
 import ProfilePage from '../pages/user/Profile/ProfilePage'
 import DashboardPage from '../pages/admin/DashboardPage'
 import UsersPage from '../pages/admin/UsersPage'
+import ProductsPage from '../pages/admin/ProductsPage'
+import StoresPage from '../pages/admin/StoresPage'
+import CategoriesPage from '../pages/admin/CategoriesPage'
+import BannersPage from '../pages/admin/BannersPage'
 import NotFoundPage from '../pages/notFound/NotFoundPage'
 
 const router = createBrowserRouter([
@@ -78,6 +84,8 @@ const router = createBrowserRouter([
       { path: 'store/:id', element: <StoreDetail /> },
       { path: 'product/:id', element: <ProductDetail /> },
       { path: 'banner/:id', element: <BannerDetail /> },
+      { path: 'banners', element: <BannerList /> },
+      { path: 'search', element: <Search /> },
     ],
   },
 
@@ -113,6 +121,10 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <DashboardPage /> },
           { path: 'users', element: <UsersPage /> },
+          { path: 'products', element: <ProductsPage /> },
+          { path: 'stores', element: <StoresPage /> },
+          { path: 'categories', element: <CategoriesPage /> },
+          { path: 'banners', element: <BannersPage /> },
         ],
       },
     ],

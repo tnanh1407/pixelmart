@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { storeService } from '@/services/store.service'
 import { provinces } from '../../../data/products'
@@ -12,13 +13,22 @@ import Pagination from './components/Pagination'
 const ITEMS_PER_PAGE = 10
 
 export default function Storelist() {
-  const [search, setSearch] = useState('')
+  const [searchParams] = useSearchParams()
+  const urlSearch = searchParams.get('search') || ''
+
+  const [search, setSearch] = useState(urlSearch)
   const [province, setProvince] = useState('')
   const [shopType, setShopType] = useState<'all' | 'normal' | 'mall'>('all')
   const [category, setCategory] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState(1)
 
-  const [appliedSearch, setAppliedSearch] = useState('')
+  const [appliedSearch, setAppliedSearch] = useState(urlSearch)
+
+  useEffect(() => {
+    setSearch(urlSearch)
+    setAppliedSearch(urlSearch)
+    setCurrentPage(1)
+  }, [urlSearch])
   const [appliedProvince, setAppliedProvince] = useState('')
   const [appliedShopType, setAppliedShopType] = useState<'all' | 'normal' | 'mall'>('all')
   const [appliedCategory, setAppliedCategory] = useState<string[]>([])

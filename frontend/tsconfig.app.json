@@ -10,7 +10,6 @@
     // Relative imports - TrungQuanDev Note: Dành cho chạy app
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"],
       "@/*": ["./src/*"],
     },
     // Cần config types ở đây để sử dụng được các các custom matchers của "@testing-library/jest-dom"...vv

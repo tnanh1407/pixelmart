@@ -18,9 +18,8 @@ interface UserState {
   googleLogin: (payload: {
     googleId: string
     email: string
-    firstName: string
-    lastName: string
-    avatar?: string
+    name : string
+    avatar?: string | undefined
   }) => Promise<void>
   logout: () => Promise<void>
   fetchUser: () => Promise<void>
@@ -85,6 +84,7 @@ const useUserStore = create<UserState>()(
           user: null,
           isAuthenticated: false,
         })
+        localStorage.removeItem('user-storage')
       },
 
       fetchUser: async () => {

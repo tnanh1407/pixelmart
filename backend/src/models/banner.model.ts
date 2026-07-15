@@ -12,7 +12,6 @@ export interface IBanner {
   content?: string;
   image: string;
   link?: string;
-  position: "home" | "category" | "popup";
   isActive: boolean;
   startDate?: Date;
   endDate?: Date;
@@ -58,17 +57,6 @@ const bannerSchema = new mongoose.Schema<IBannerDocument>(
     image: {
       type: String,
       required: [true, "Ảnh banner là bắt buộc"],
-    },
-    link: {
-      type: String,
-      trim: true,
-      default: null,
-    },
-    position: {
-      type: String,
-      enum: ["home", "category", "popup"],
-      default: "home",
-      index: true,
     },
     isActive: {
       type: Boolean,

@@ -267,7 +267,6 @@ interface InitAddressFormParams {
 export function initAddressFormDidOpen({
   provinces,
   activeDistricts,
-  activeWards,
   setDistricts,
   setWards,
   goongjs,
@@ -506,7 +505,6 @@ export function initEditAddressFormDidOpen({
   address,
   provinces,
   activeDistricts,
-  activeWards,
   setDistricts,
   setWards,
   goongjs,

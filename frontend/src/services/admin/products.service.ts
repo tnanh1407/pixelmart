@@ -1,0 +1,25 @@
+import api from '../api'
+
+export const productsService = {
+  async getProducts(params: {
+    page?: number
+    limit?: number
+    search?: string
+    categoryId?: string
+    sort?: string
+  } = {}) {
+    const { data } = await api.get('/products', { params })
+    return {
+      products: data.products || data.data || [],
+      pagination: data.pagination || { page: 1, limit: 10, total: 0, totalPages: 0 },
+    }
+  },
+
+  async updateProduct(id: string, payload: { isActive?: boolean; isFeatured?: boolean }): Promise<void> {
+    await api.put(`/products/${id}`, payload)
+  },
+
+  async deleteProduct(id: string): Promise<void> {
+    await api.delete(`/products/${id}`)
+  },
+}

@@ -47,7 +47,6 @@ async function seedBanners() {
           shortDescription: template.shortDescription,
           image: uploadResult.secure_url,
           link: template.link,
-          position: template.position,
           isActive: true,
           order: template.order,
           author: template.author,

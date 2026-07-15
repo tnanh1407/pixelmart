@@ -6,7 +6,6 @@ export interface ICategory {
   slug: string;
   description?: string;
   image?: string;
-  parentId?: string; // Subcategory support referencing Category _id
   isActive: boolean;
 }
 
@@ -44,12 +43,6 @@ const categorySchema = new mongoose.Schema<ICategoryDocument>(
     image: {
       type: String,
       default: null,
-    },
-    parentId: {
-      type: String,
-      ref: "Category",
-      default: null,
-      index: true,
     },
     isActive: {
       type: Boolean,

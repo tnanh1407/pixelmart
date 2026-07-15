@@ -7,7 +7,6 @@ export function useAuth() {
   const { isLoading: isFetchingUser } = useMeQuery()
 
   const isAdmin = user?.role === 'admin'
-
   return {
     user,
     isAuthenticated,

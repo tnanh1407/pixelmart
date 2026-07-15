@@ -21,14 +21,16 @@ class ProductService {
     const filter: any = { isActive: true };
 
     if (search) {
-      filter.$text = { $search: search };
+      const regex = { $regex: search, $options: "i" };
+      filter.$or = [
+        { name: regex },
+        { brand: regex },
+        { description: regex },
+      ];
     }
 
     if (categoryId) {
-      // Find subcategories if any to filter recursively
-      const subCates = await Category.find({ parentId: categoryId });
-      const cateIds = [categoryId, ...subCates.map(c => c._id)];
-      filter.categoryId = { $in: cateIds };
+      filter.categoryId = categoryId;
     }
 
     if (storeId) {
@@ -59,13 +61,14 @@ class ProductService {
       if (sort === "priceAsc") sorting = { price: 1 };
       else if (sort === "priceDesc") sorting = { price: -1 };
       else if (sort === "rating") sorting = { ratingsAverage: -1 };
-      else if (sort === "sold") sorting = { ratingsQuantity: -1 }; // assuming orders/sales count is ratingQuantity or reviews
+      else if (sort === "sold") sorting = { ratingsQuantity: -1 };
+      else if (sort === "createdAt") sorting = { createdAt: -1 };
     }
 
     const products = await Product.find(filter)
       .populate("categoryId", "name slug")
       .populate("storeId", "name slug logo isVerified")
-      .sort(search && !sort ? { score: { $meta: "textScore" } } : sorting)
+      .sort(sorting)
       .skip(skipIndex)
       .limit(Number(limit));
 

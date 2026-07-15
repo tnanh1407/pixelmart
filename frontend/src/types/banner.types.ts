@@ -10,7 +10,6 @@ export interface IBanner {
   content?: string
   image: string
   link?: string
-  position: 'home' | 'category' | 'popup'
   isActive: boolean
   startDate?: string
   endDate?: string

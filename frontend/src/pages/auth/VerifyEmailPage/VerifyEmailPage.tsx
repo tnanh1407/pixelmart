@@ -5,6 +5,9 @@ import { Loader2, ShieldCheck } from 'lucide-react'
 import Swal from 'sweetalert2'
 import { authService } from '@/services/auth.service'
 
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+
 export default function VerifyEmailPage() {
   const [code, setCode] = useState(['', '', '', '', '', ''])
   const [isVerifying, setIsVerifying] = useState(false)
@@ -113,69 +116,83 @@ export default function VerifyEmailPage() {
   }
 
   return (
-    <div className="w-full max-w-md font-sans">
+    <div className="w-full max-w-4xl font-sans">
       <SpeedInsights />
-      <div className="bg-white rounded-xl shadow-lg p-6">
-        <div className="flex justify-center mb-4">
-          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-            <ShieldCheck size={32} className="text-primary" />
+      <Card className="overflow-hidden p-0 border border-gray-100/50 shadow-2xl">
+        <CardContent className="grid p-0 md:grid-cols-2">
+          {/* Form */}
+          <div className="p-6 md:p-8 flex flex-col justify-center">
+            <div className="flex justify-center mb-4">
+              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                <ShieldCheck size={32} className="text-primary" />
+              </div>
+            </div>
+
+            <h2 className="text-2xl font-bold text-center text-gray-900 mb-1 uppercase">Xác thực email</h2>
+            <p className="text-gray-500 text-center text-sm mb-6">
+              {isSending ? 'Đang gửi mã xác thực...' : 'Nhập mã 6 chữ số đã gửi đến email của bạn'}
+            </p>
+
+            <div className="flex justify-center gap-2 mb-6">
+              {code.map((digit, index) => (
+                <input
+                  key={index}
+                  id={`code-${index}`}
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={1}
+                  value={digit}
+                  onChange={(e) => handleChange(index, e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(index, e)}
+                  onPaste={handlePaste}
+                  disabled={isVerifying || isSending}
+                  className="w-11 h-12 text-center text-lg font-bold border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50"
+                />
+              ))}
+            </div>
+
+            <Button
+              onClick={handleVerify}
+              disabled={isVerifying || isSending || code.join('').length !== 6}
+              className="w-full bg-primary hover:bg-primary-hover text-white py-2 rounded-lg text-sm font-semibold transition-colors flex items-center justify-center gap-2"
+            >
+              {isSending ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                  Đang gửi mã...
+                </>
+              ) : isVerifying ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                  Đang xác thực...
+                </>
+              ) : (
+                "Xác thực"
+              )}
+            </Button>
+
+            <p className="text-center mt-6 text-xs text-gray-500">
+              Không nhận được mã?{' '}
+              <button
+                onClick={handleResend}
+                disabled={isResending}
+                className="text-primary hover:underline hover:text-primary-hover font-semibold disabled:opacity-50"
+              >
+                {isResending ? 'Đang gửi...' : 'Gửi lại'}
+              </button>
+            </p>
           </div>
-        </div>
-
-        <h2 className="text-2xl font-bold text-center text-text-second mb-1 uppercase">Xác thực email</h2>
-        <p className="text-text-second-light text-center text-sm mb-5 capitalize">
-          {isSending ? 'Đang gửi mã xác thực...' : 'Nhập mã 6 chữ số đã gửi đến email của bạn'}
-        </p>
-
-        <div className="flex justify-center gap-2 mb-5">
-          {code.map((digit, index) => (
-            <input
-              key={index}
-              id={`code-${index}`}
-              type="text"
-              inputMode="numeric"
-              maxLength={1}
-              value={digit}
-              onChange={(e) => handleChange(index, e.target.value)}
-              onKeyDown={(e) => handleKeyDown(index, e)}
-              onPaste={handlePaste}
-              disabled={isVerifying || isSending}
-              className="w-11 h-12 text-center text-lg font-bold border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50"
+          
+          {/* Side Image */}
+          <div className="relative hidden bg-slate-50 md:block">
+            <img
+              src="/auth/login_side.png"
+              alt="PixelMart Verification Cover"
+              className="absolute inset-0 h-full w-full object-cover brightness-[0.95]"
             />
-          ))}
-        </div>
-
-        <button
-          onClick={handleVerify}
-          disabled={isVerifying || isSending || code.join('').length !== 6}
-          className="w-full bg-primary text-white py-2 rounded-lg text-sm font-semibold hover:bg-primary-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-        >
-          {isSending ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Đang gửi mã...
-            </>
-          ) : isVerifying ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Đang xác thực...
-            </>
-          ) : (
-            "Xác thực"
-          )}
-        </button>
-
-        <p className="text-center mt-4 text-xs text-text-second-light">
-          Không nhận được mã?{' '}
-          <button
-            onClick={handleResend}
-            disabled={isResending}
-            className="text-primary hover:text-primary-hover font-medium disabled:opacity-50"
-          >
-            {isResending ? 'Đang gửi...' : 'Gửi lại'}
-          </button>
-        </p>
-      </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }

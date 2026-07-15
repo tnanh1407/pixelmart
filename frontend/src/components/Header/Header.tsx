@@ -18,10 +18,21 @@ const searchOptions = [
 ]
 
 export default function Header() {
-
   const [mobileOpen, setMobileOpen] = useState(false)
   const [searchType, setSearchType] = useState(searchOptions[0])
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!searchQuery.trim()) return
+
+    if (searchType.value === 'product') {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`)
+    } else {
+      navigate(`/store-list?search=${encodeURIComponent(searchQuery.trim())}`)
+    }
+  }
   const dropdownRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
 
@@ -49,6 +60,7 @@ export default function Header() {
           </Link>
           <div className="flex items-center gap-6">
             <Link to="/" className="transition-colors duration-300 hover:text-secondary font-medium capitalize">Tiếng Việt</Link>
+              <Link to="/banners" className="transition-colors duration-300 hover:text-secondary font-medium capitalize">Chiến dịch</Link>
             <Link to="/" className="transition-colors duration-300 hover:text-secondary font-medium capitalize">Thông báo</Link>
             <Link to="/store-list" className="transition-colors duration-300 hover:text-secondary font-medium capitalize">Gian hàng</Link>
             <Link to="/pointmall-voucher" className="transition-colors duration-300 hover:text-secondary font-medium capitalize">Mã giảm giá</Link>
@@ -69,10 +81,11 @@ export default function Header() {
 
             {/* Search bar */}
             <div className="flex-1 max-w-2xl hidden md:flex flex-col">
-              <div className="flex items-center w-full border-2 border-gray-200 rounded-lg focus-within:border-primary transition-colors shadow-sm hover:shadow-md">
+              <form onSubmit={handleSearchSubmit} className="flex items-center w-full border-2 border-gray-200 rounded-lg focus-within:border-primary transition-colors shadow-sm hover:shadow-md">
                 {/* Dropdown */}
                 <div className="relative" ref={dropdownRef}>
                   <button
+                    type="button"
                     onClick={() => setDropdownOpen(!dropdownOpen)}
                     className="cursor-pointer capitalize flex items-center gap-1.5 h-full px-4 py-2.5 bg-gray-50 border-r border-gray-200 text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors rounded-l-lg"
                   >
@@ -85,6 +98,7 @@ export default function Header() {
                       {searchOptions.map((option) => (
                         <button
                           key={option.value}
+                          type="button"
                           onClick={() => {
                             setSearchType(option)
                             setDropdownOpen(false)
@@ -107,14 +121,16 @@ export default function Header() {
                 <input
                   type="text"
                   placeholder="Tìm kiếm sản phẩm, cửa hàng..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   className="flex-1 px-4 py-2.5 text-sm outline-none placeholder:text-gray-400"
                 />
 
                 {/* Search button */}
-                <button className="cursor-pointer px-5 py-2.5 bg-primary text-white hover:bg-primary-hover transition-colors rounded-r-lg">
+                <button type="submit" className="cursor-pointer px-5 py-2.5 bg-primary text-white hover:bg-primary-hover transition-colors rounded-r-lg border-none">
                   <Search size={20} />
                 </button>
-              </div>
+              </form>
 
               {/* Category links - dưới search */}
               <div className="flex items-center gap-4 mt-2.5 text-sm text-gray-500 capitalize font-medium">
@@ -170,16 +186,18 @@ export default function Header() {
 
       {/* Mobile search */}
       <div className="md:hidden bg-white px-4 py-3 border-b border-gray-100">
-        <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+        <form onSubmit={handleSearchSubmit} className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
           <input
             type="text"
             placeholder="Tìm kiếm sản phẩm..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="flex-1 px-3 py-2 text-base outline-none"
           />
-          <button className="px-3 py-2 bg-[#009b4d] text-white cursor-pointer">
+          <button type="submit" className="px-3 py-2 bg-[#009b4d] text-white cursor-pointer">
             <Search size={16} />
           </button>
-        </div>
+        </form>
         <div className="flex items-center gap-3 mt-2 text-xs text-gray-600 overflow-x-auto">
           {categories.map((cat) => (
             <Link key={cat} to="/" className="whitespace-nowrap hover:text-secondary transition-colors">

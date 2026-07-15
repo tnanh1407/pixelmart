@@ -11,7 +11,7 @@ export default function AuthLayout() {
         className="flex-1 flex items-center justify-center overflow-hidden bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('/auth/login-bg.jpg')" }}
       >
-        <div className="w-full max-w-350 mx-auto px-6 flex justify-end">
+        <div className="w-full max-w-350 mx-auto px-6 flex justify-center">
           <Outlet />
         </div>
       </main>

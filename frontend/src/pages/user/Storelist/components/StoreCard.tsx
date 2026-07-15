@@ -1,6 +1,8 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Store, Star, MessageSquare, Clock, BadgeCheck } from 'lucide-react'
 import type { IStore } from '@/types/store.types'
+import { useFollowStatus, useFollowStore, useUnfollowStore } from '@/hooks/store/useFollowStore'
+import useUserStore from '@/stores/useUserStore'
 
 interface StoreCardProps {
   store: IStore
@@ -14,6 +16,32 @@ const RESPONSE_TIME_LABELS: Record<string, string> = {
 
 
 export default function StoreCard({ store }: StoreCardProps) {
+  const navigate = useNavigate()
+  const { isAuthenticated } = useUserStore()
+
+  const { data: followData } = useFollowStatus(store._id)
+  const isFollowing = followData?.isFollowing ?? false
+
+  const followMutation = useFollowStore(store._id)
+  const unfollowMutation = useUnfollowStore(store._id)
+
+  const handleFollowToggle = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!isAuthenticated) {
+      navigate('/login')
+      return
+    }
+
+    if (isFollowing) {
+      unfollowMutation.mutate()
+    } else {
+      followMutation.mutate()
+    }
+  }
+
+  const isPending = followMutation.isPending || unfollowMutation.isPending
+
   return (
     <div className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
       <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 p-5">
@@ -97,8 +125,16 @@ export default function StoreCard({ store }: StoreCardProps) {
           >
             VIEW SHOP
           </Link>
-          <button className="w-full text-center px-5 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-hover transition-colors">
-            FOLLOW
+          <button
+            onClick={handleFollowToggle}
+            disabled={isPending}
+            className={`w-full text-center px-5 py-2 text-sm font-medium rounded-lg transition-colors cursor-pointer disabled:opacity-50 ${
+              isFollowing
+                ? 'bg-gray-100 border border-gray-300 text-gray-700 hover:bg-gray-250 hover:text-gray-900'
+                : 'bg-primary text-white hover:bg-primary-hover border-none'
+            }`}
+          >
+            {isFollowing ? 'UNFOLLOW' : 'FOLLOW'}
           </button>
         </div>
       </div>

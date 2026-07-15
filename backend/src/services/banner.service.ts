@@ -1,13 +1,11 @@
 import Banner, { IBanner } from "../models/banner.model.js";
 import { AppError } from "../middlewares/error.middleware.js";
+import cloudinary from "../config/cloudinary.js";
+
 
 class BannerService {
-  async getActiveBanners(position?: string) {
+  async getActiveBanners() {
     const filter: any = { isActive: true };
-
-    if (position) {
-      filter.position = position;
-    }
 
     const now = new Date();
     filter.$or = [
@@ -19,10 +17,9 @@ class BannerService {
   }
 
   async getAllBanners(query: any = {}) {
-    const { page = 1, limit = 50, position, isActive } = query;
+    const { page = 1, limit = 50, isActive } = query;
     const filter: any = {};
 
-    if (position) filter.position = position;
     if (isActive !== undefined) filter.isActive = isActive === "true" || isActive === true;
 
     const skipIndex = (Number(page) - 1) * Number(limit);
@@ -66,7 +63,7 @@ class BannerService {
     if (data.title !== undefined) banner.title = data.title;
     if (data.image !== undefined) banner.image = data.image;
     if (data.link !== undefined) banner.link = data.link;
-    if (data.position !== undefined) banner.position = data.position;
+
     if (data.isActive !== undefined) banner.isActive = data.isActive;
     if (data.startDate !== undefined) banner.startDate = data.startDate;
     if (data.endDate !== undefined) banner.endDate = data.endDate;
@@ -80,6 +77,15 @@ class BannerService {
     await banner.deleteOne();
     return { message: "Xóa banner thành công" };
   }
+
+  async uploadBannerImage(file: Express.Multer.File): Promise<string> {
+    const dataURI = `data:${file.mimetype};base64,${file.buffer.toString("base64")}`;
+    const result = await cloudinary.uploader.upload(dataURI, {
+      folder: "pixelmart/banners",
+    });
+    return result.secure_url;
+  }
 }
 
 export default new BannerService();
+

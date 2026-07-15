@@ -1,57 +1,202 @@
-import { Users, TrendingUp, DollarSign, Activity } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
+import { Users, Package, Store, Tag, TrendingUp, Activity, ShoppingCart, BarChart3 } from 'lucide-react'
+import { adminService } from '@/services/admin/admin.service'
+import { Link } from 'react-router-dom'
 
-const stats = [
-  { name: 'Total Users', value: '1,234', icon: Users, change: '+12%', color: 'bg-blue-500' },
-  { name: 'Revenue', value: '$45,678', icon: DollarSign, change: '+8%', color: 'bg-green-500' },
-  { name: 'Growth', value: '23%', icon: TrendingUp, change: '+5%', color: 'bg-purple-500' },
-  { name: 'Active', value: '89%', icon: Activity, change: '+3%', color: 'bg-orange-500' },
-]
+const formatNumber = (n: number) => new Intl.NumberFormat('vi-VN').format(n)
 
 export default function DashboardPage() {
+  const { data: stats, isLoading } = useQuery({
+    queryKey: ['admin-stats'],
+    queryFn: () => adminService.getStats(),
+    staleTime: 30 * 1000,
+  })
+
+  const statCards = [
+    {
+      name: 'Tổng người dùng',
+      value: stats?.totalUsers ?? 0,
+      icon: Users,
+      color: 'bg-blue-500',
+      bgColor: 'bg-blue-50',
+      link: '/admin/users',
+    },
+    {
+      name: 'Tổng sản phẩm',
+      value: stats?.totalProducts ?? 0,
+      icon: Package,
+      color: 'bg-green-500',
+      bgColor: 'bg-green-50',
+      link: '/admin/products',
+    },
+    {
+      name: 'Tổng cửa hàng',
+      value: stats?.totalStores ?? 0,
+      icon: Store,
+      color: 'bg-purple-500',
+      bgColor: 'bg-purple-50',
+      link: '/admin/stores',
+    },
+    {
+      name: 'Danh mục',
+      value: stats?.totalCategories ?? 0,
+      icon: Tag,
+      color: 'bg-orange-500',
+      bgColor: 'bg-orange-50',
+      link: '/admin/categories',
+    },
+  ]
+
+  const quickLinks = [
+    { name: 'Quản lý người dùng', path: '/admin/users', icon: Users, color: 'text-blue-600 bg-blue-50' },
+    { name: 'Quản lý sản phẩm', path: '/admin/products', icon: Package, color: 'text-green-600 bg-green-50' },
+    { name: 'Quản lý cửa hàng', path: '/admin/stores', icon: Store, color: 'text-purple-600 bg-purple-50' },
+    { name: 'Quản lý danh mục', path: '/admin/categories', icon: Tag, color: 'text-orange-600 bg-orange-50' },
+    { name: 'Quản lý banner', path: '/admin/banners', icon: BarChart3, color: 'text-pink-600 bg-pink-50' },
+    { name: 'Quản lý banner', path: '/admin/banners', icon: BarChart3, color: 'text-pink-600 bg-pink-50' },
+    
+  ]
+
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Dashboard</h1>
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+          <p className="text-sm text-gray-500 mt-1">Tổng quan hệ thống PixelMart</p>
+        </div>
+        <div className="flex items-center gap-2 text-sm text-gray-500">
+          <Activity size={16} className="text-green-500" />
+          <span>Hệ thống hoạt động tốt</span>
+        </div>
+      </div>
 
+      {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {stats.map((stat) => (
-          <div key={stat.name} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+        {statCards.map((stat) => (
+          <Link
+            key={stat.name}
+            to={stat.link}
+            className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow group"
+          >
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-500">{stat.name}</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">{stat.value}</p>
-                <p className="text-sm text-green-600 mt-1">{stat.change}</p>
+                {isLoading ? (
+                  <div className="h-8 w-20 bg-gray-100 rounded animate-pulse mt-1" />
+                ) : (
+                  <p className="text-2xl font-bold text-gray-900 mt-1">{formatNumber(stat.value)}</p>
+                )}
               </div>
-              <div className={`${stat.color} p-3 rounded-lg`}>
-                <stat.icon size={24} className="text-white" />
+              <div className={`${stat.bgColor} p-3 rounded-lg group-hover:scale-110 transition-transform`}>
+                <stat.icon size={24} className={`${stat.color.replace('bg-', 'text-')}`} />
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h2>
-        <div className="space-y-4">
-          {[
-            { user: 'John Doe', action: 'Created a new project', time: '2 minutes ago' },
-            { user: 'Jane Smith', action: 'Updated profile settings', time: '15 minutes ago' },
-            { user: 'Bob Wilson', action: 'Completed task #123', time: '1 hour ago' },
-          ].map((item, i) => (
-            <div key={i} className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-                  <span className="text-indigo-600 font-medium text-sm">
-                    {item.user.charAt(0)}
-                  </span>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Quick Links */}
+        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Truy cập nhanh</h2>
+          <div className="space-y-2">
+            {quickLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-50 transition-colors group"
+              >
+                <div className={`${link.color} p-2 rounded-lg`}>
+                  <link.icon size={18} />
                 </div>
-                <div>
-                  <p className="font-medium text-gray-900">{item.user}</p>
-                  <p className="text-sm text-gray-500">{item.action}</p>
+                <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{link.name}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Recent Users */}
+        <div className="lg:col-span-2 bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-gray-900">Người dùng gần đây</h2>
+            <Link to="/admin/users" className="text-sm text-indigo-600 hover:text-indigo-700 font-medium">
+              Xem tất cả
+            </Link>
+          </div>
+          {isLoading ? (
+            <div className="space-y-3">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="flex items-center gap-3 animate-pulse">
+                  <div className="w-10 h-10 bg-gray-100 rounded-full" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 bg-gray-100 rounded w-1/3" />
+                    <div className="h-3 bg-gray-100 rounded w-1/2" />
+                  </div>
                 </div>
-              </div>
-              <span className="text-sm text-gray-400">{item.time}</span>
+              ))}
             </div>
-          ))}
+          ) : stats?.recentUsers && stats.recentUsers.length > 0 ? (
+            <div className="space-y-3">
+              {stats.recentUsers.map((user) => (
+                <div key={user._id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center overflow-hidden">
+                      {user.avatar ? (
+                        <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-indigo-600 font-medium text-sm">{user.name.charAt(0).toUpperCase()}</span>
+                      )}
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-900 text-sm">{user.name}</p>
+                      <p className="text-xs text-gray-500">{user.email}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                      user.role === 'admin' ? 'bg-red-100 text-red-700' :
+                      user.role === 'vendor' ? 'bg-purple-100 text-purple-700' :
+                      'bg-gray-100 text-gray-700'
+                    }`}>
+                      {user.role}
+                    </span>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      {new Date(user.createdAt).toLocaleDateString('vi-VN')}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-gray-500 text-center py-8">Chưa có dữ liệu</p>
+          )}
+        </div>
+      </div>
+
+      {/* System Info */}
+      <div className="mt-6 bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Thông tin hệ thống</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="text-center p-4 bg-gray-50 rounded-lg">
+            <ShoppingCart size={24} className="mx-auto text-gray-400 mb-2" />
+            <p className="text-xs text-gray-500">Banner hoạt động</p>
+            <p className="text-lg font-bold text-gray-900">{stats?.totalBanners ?? 0}</p>
+          </div>
+          <div className="text-center p-4 bg-gray-50 rounded-lg">
+            <Store size={24} className="mx-auto text-gray-400 mb-2" />
+            <p className="text-xs text-gray-500">Cửa hàng hoạt động</p>
+            <p className="text-lg font-bold text-gray-900">{stats?.activeStores ?? 0}</p>
+          </div>
+          <div className="text-center p-4 bg-gray-50 rounded-lg">
+            <Package size={24} className="mx-auto text-gray-400 mb-2" />
+            <p className="text-xs text-gray-500">Sản phẩm đang bán</p>
+            <p className="text-lg font-bold text-gray-900">{stats?.activeProducts ?? 0}</p>
+          </div>
+          <div className="text-center p-4 bg-gray-50 rounded-lg">
+            <TrendingUp size={24} className="mx-auto text-gray-400 mb-2" />
+            <p className="text-xs text-gray-500">Người dùng hoạt động</p>
+            <p className="text-lg font-bold text-gray-900">{stats?.activeUsers ?? 0}</p>
+          </div>
         </div>
       </div>
     </div>

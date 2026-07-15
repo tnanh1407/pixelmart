@@ -2,10 +2,8 @@ import api from './api'
 import type { IBanner } from '@/types/banner.types'
 
 export const bannerService = {
-  async getActiveBanners(position?: string): Promise<IBanner[]> {
-    const params: any = {}
-    if (position) params.position = position
-    const { data } = await api.get('/banners', { params })
+  async getActiveBanners(): Promise<IBanner[]> {
+    const { data } = await api.get('/banners')
     return data.data || []
   },
 

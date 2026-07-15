@@ -1,10 +1,10 @@
 import { type Request, type Response } from "express";
 import bannerService from "../services/banner.service.js";
+import { AppError } from "../middlewares/error.middleware.js";
 
 class BannerController {
   async getActiveBanners(req: Request, res: Response) {
-    const { position } = req.query;
-    const banners = await bannerService.getActiveBanners(position as string);
+    const banners = await bannerService.getActiveBanners();
     res.json({
       success: true,
       data: banners,
@@ -50,6 +50,20 @@ class BannerController {
       ...result,
     });
   }
+
+  async uploadBannerImage(req: Request, res: Response) {
+    const file = req.file;
+    if (!file) {
+      throw new AppError("Không có file nào được tải lên", 400);
+    }
+    const url = await bannerService.uploadBannerImage(file);
+    res.json({
+      success: true,
+      message: "Tải ảnh banner lên thành công",
+      data: { url },
+    });
+  }
 }
 
 export default new BannerController();
+

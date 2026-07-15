@@ -8,6 +8,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import Swal from 'sweetalert2'
 import { authService } from '@/services/auth.service'
 
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+
 const resetPasswordSchema = z
   .object({
     password: z.string().min(6, 'Mật khẩu phải có ít nhất 6 ký tự'),
@@ -36,27 +41,9 @@ export default function ResetPasswordPage() {
     defaultValues: { password: '', confirmPassword: '' },
   })
 
-  if (!token) {
-    return (
-      <div className="w-full max-w-md font-sans">
-        <SpeedInsights />
-        <div className="bg-white rounded-xl shadow-lg p-6 text-center">
-          <h2 className="text-2xl font-bold text-text-second mb-3 uppercase">Liên kết không hợp lệ</h2>
-          <p className="text-text-second-light text-sm mb-5">Token đặt lại mật khẩu không tồn tại hoặc đã hết hạn.</p>
-          <Link
-            to="/forgot-password"
-            className="inline-block bg-primary text-white px-6 py-2 rounded-lg text-sm font-semibold hover:bg-primary-hover transition-colors"
-          >
-            Gửi lại link
-          </Link>
-        </div>
-      </div>
-    )
-  }
-
   const onSubmit = async (data: ResetPasswordFormData) => {
     try {
-      await authService.resetPassword(token, data.password, data.confirmPassword)
+      await authService.resetPassword(token!, data.password, data.confirmPassword)
       Swal.fire({
         icon: 'success',
         title: 'Đặt lại mật khẩu thành công!',
@@ -73,81 +60,127 @@ export default function ResetPasswordPage() {
     }
   }
 
-  return (
-    <div className="w-full max-w-md font-sans">
-      <SpeedInsights />
-      <div className="bg-white rounded-xl shadow-lg p-6">
-        <h2 className="text-2xl font-bold text-center text-text-second mb-1 uppercase">Đặt lại mật khẩu</h2>
-        <p className="text-text-second-light text-center text-sm mb-5 capitalize">Nhập mật khẩu mới của bạn</p>
-
-        <form noValidate onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-          <div>
-            <label className="block text-xs font-medium text-text-second mb-1">Mật khẩu mới</label>
-            <div className="relative">
-              <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-second-light" />
-              <input
-                disabled={isSubmitting}
-                type={showPassword ? 'text' : 'password'}
-                {...register('password')}
-                placeholder="Tạo mật khẩu mới"
-                className={`w-full pl-9 pr-9 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent ${errors.password ? 'border-red-error' : 'border-gray-200'}`}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-text-second-light hover:text-text-second"
+  if (!token) {
+    return (
+      <div className="w-full max-w-4xl font-sans">
+        <SpeedInsights />
+        <Card className="overflow-hidden p-0 border border-gray-100/50 shadow-2xl">
+          <CardContent className="grid p-0 md:grid-cols-2">
+            <div className="p-6 md:p-8 flex flex-col justify-center text-center">
+              <h2 className="text-2xl font-bold text-gray-900 mb-3 uppercase">Liên kết không hợp lệ</h2>
+              <p className="text-gray-500 text-sm mb-6">Token đặt lại mật khẩu không tồn tại hoặc đã hết hạn.</p>
+              <Link
+                to="/forgot-password"
+                className="inline-block bg-primary text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-primary-hover transition-colors"
               >
-                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-              </button>
+                Gửi lại link
+              </Link>
             </div>
-            {errors.password && <p className="text-red-error text-xs mt-1">{errors.password.message}</p>}
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-text-second mb-1">Xác nhận mật khẩu</label>
-            <div className="relative">
-              <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-second-light" />
-              <input
-                disabled={isSubmitting}
-                type={showConfirmPassword ? 'text' : 'password'}
-                {...register('confirmPassword')}
-                placeholder="Nhập lại mật khẩu"
-                className={`w-full pl-9 pr-9 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent ${errors.confirmPassword ? 'border-red-error' : 'border-gray-200'}`}
+            
+            <div className="relative hidden bg-slate-50 md:block">
+              <img
+                src="/auth/login_side.png"
+                alt="PixelMart Cover"
+                className="absolute inset-0 h-full w-full object-cover brightness-[0.95]"
               />
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-text-second-light hover:text-text-second"
-              >
-                {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-              </button>
             </div>
-            {errors.confirmPassword && <p className="text-red-error text-xs mt-1">{errors.confirmPassword.message}</p>}
-          </div>
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-primary text-white py-2 rounded-lg text-sm font-semibold hover:bg-primary-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Đang cập nhật...
-              </>
-            ) : (
-              "Đặt lại mật khẩu"
-            )}
-          </button>
-        </form>
-
-        <div className="flex items-center justify-center gap-2 mt-5">
-          <ArrowLeft size={16} className="text-text-second-light" />
-          <Link to="/login" className="text-sm text-primary hover:text-primary-hover font-medium">
-            Quay lại đăng nhập
-          </Link>
-        </div>
+          </CardContent>
+        </Card>
       </div>
+    )
+  }
+
+  return (
+    <div className="w-full max-w-4xl font-sans">
+      <SpeedInsights />
+      <Card className="overflow-hidden p-0 border border-gray-100/50 shadow-2xl">
+        <CardContent className="grid p-0 md:grid-cols-2">
+          {/* Form */}
+          <form noValidate onSubmit={handleSubmit(onSubmit)} className="p-6 md:p-8 flex flex-col justify-center">
+            <div className="flex flex-col items-center gap-2 text-center mb-6">
+              <h1 className="text-2xl font-bold text-gray-900 uppercase">Đặt lại mật khẩu</h1>
+              <p className="text-sm text-gray-500">
+                Nhập mật khẩu mới của bạn bên dưới.
+              </p>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="password">Mật khẩu mới</Label>
+                <div className="relative">
+                  <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <Input
+                    id="password"
+                    disabled={isSubmitting}
+                    type={showPassword ? 'text' : 'password'}
+                    {...register('password')}
+                    placeholder="Tạo mật khẩu mới"
+                    className={errors.password ? 'border-red-500 focus-visible:ring-red-500' : ''}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+                {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="confirmPassword">Xác nhận mật khẩu</Label>
+                <div className="relative">
+                  <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <Input
+                    id="confirmPassword"
+                    disabled={isSubmitting}
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    {...register('confirmPassword')}
+                    placeholder="Nhập lại mật khẩu"
+                    className={errors.confirmPassword ? 'border-red-500 focus-visible:ring-red-500' : ''}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+                {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword.message}</p>}
+              </div>
+
+              <Button type="submit" disabled={isSubmitting} className="w-full bg-primary hover:bg-primary-hover text-white py-2 rounded-lg text-sm font-semibold transition-colors mt-2">
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                    Đang cập nhật...
+                  </>
+                ) : (
+                  "Đặt lại mật khẩu"
+                )}
+              </Button>
+
+              <div className="flex items-center justify-center gap-2 mt-6">
+                <ArrowLeft size={16} className="text-gray-400" />
+                <Link to="/login" className="text-sm text-primary hover:underline font-semibold">
+                  Quay lại đăng nhập
+                </Link>
+              </div>
+            </div>
+          </form>
+          
+          {/* Side Image */}
+          <div className="relative hidden bg-slate-50 md:block">
+            <img
+              src="/auth/login-bg.jpg"
+              alt="PixelMart Reset Password Cover"
+              className="absolute inset-0 h-full w-full object-cover brightness-[0.95]"
+            />
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }
