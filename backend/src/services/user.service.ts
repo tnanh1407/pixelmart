@@ -1,7 +1,8 @@
 import userRepository from "../repositories/user.repository.js";
 import { type IUser, type IAddress } from "../models/user.model.js";
 import { AppError } from "../middlewares/error.middleware.js";
-import cloudinary from "../config/cloudinary.js";
+import cloudinary, { CLOUDINARY_FOLDERS } from "../config/cloudinary.js";
+
 
 class UserService {
   async createUser(data: Partial<IUser>) {
@@ -88,13 +89,13 @@ class UserService {
       const parts = user.avatar.split("/");
       const filename = parts[parts.length - 1];
       const publicId = filename.split(".")[0];
-      await cloudinary.uploader.destroy(`pixelmart/avatars/${publicId}`);
+      await cloudinary.uploader.destroy(`${CLOUDINARY_FOLDERS.AVATARS}/${publicId}`);
     }
 
     const b64 = Buffer.from(file.buffer).toString("base64");
     const dataURI = `data:${file.mimetype};base64,${b64}`;
     const result = await cloudinary.uploader.upload(dataURI, {
-      folder: "pixelmart/avatars",
+      folder: CLOUDINARY_FOLDERS.AVATARS,
       public_id: userId,
       format: "webp",
       overwrite: true,

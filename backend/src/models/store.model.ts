@@ -5,7 +5,6 @@ export interface IStore {
   name: string;
   slug: string;
   logo?: string;
-  coverImage?: string;
   description?: string;
   ownerId: string; // The User who owns this Store
   phone?: string;
@@ -16,10 +15,7 @@ export interface IStore {
     district?: string;
     city?: string;
   };
-  responseRate?: number;
-  responseTime?: 'minutes' | 'hours' | 'day';
   followersCount?: number;
-  followingCount?: number;
   policies?: string[];
   isVerified: boolean; // Official Mall / Verified Shop
   ratingsAverage: number;
@@ -57,10 +53,6 @@ const storeSchema = new mongoose.Schema<IStoreDocument>(
       type: String,
       default: null,
     },
-    coverImage: {
-      type: String,
-      default: null,
-    },
     description: {
       type: String,
       trim: true,
@@ -89,22 +81,7 @@ const storeSchema = new mongoose.Schema<IStoreDocument>(
       district: { type: String, trim: true },
       city: { type: String, trim: true },
     },
-    responseRate: {
-      type: Number,
-      default: 0,
-      min: [0, "Tỷ lệ phản hồi từ 0 đến 100"],
-      max: [100, "Tỷ lệ phản hồi từ 0 đến 100"],
-    },
-    responseTime: {
-      type: String,
-      enum: ["minutes", "hours", "day"],
-      default: "minutes",
-    },
     followersCount: {
-      type: Number,
-      default: 0,
-    },
-    followingCount: {
       type: Number,
       default: 0,
     },

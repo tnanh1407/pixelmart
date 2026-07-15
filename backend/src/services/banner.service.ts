@@ -1,6 +1,7 @@
 import Banner, { IBanner } from "../models/banner.model.js";
 import { AppError } from "../middlewares/error.middleware.js";
-import cloudinary from "../config/cloudinary.js";
+import cloudinary, { CLOUDINARY_FOLDERS } from "../config/cloudinary.js";
+
 
 
 class BannerService {
@@ -61,13 +62,24 @@ class BannerService {
     const banner = await this.getBannerById(id);
 
     if (data.title !== undefined) banner.title = data.title;
+    if (data.shortDescription !== undefined) banner.shortDescription = data.shortDescription;
+    if (data.content !== undefined) banner.content = data.content;
     if (data.image !== undefined) banner.image = data.image;
-    if (data.link !== undefined) banner.link = data.link;
-
     if (data.isActive !== undefined) banner.isActive = data.isActive;
     if (data.startDate !== undefined) banner.startDate = data.startDate;
     if (data.endDate !== undefined) banner.endDate = data.endDate;
+    if (data.durationInDays !== undefined) banner.durationInDays = data.durationInDays;
     if (data.order !== undefined) banner.order = data.order;
+
+    // Structured Article CMS fields
+    if (data.author !== undefined) banner.author = data.author;
+    if (data.categoryName !== undefined) banner.categoryName = data.categoryName;
+    if (data.sapo !== undefined) banner.sapo = data.sapo;
+    if (data.contentSections !== undefined) banner.contentSections = data.contentSections;
+    if (data.highlightsTitle !== undefined) banner.highlightsTitle = data.highlightsTitle;
+    if (data.highlights !== undefined) banner.highlights = data.highlights;
+    if (data.quote !== undefined) banner.quote = data.quote;
+    if (data.quoteAuthor !== undefined) banner.quoteAuthor = data.quoteAuthor;
 
     return await banner.save();
   }
@@ -81,7 +93,7 @@ class BannerService {
   async uploadBannerImage(file: Express.Multer.File): Promise<string> {
     const dataURI = `data:${file.mimetype};base64,${file.buffer.toString("base64")}`;
     const result = await cloudinary.uploader.upload(dataURI, {
-      folder: "pixelmart/banners",
+      folder: CLOUDINARY_FOLDERS.BANNERS,
     });
     return result.secure_url;
   }

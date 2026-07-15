@@ -85,6 +85,25 @@ class StoreController {
       ...result
     });
   }
+
+  async getFollowedStores(req: Request, res: Response) {
+    const userId = req.user!.userId;
+    const result = await storeService.getFollowedStores(userId, req.query);
+    res.json({
+      success: true,
+      ...result
+    });
+  }
+
+  async getStoreFollowers(req: Request, res: Response) {
+    const storeId = req.params.id as string;
+    const result = await storeService.getStoreFollowers(storeId, req.query);
+    res.json({
+      success: true,
+      ...result
+    });
+  }
 }
 
 export default new StoreController();
+

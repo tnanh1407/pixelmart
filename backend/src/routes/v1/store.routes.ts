@@ -7,7 +7,9 @@ const router = Router();
 
 router.get("/", asyncHandler(storeController.getStores.bind(storeController)));
 router.get("/me", auth, asyncHandler(storeController.getMyStore.bind(storeController)));
+router.get("/followed", auth, asyncHandler(storeController.getFollowedStores.bind(storeController)));
 router.get("/:id", asyncHandler(storeController.getStoreById.bind(storeController)));
+router.get("/:id/followers", asyncHandler(storeController.getStoreFollowers.bind(storeController)));
 
 // Authenticated users
 router.post("/", auth, asyncHandler(storeController.createStore.bind(storeController)));

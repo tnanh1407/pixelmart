@@ -8,7 +8,6 @@ import {
   Package,
   MapPin,
   Calendar,
-  MessageSquare,
   Eye,
   UserCheck,
 } from 'lucide-react'
@@ -16,11 +15,6 @@ import type { IStore } from '@/types/store.types'
 import { useFollowStatus, useFollowStore, useUnfollowStore } from '@/hooks/store/useFollowStore'
 import useUserStore from '@/stores/useUserStore'
 
-const RESPONSE_TIME_LABELS: Record<string, string> = {
-  minutes: 'trong vài phút',
-  hours: 'trong vài giờ',
-  day: 'trong một ngày',
-}
 
 interface StoreDetailHeaderProps {
   store: IStore
@@ -115,9 +109,7 @@ export default function StoreDetailHeader({ store, productsCount }: StoreDetailH
         <div className="grid grid-cols-2 gap-x-6 gap-y-2 shrink-0 text-base ml-40 flex-1 font-medium">
           <div className="flex items-center gap-2"><Package size={16} className="text-black shrink-0" /><span className="text-black">Products:</span> <span className="font-bold text-[#009b4d]">{productsCount}</span></div>
           <div className="flex items-center gap-2"><Eye size={16} className="text-black shrink-0" /><span className="text-black">Followers:</span> <span className="font-bold text-[#009b4d]">{(store.followersCount ?? 0).toLocaleString()}</span></div>
-          <div className="flex items-center gap-2"><UserPlus size={16} className="text-black shrink-0" /><span className="text-black">Following:</span> <span className="font-bold text-[#009b4d]">{store.followingCount ?? 0}</span></div>
           <div className="flex items-center gap-2"><Star size={16} className="text-black shrink-0" /><span className="text-black">Rating:</span> <span className="font-bold text-[#009b4d]">{store.ratingsAverage} ({store.ratingsQuantity})</span></div>
-          <div className="flex items-center gap-2"><MessageSquare size={16} className="text-black shrink-0" /><span className="text-black">Chat Performance:</span> <span className="font-bold text-[#009b4d]">{store.responseRate ?? 0}% ({RESPONSE_TIME_LABELS[store.responseTime || 'minutes']})</span></div>
           <div className="flex items-center gap-2"><Calendar size={16} className="text-black shrink-0" /><span className="text-black">Joined:</span> <span className="font-bold text-[#009b4d]">{new Date(store.createdAt).toLocaleDateString('vi-VN')}</span></div>
         </div>
       </div>

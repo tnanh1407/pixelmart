@@ -1,19 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { Store, Star, MessageSquare, Clock, BadgeCheck } from 'lucide-react'
+import { Store, Star, BadgeCheck } from 'lucide-react'
 import type { IStore } from '@/types/store.types'
 import { useFollowStatus, useFollowStore, useUnfollowStore } from '@/hooks/store/useFollowStore'
 import useUserStore from '@/stores/useUserStore'
-
 interface StoreCardProps {
   store: IStore
 }
-
-const RESPONSE_TIME_LABELS: Record<string, string> = {
-  minutes: 'within minutes',
-  hours: 'within hours',
-  day: 'within a day',
-}
-
 
 export default function StoreCard({ store }: StoreCardProps) {
   const navigate = useNavigate()
@@ -70,9 +62,6 @@ export default function StoreCard({ store }: StoreCardProps) {
           <div className="flex items-center gap-1 text-xs text-text-second mt-1 justify-center sm:justify-start">
             <span className="text-primary font-semibold">{store.followersCount ?? 0}</span>
             <span>Followers</span>
-            <span className="mx-1">|</span>
-            <span className="text-primary font-semibold">{store.followingCount ?? 0}</span>
-            <span>Following</span>
           </div>
           <p className="text-xs text-text-second mt-0.5">Tham gia: {new Date(store.createdAt).toLocaleDateString('vi-VN')}</p>
 
@@ -96,24 +85,6 @@ export default function StoreCard({ store }: StoreCardProps) {
               {store.ratingsQuantity ? store.ratingsAverage.toFixed(1) : 'N/A'}
             </span>
             <span className="text-xs text-gray-400">Đánh giá</span>
-          </div>
-
-          <div className="flex flex-col items-center gap-2 min-w-15">
-            <div className=" rounded-full bg-orange-50 flex items-center justify-center">
-              <MessageSquare size={22} className="text-primary" />
-            </div>
-            <span className="text-sm font-bold text-gray-900">{store.responseRate ?? 0}%</span>
-            <span className="text-xs text-gray-400 ">Tỉ lệ phản hồi</span>
-          </div>
-
-          <div className="flex flex-col items-center gap-2 min-w-15">
-            <div className=" rounded-full bg-orange-50 flex items-center justify-center">
-              <Clock size={22} className="text-primary" />
-            </div>
-            <span className="text-sm font-bold text-gray-900">
-              {RESPONSE_TIME_LABELS[store.responseTime || 'minutes']}
-            </span>
-            <span className="text-xs text-gray-400">Thời gian phản hồi</span>
           </div>
         </div>
 

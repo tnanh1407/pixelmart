@@ -1,9 +1,10 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
 import { useAuth } from '@/hooks/auth'
+import { getAuthenticatedRedirectPath } from '@/utils/authRedirect'
 
 export default function PublicRoute() {
-  const { isAuthenticated, isLoading } = useAuth()
+  const { user, isAuthenticated, isLoading } = useAuth()
 
   if (isLoading) {
     return (
@@ -14,7 +15,7 @@ export default function PublicRoute() {
   }
 
   if (isAuthenticated) {
-    return <Navigate to="/" replace />
+    return <Navigate to={getAuthenticatedRedirectPath(user)} replace />
   }
 
   return <Outlet />

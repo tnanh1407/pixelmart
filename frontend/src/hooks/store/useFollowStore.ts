@@ -36,3 +36,19 @@ export function useUnfollowStore(storeId: string | undefined) {
     },
   })
 }
+
+export function useFollowedStores(params: { page?: number; limit?: number } = {}) {
+  return useQuery({
+    queryKey: ['followedStores', params],
+    queryFn: () => storeService.getFollowedStores(params),
+  })
+}
+
+export function useStoreFollowers(storeId: string | undefined, params: { page?: number; limit?: number } = {}) {
+  return useQuery({
+    queryKey: ['storeFollowers', storeId, params],
+    queryFn: () => storeService.getStoreFollowers(storeId!, params),
+    enabled: !!storeId,
+  })
+}
+

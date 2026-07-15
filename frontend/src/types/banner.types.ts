@@ -14,6 +14,7 @@ export interface IBanner {
   startDate?: string
   endDate?: string
   order: number
+  durationInDays?: string
   createdAt: string
   updatedAt: string
   // Structured Article fields

@@ -3,7 +3,6 @@ export interface IStore {
   name: string
   slug: string
   logo?: string
-  coverImage?: string
   description?: string
   ownerId: string
   phone?: string
@@ -14,10 +13,7 @@ export interface IStore {
     district?: string
     city?: string
   }
-  responseRate?: number
-  responseTime?: 'minutes' | 'hours' | 'day'
   followersCount?: number
-  followingCount?: number
   policies?: string[]
   isVerified: boolean
   ratingsAverage: number

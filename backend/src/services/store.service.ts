@@ -105,7 +105,6 @@ class StoreService {
     }
 
     if (data.logo !== undefined) store.logo = data.logo;
-    if (data.coverImage !== undefined) store.coverImage = data.coverImage;
     if (data.description !== undefined) store.description = data.description;
     if (data.phone !== undefined) store.phone = data.phone;
     if (data.email !== undefined) store.email = data.email;
@@ -166,6 +165,52 @@ class StoreService {
   async checkFollowStatus(userId: string, storeId: string) {
     const existing = await StoreFollow.findOne({ userId, storeId });
     return { isFollowing: !!existing };
+  }
+
+  async getFollowedStores(userId: string, query: any = {}) {
+    const { page = 1, limit = 20 } = query;
+    const skipIndex = (Number(page) - 1) * Number(limit);
+
+    const follows = await StoreFollow.find({ userId })
+      .populate("storeId")
+      .skip(skipIndex)
+      .limit(Number(limit))
+      .sort({ createdAt: -1 });
+
+    const total = await StoreFollow.countDocuments({ userId });
+
+    return {
+      stores: follows.map((f) => f.storeId).filter(Boolean),
+      pagination: {
+        page: Number(page),
+        limit: Number(limit),
+        total,
+        totalPages: Math.ceil(total / Number(limit)),
+      },
+    };
+  }
+
+  async getStoreFollowers(storeId: string, query: any = {}) {
+    const { page = 1, limit = 20 } = query;
+    const skipIndex = (Number(page) - 1) * Number(limit);
+
+    const follows = await StoreFollow.find({ storeId })
+      .populate("userId", "name email avatar")
+      .skip(skipIndex)
+      .limit(Number(limit))
+      .sort({ createdAt: -1 });
+
+    const total = await StoreFollow.countDocuments({ storeId });
+
+    return {
+      followers: follows.map((f) => f.userId).filter(Boolean),
+      pagination: {
+        page: Number(page),
+        limit: Number(limit),
+        total,
+        totalPages: Math.ceil(total / Number(limit)),
+      },
+    };
   }
 
   private generateSlug(name: string): string {

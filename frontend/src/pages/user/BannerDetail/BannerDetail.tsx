@@ -68,7 +68,7 @@ export default function BannerDetail() {
       />
 
       {/* Hero Banner Section */}
-      <div className="group relative w-full h-80 sm:h-96 rounded-3xl overflow-hidden shadow-lg border border-gray-100/50 mb-8 bg-slate-50">
+      <div className="group relative w-full h-80 sm:h-96 rounded-3xl overflow-hidden shadow-lg border border-gray-100/50 mb-8 bg-slate-50">x
         <img
           src={banner.image}
           alt={banner.title}

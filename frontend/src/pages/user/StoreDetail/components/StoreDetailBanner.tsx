@@ -8,7 +8,7 @@ export default function StoreDetailBanner({ store }: StoreDetailBannerProps) {
   return (
     <div className="relative w-full h-52 rounded-b-2xl overflow-hidden">
       <img
-        src={store.coverImage || '/homeLayout/homePage/banner/banner_1.webp'}
+        src="/homeLayout/homePage/banner/banner_1.webp"
         alt={store.name}
         className="w-full h-full object-cover"
       />

@@ -2,9 +2,12 @@ export const bannerSeedData = [
   {
     title: "Nông Sản Sạch OCOP - Tươi Ngon Mỗi Ngày",
     shortDescription: "Cung cấp nông sản sạch đạt chuẩn OCOP từ các vùng miền cả nước.",
+    content: "Chiến dịch lớn giới thiệu nông sản sạch đạt tiêu chuẩn OCOP trên toàn quốc tại hệ thống PixelMart. Chúng tôi cam kết mang tới cho khách hàng những sản phẩm chất lượng nhất, được kiểm định nghiêm ngặt từ khâu gieo trồng tới thu hoạch.",
     sourceUrl: "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1200&h=400&fit=crop",
-    link: "/products?category=san-pham-ocop",
-    position: "home" as const,
+    isActive: true,
+    startDate: "2026-07-01",
+    endDate: "2026-08-01",
+    durationInDays: "31",
     order: 1,
     author: "Ban Biên Tập PixelMart",
     categoryName: "Nông Nghiệp Xanh",
@@ -31,9 +34,12 @@ export const bannerSeedData = [
   {
     title: "Đặc Sản Trái Cây Miền Tây Sông Nước",
     shortDescription: "Bưởi da xanh, xoài cát, sầu riêng chín cây chất lượng xuất khẩu.",
+    content: "PixelMart tự hào kết nối trực tiếp với các nhà vườn miền Tây, mang đến những loại trái cây chín cây tươi ngon, không ngâm hóa chất, hỗ trợ đổi trả nếu bị hư hỏng.",
     sourceUrl: "https://images.unsplash.com/photo-1619546813926-a78fa6372cd2?q=80&w=1200&h=400&fit=crop",
-    link: "/products?category=thuc-pham-va-dac-san",
-    position: "home" as const,
+    isActive: true,
+    startDate: "2026-07-10",
+    endDate: "2026-07-25",
+    durationInDays: "15",
     order: 2,
     author: "Nhóm Phóng Viên Thị Trường",
     categoryName: "Nhịp Sống Tiêu Dùng",
@@ -53,14 +59,19 @@ export const bannerSeedData = [
       "Cam kết: Trái cây chín cây tự nhiên, không ủ hóa chất ép chín.",
       "Đổi trả 100%: Hỗ trợ hoàn tiền hoặc bù hàng mới ngay lập tức nếu sản phẩm bị hư hỏng hay khô sượng bên trong.",
       "Đóng gói chuyên dụng: Trái cây được bọc lưới xốp chống dập nát, giao hàng trong thùng thoáng khí bảo quản tối ưu."
-    ]
+    ],
+    quote: "Trái cây miền Tây luôn mang một phong vị độc đáo. Mang được những loại quả ngon chín tự nhiên nhất tới đô thị là niềm vui của chúng tôi.",
+    quoteAuthor: "Đội ngũ thu mua nông sản PixelMart"
   },
   {
     title: "Mật Ong Rừng & Trà Thảo Mộc Tự Nhiên",
     shortDescription: "Bồi bổ sức khỏe tinh khiết với các dòng mật ong rừng tự nhiên.",
+    content: "Khám phá bộ sưu tập mật ong rừng Sơn La nguyên chất và trà thảo mộc Sapa giúp nâng cao sức đề kháng, cải thiện giấc ngủ và bảo vệ sức khỏe hệ tiêu hóa.",
     sourceUrl: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?q=80&w=1200&h=400&fit=crop",
-    link: "/products?category=suc-khoe-va-lam-dep",
-    position: "home" as const,
+    isActive: true,
+    startDate: "2026-07-05",
+    endDate: "2026-08-05",
+    durationInDays: "31",
     order: 3,
     author: "Dược sĩ Minh Châu (Cố vấn Dinh Dưỡng)",
     categoryName: "Sức Khỏe & Đời Sống",
@@ -68,7 +79,7 @@ export const bannerSeedData = [
     contentSections: [
       {
         title: "Mật ong rừng tự nhiên - Hương vị tinh khiết từ đại ngàn Sơn La",
-        content: "Sản phẩm mật ong rừng phân phối bởi PixelMart được khai thác thủ công từ các khu rừng già nguyên sinh vùng Tây Bắc. Mật ong tự nhiên có màu vàng óng ả đặc trưng, vị ngọt thanh tự nhiên và chứa nhiều vitamin, khoáng chất thiết yếu cùng hàm lượng chất chống oxy hóa cao, cam kết không pha trộn đường hóa học hay chất bảo quản nhân tạo."
+        content: "Sản phẩm mật ong rừng phân phối bởi PixelMart được khai thác thủ công từ các khu rừng già nguyên sinh vùng Tây Bắc. Mật ong tự nhiên có màu vàng óng ả đặc trưng, vị ngọt thanh tự nhiên và chứa nhiều vitamin, khoáng chất thiết yếu cùng hàm lượng chất chống oxy hóa cao, cam kết không pha trộn đường hóa học hay chất bảo quan nhân tạo."
       },
       {
         title: "Trà thảo mộc Sapa - Tác dụng vàng cho hệ tiêu hóa và thanh nhiệt",
@@ -80,14 +91,19 @@ export const bannerSeedData = [
       "Giảm ngay 20% khi mua trọn bộ combo Mật Ong Rừng & Trà Thảo Mộc.",
       "Tặng kèm gậy lấy mật ong bằng gỗ sồi tự nhiên cho mỗi hóa đơn từ 350.000đ.",
       "Hoàn trả gấp 3 lần giá trị đơn hàng nếu phát hiện sản phẩm mật ong kém chất lượng hoặc chứa tạp chất."
-    ]
+    ],
+    quote: "Một thìa mật ong ấm vào buổi sáng kết hợp trà thảo mộc buổi tối là liệu pháp detox nhẹ nhàng nhưng vô cùng hiệu quả cho cơ thể.",
+    quoteAuthor: "Dược sĩ Minh Châu tư vấn"
   },
   {
     title: "Gạo Thơm Bản Địa - Đậm Đà Bữa Cơm Việt",
     shortDescription: "Các dòng gạo ngon thượng hạng đạt chuẩn sạch và hữu cơ.",
+    content: "Giới thiệu các dòng gạo đặc sản như ST25 ngon nhất thế giới hay gạo lứt huyết rồng giàu dinh dưỡng, mang lại hạt cơm dẻo ngọt tự nhiên cho bữa cơm gia đình đầm ấm.",
     sourceUrl: "https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?q=80&w=1200&h=400&fit=crop",
-    link: "/products?category=thuc-pham-va-dac-san",
-    position: "home" as const,
+    isActive: true,
+    startDate: "2026-07-01",
+    endDate: "2026-12-31",
+    durationInDays: "183",
     order: 4,
     author: "Nhóm Phóng Viên Nông Nghiệp",
     categoryName: "Hương Vị Việt Nam",
@@ -107,14 +123,19 @@ export const bannerSeedData = [
       "Giảm ngay 15% cho bao gạo ST25 loại 5kg cao cấp.",
       "Tặng kèm 1 hũ muối hồng OCOP khi mua đơn hàng gạo từ 300.000đ.",
       "Miễn phí giao hàng tận nhà toàn quốc khi mua từ 2 bao gạo (10kg) trở lên."
-    ]
+    ],
+    quote: "Ăn một hạt gạo ngon sạch không chỉ nuôi dưỡng cơ thể mà còn là cách chúng ta trân trọng giọt mồ hôi của người nông dân trên cánh đồng quê hương.",
+    quoteAuthor: "Nhóm Phóng Viên Nông Nghiệp đúc kết"
   },
   {
     title: "Đông Trùng Hạ Thảo & Nhân Sâm Quý",
     shortDescription: "Thực phẩm bổ dưỡng tinh hoa cho gia đình và người thân.",
+    content: "Đông trùng hạ thảo sấy thăng hoa Tam Đảo đạt chuẩn OCOP 4 sao, lưu giữ trọn vẹn 99% dưỡng chất quý hiếm, là món quà bồi bổ sức khỏe ý nghĩa nhất.",
     sourceUrl: "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?q=80&w=1200&h=400&fit=crop",
-    link: "/products?category=thuc-pham-bo-duong",
-    position: "home" as const,
+    isActive: true,
+    startDate: "2026-07-15",
+    endDate: "2026-07-30",
+    durationInDays: "15",
     order: 5,
     author: "Nhóm Khoa học & Công nghệ",
     categoryName: "Y Học & Sức Khỏe",
@@ -134,6 +155,8 @@ export const bannerSeedData = [
       "Tăng cường thể lực, kích thích tuần hoàn máu và hỗ trợ hệ hô hấp, bổ phổi cực kỳ tốt cho người lớn tuổi.",
       "Giảm căng thẳng mệt mỏi tinh thần, giúp mang lại giấc ngủ sâu tự nhiên.",
       "Hỗ trợ trẻ hóa tế bào, cải thiện chức năng gan thận thải độc cơ thể."
-    ]
+    ],
+    quote: "Ứng dụng công nghệ sấy thăng hoa hiện đại đã giúp chúng tôi đem đến cho người tiêu dùng Việt dòng dược liệu quý với chất lượng tương đương nhân sâm tự nhiên.",
+    quoteAuthor: "Đại diện viện nghiên cứu chia sẻ"
   }
 ];

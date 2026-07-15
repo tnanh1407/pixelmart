@@ -9,6 +9,7 @@ import { GoogleLogin } from '@react-oauth/google'
 import Swal from 'sweetalert2'
 import { useLoginMutation } from '@/hooks/auth'
 import { useGoogleAuth } from '@/hooks/auth'
+import { getAuthenticatedRedirectPath } from '@/utils/authRedirect'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -41,7 +42,7 @@ export default function LoginPage() {
 
   const onSubmit = (data: LoginFormData) => {
     loginMutation.mutate(data, {
-      onSuccess: () => navigate('/'),
+      onSuccess: (user) => navigate(getAuthenticatedRedirectPath(user), { replace: true }),
       onError: (err: any) => {
         const message = err?.response?.data?.message || 'Đăng nhập thất bại'
         const isUnverified = message.toLowerCase().includes('email not verified')

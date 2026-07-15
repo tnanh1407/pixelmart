@@ -48,4 +48,20 @@ export const storeService = {
     const { data } = await api.get(`/stores/${id}/follow/status`)
     return data
   },
+
+  async getFollowedStores(params: { page?: number; limit?: number } = {}): Promise<StoreListResponse> {
+    const { data } = await api.get('/stores/followed', { params })
+    return {
+      stores: data.stores || data.data || [],
+      pagination: data.pagination || { page: 1, limit: 10, total: 0, totalPages: 0 },
+    }
+  },
+
+  async getStoreFollowers(id: string, params: { page?: number; limit?: number } = {}): Promise<{ followers: any[]; pagination: any }> {
+    const { data } = await api.get(`/stores/${id}/followers`, { params })
+    return {
+      followers: data.followers || data.data || [],
+      pagination: data.pagination || { page: 1, limit: 10, total: 0, totalPages: 0 },
+    }
+  },
 }

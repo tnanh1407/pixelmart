@@ -11,12 +11,11 @@ export interface IBanner {
   shortDescription?: string;
   content?: string;
   image: string;
-  link?: string;
   isActive: boolean;
   startDate?: Date;
   endDate?: Date;
   order: number;
-  // Structured Article fields
+  durationInDays?: string;
   author?: string;
   categoryName?: string;
   sapo?: string;
@@ -52,6 +51,7 @@ const bannerSchema = new mongoose.Schema<IBannerDocument>(
     },
     content: {
       type: String,
+      trim: true,
       default: "",
     },
     image: {
@@ -69,6 +69,10 @@ const bannerSchema = new mongoose.Schema<IBannerDocument>(
     },
     endDate: {
       type: Date,
+      default: null,
+    },
+    durationInDays: {
+      type: String,
       default: null,
     },
     order: {
@@ -103,12 +107,10 @@ const bannerSchema = new mongoose.Schema<IBannerDocument>(
       default: "",
       trim: true,
     },
-    highlights: [
-      {
-        type: String,
-        trim: true,
-      },
-    ],
+    highlights: {
+      type: [String],
+      default: [],
+    },
     quote: {
       type: String,
       default: "",

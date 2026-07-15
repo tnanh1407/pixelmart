@@ -3,6 +3,7 @@ import { type CredentialResponse } from '@react-oauth/google'
 import { jwtDecode } from 'jwt-decode'
 import Swal from 'sweetalert2'
 import { useGoogleLoginMutation } from './useAuthMutations'
+import { getAuthenticatedRedirectPath } from '@/utils/authRedirect'
 
 interface GoogleJwtPayload {
   sub: string
@@ -29,7 +30,7 @@ export function useGoogleAuth() {
         avatar: decoded.picture,
       },
       {
-        onSuccess: () => navigate('/'),
+        onSuccess: (user) => navigate(getAuthenticatedRedirectPath(user), { replace: true }),
         onError: (err: any) => {
           Swal.fire({
             icon: 'error',
