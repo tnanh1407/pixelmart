@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
-import { Search, Trash2, Edit, Plus, X, Loader2, Tag, Upload } from 'lucide-react'
+import { Search, Trash2, Edit, Plus, X, Loader2, Tag, Upload, ChevronLeft, ChevronRight } from 'lucide-react'
 import { adminService } from '@/services/admin/admin.service'
 import { toast } from 'sonner'
 import Swal from 'sweetalert2'
@@ -203,13 +203,29 @@ export default function CategoriesPage() {
             placeholder="Tìm kiếm danh mục..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className={`w-full pl-10 ${
+              searchInput ? 'pr-10' : 'pr-4'
+            } py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent`}
           />
+          {searchInput && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearchInput('')
+                setSearch('')
+                setPage(1)
+              }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <X size={16} />
+            </button>
+          )}
         </div>
         <button
           type="submit"
-          className="px-4 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors whitespace-nowrap"
+          className="px-4 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors whitespace-nowrap flex items-center gap-1.5"
         >
+          <Search size={16} />
           Tìm kiếm
         </button>
       </form>
@@ -225,85 +241,112 @@ export default function CategoriesPage() {
             <p className="text-gray-500">Không tìm thấy danh mục nào</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-100">
-                <tr>
-                  <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Hình ảnh</th>
-                  <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Tên danh mục</th>
-                  <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Mô tả</th>
-                  <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Trạng thái</th>
-                  <th className="text-right px-6 py-3 text-sm font-medium text-gray-500">Thao tác</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {categories.map((cat: any) => (
-                  <tr key={cat._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4">
-                      <div className="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden border border-gray-100">
-                        {cat.image ? (
-                          <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <Tag size={16} className="text-gray-300" />
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 font-medium text-gray-900 text-sm">{cat.name}</td>
-                    <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{cat.description || '—'}</td>
-                    <td className="px-6 py-4">
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                        cat.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                      }`}>
-                        {cat.isActive ? 'Hoạt động' : 'Ẩn'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center justify-end gap-1">
-                        <button
-                          onClick={() => openEdit(cat)}
-                          className="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
-                          title="Chỉnh sửa"
-                        >
-                          <Edit size={16} />
-                        </button>
-                        <button
-                          onClick={() => {
-                            Swal.fire({
-                              title: 'Xác nhận xóa?',
-                              text: 'Bạn có chắc chắn muốn xóa danh mục này? Thao tác này không thể hoàn tác.',
-                              icon: 'warning',
-                              showCancelButton: true,
-                              confirmButtonColor: '#ef4444',
-                              cancelButtonColor: '#6b7280',
-                              confirmButtonText: 'Đồng ý xóa',
-                              cancelButtonText: 'Hủy',
-                              customClass: {
-                                popup: '!rounded-xl',
-                                confirmButton: '!rounded-lg !px-6 !ml-2',
-                                cancelButton: '!rounded-lg !px-6',
-                                actions: '!gap-2',
-                              }
-                            }).then((result) => {
-                              if (result.isConfirmed) {
-                                deleteMutation.mutate(cat._id)
-                              }
-                            })
-                          }}
-                          disabled={deleteMutation.isPending}
-                          className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                          title="Xóa"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
-                    </td>
+          <>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50 border-b border-gray-100">
+                  <tr>
+                    <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Hình ảnh</th>
+                    <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Tên danh mục</th>
+                    <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Mô tả</th>
+                    <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Trạng thái</th>
+                    <th className="text-right px-6 py-3 text-sm font-medium text-gray-500">Thao tác</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {categories.map((cat: any) => (
+                    <tr key={cat._id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4">
+                        <div className="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden border border-gray-100">
+                          {cat.image ? (
+                            <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <Tag size={16} className="text-gray-300" />
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 font-medium text-gray-900 text-sm">{cat.name}</td>
+                      <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{cat.description || '—'}</td>
+                      <td className="px-6 py-4">
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                          cat.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                        }`}>
+                          {cat.isActive ? 'Hoạt động' : 'Ẩn'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center justify-end gap-1">
+                          <button
+                            onClick={() => openEdit(cat)}
+                            className="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                            title="Chỉnh sửa"
+                          >
+                            <Edit size={16} />
+                          </button>
+                          <button
+                            onClick={() => {
+                              Swal.fire({
+                                title: 'Xác nhận xóa?',
+                                text: 'Bạn có chắc chắn muốn xóa danh mục này? Thao tác này không thể hoàn tác.',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#ef4444',
+                                cancelButtonColor: '#6b7280',
+                                confirmButtonText: 'Đồng ý xóa',
+                                cancelButtonText: 'Hủy',
+                                customClass: {
+                                  popup: '!rounded-xl',
+                                  confirmButton: '!rounded-lg !px-6 !ml-2',
+                                  cancelButton: '!rounded-lg !px-6',
+                                  actions: '!gap-2',
+                                }
+                              }).then((result) => {
+                                if (result.isConfirmed) {
+                                  deleteMutation.mutate(cat._id)
+                                }
+                              })
+                            }}
+                            disabled={deleteMutation.isPending}
+                            className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                            title="Xóa"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination */}
+            {pagination.totalPages > 1 && (
+              <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100">
+                <p className="text-sm text-gray-500">
+                  Trang {pagination.page} / {pagination.totalPages}
+                </p>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    disabled={page === 1}
+                    className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  <button
+                    onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
+                    disabled={page === pagination.totalPages}
+                    className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
 

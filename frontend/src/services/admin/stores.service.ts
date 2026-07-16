@@ -38,8 +38,12 @@ export const storesService = {
     }
   },
 
-  async updateStore(id: string, payload: { isVerified?: boolean; isActive?: boolean }): Promise<void> {
+  async updateStore(id: string, payload: any): Promise<void> {
     await api.put(`/stores/${id}`, payload)
+  },
+
+  async createStore(payload: any): Promise<void> {
+    await api.post('/stores', payload)
   },
 
   async deleteStore(id: string): Promise<void> {

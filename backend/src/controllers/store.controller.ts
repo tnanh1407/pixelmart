@@ -29,7 +29,8 @@ class StoreController {
 
   async createStore(req: Request, res: Response) {
     const userId = req.user!.userId;
-    const store = await storeService.createStore(userId, req.body);
+    const userRole = req.user!.role;
+    const store = await storeService.createStore(userId, userRole, req.body);
     res.status(201).json({
       success: true,
       data: store

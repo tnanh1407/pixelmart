@@ -13,8 +13,15 @@ class UserController {
   }
 
   async getAll(req: Request, res: Response) {
-    const { page, limit, sort, ...filter } = req.query;
-    const result = await userService.getAllUsers(filter, {
+    const { page, limit, sort, search, ...filter } = req.query;
+    const mongoFilter: any = { ...filter };
+    if (search) {
+      mongoFilter.$or = [
+        { name: { $regex: search as string, $options: "i" } },
+        { email: { $regex: search as string, $options: "i" } }
+      ];
+    }
+    const result = await userService.getAllUsers(mongoFilter, {
       page: page ? Number(page) : undefined,
       limit: limit ? Number(limit) : undefined,
       sort: sort as string,

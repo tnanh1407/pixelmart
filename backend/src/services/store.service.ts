@@ -4,8 +4,14 @@ import { AppError } from "../middlewares/error.middleware.js";
 
 class StoreService {
   async getStores(query: any = {}) {
-    const { page = 1, limit = 10, search, isVerified } = query;
-    const filter: any = { isActive: true };
+    const { page = 1, limit = 10, search, isVerified, isActive, all } = query;
+    const filter: any = {};
+
+    if (all !== "true" && all !== true) {
+      filter.isActive = true;
+    } else if (isActive !== undefined) {
+      filter.isActive = isActive === "true" || isActive === true;
+    }
 
     if (search) {
       filter.$text = { $search: search };
@@ -19,7 +25,8 @@ class StoreService {
     const stores = await Store.find(filter)
       .sort(search ? { score: { $meta: "textScore" } } : { createdAt: -1 })
       .skip(skipIndex)
-      .limit(Number(limit));
+      .limit(Number(limit))
+      .populate("ownerId", "name email");
 
     const total = await Store.countDocuments(filter);
 
@@ -35,7 +42,7 @@ class StoreService {
   }
 
   async getStoreById(id: string) {
-    const store = await Store.findById(id);
+    const store = await Store.findById(id).populate("ownerId", "name email");
     if (!store) {
       throw new AppError("Cửa hàng không tồn tại", 404);
     }
@@ -46,15 +53,20 @@ class StoreService {
     return await Store.findOne({ ownerId });
   }
 
-  async createStore(ownerId: string, data: Partial<IStore>) {
+  async createStore(userId: string, userRole: string, data: Partial<IStore>) {
     const { name, slug } = data;
 
     if (!name) {
       throw new AppError("Tên cửa hàng là bắt buộc", 400);
     }
 
+    let targetOwnerId = userId;
+    if (userRole === "admin" && data.ownerId) {
+      targetOwnerId = data.ownerId;
+    }
+
     // Check if user already owns a store
-    const existingOwns = await Store.findOne({ ownerId });
+    const existingOwns = await Store.findOne({ ownerId: targetOwnerId });
     if (existingOwns) {
       throw new AppError("Mỗi tài khoản chỉ có thể sở hữu 1 cửa hàng", 400);
     }
@@ -71,7 +83,7 @@ class StoreService {
 
     return await Store.create({
       ...data,
-      ownerId,
+      ownerId: targetOwnerId,
       slug: storeSlug
     });
   }
@@ -108,14 +120,24 @@ class StoreService {
     if (data.description !== undefined) store.description = data.description;
     if (data.phone !== undefined) store.phone = data.phone;
     if (data.email !== undefined) store.email = data.email;
+    if (data.address !== undefined) store.address = data.address;
+    if (data.policies !== undefined) store.policies = data.policies;
     
-    // Only admin can verify store
-    if (data.isVerified !== undefined && userRole === "admin") {
-      store.isVerified = data.isVerified;
-    }
-
-    if (data.isActive !== undefined && userRole === "admin") {
-      store.isActive = data.isActive;
+    // Only admin can verify / activate store and change owner
+    if (userRole === "admin") {
+      if (data.isVerified !== undefined) {
+        store.isVerified = data.isVerified;
+      }
+      if (data.isActive !== undefined) {
+        store.isActive = data.isActive;
+      }
+      if (data.ownerId !== undefined && data.ownerId !== store.ownerId) {
+        const existingOwns = await Store.findOne({ ownerId: data.ownerId });
+        if (existingOwns && existingOwns._id.toString() !== id) {
+          throw new AppError("Mỗi tài khoản chỉ có thể sở hữu 1 cửa hàng", 400);
+        }
+        store.ownerId = data.ownerId;
+      }
     }
 
     return await store.save();
