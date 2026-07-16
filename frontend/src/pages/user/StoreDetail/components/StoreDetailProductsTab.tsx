@@ -1,7 +1,7 @@
 import { TrendingUp, Sparkles, Clock, Package } from 'lucide-react'
 import type { IProduct } from '@/types/product.types'
 import { mapProductToCard } from './mapProductToCard'
-import ProductCard from '@/components/ProductCard'
+import ProductCard from '@/components/common/ProductCard'
 
 interface StoreDetailProductsTabProps {
   type: 'bestseller' | 'featured' | 'new' | 'all'

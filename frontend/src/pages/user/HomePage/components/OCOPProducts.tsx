@@ -1,6 +1,6 @@
 import { ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import ProductCard from '../../../../components/ProductCard'
+import ProductCard from '@/components/common/ProductCard'
 import { ocopProducts } from '../../../../data/products'
 
 export default function OCOPProducts() {

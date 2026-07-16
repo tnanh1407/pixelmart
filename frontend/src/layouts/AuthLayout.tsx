@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom'
-import AuthHeader from '../components/AuthHeader'
-import DefaultHelmet from '@/components/DefaultHelmet'
+import AuthHeader from '@/components/layout/AuthHeader'
+import DefaultHelmet from '@/components/common/DefaultHelmet'
 
 export default function AuthLayout() {
   return (

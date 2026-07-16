@@ -2,7 +2,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, Calendar, Sparkles, AlertCircle } from 'lucide-react'
 import { useBanner } from '@/hooks/banner/useBanners'
 import dayjs from 'dayjs'
-import AppBreadcrumb from '@/components/AppBreadcrumb'
+import AppBreadcrumb from '@/components/common/AppBreadcrumb'
 
 export default function BannerDetail() {
   const { id } = useParams<{ id: string }>()

@@ -2,7 +2,7 @@ import { Info, ChevronRight } from 'lucide-react'
 import type { IStore } from '@/types/store.types'
 import type { IProduct } from '@/types/product.types'
 import { mapProductToCard } from './mapProductToCard'
-import ProductCard from '@/components/ProductCard'
+import ProductCard from '@/components/common/ProductCard'
 
 interface StoreDetailHomeTabProps {
   store: IStore

@@ -1,4 +1,4 @@
-import type { Product } from '../components/ProductCard'
+import type { Product } from '@/components/common/ProductCard'
 
 export interface StoreProduct {
   id: number

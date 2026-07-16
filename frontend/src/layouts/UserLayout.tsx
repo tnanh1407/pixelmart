@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom'
-import UserSidebar from '../components/UserSidebar'
-import Header from '../components/Header/Header'
-import Footer from '../components/Footer/Footer'
+import UserSidebar from '@/components/layout/UserSidebar'
+import Header from '@/components/layout/Header/Header'
+import Footer from '@/components/layout/Footer/Footer'
 
 export default function UserLayout() {
   return (

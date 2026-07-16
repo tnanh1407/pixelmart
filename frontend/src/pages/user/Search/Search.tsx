@@ -4,8 +4,8 @@ import { useQuery } from '@tanstack/react-query'
 import { Filter, Star, RefreshCw, ChevronDown } from 'lucide-react'
 import { productService } from '@/services/product.service'
 import { categoryService } from '@/services/category.service'
-import ProductCard from '@/components/ProductCard'
-import AppBreadcrumb from '@/components/AppBreadcrumb'
+import ProductCard from '@/components/common/ProductCard'
+import AppBreadcrumb from '@/components/common/AppBreadcrumb'
 
 const formatPrice = (price: number) => new Intl.NumberFormat('vi-VN').format(price) + 'đ'
 

@@ -1,4 +1,4 @@
-import AvatarUpload from '@/components/AvatarUpload'
+import AvatarUpload from '@/components/common/AvatarUpload'
 import ProfileHeader from './components/ProfileHeader'
 import ProfileInfoSection from './components/ProfileInfoSection'
 import AddressSection from './components/AddressSection'

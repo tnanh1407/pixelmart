@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import ProductCard from '../../../../components/ProductCard'
+import ProductCard from '@/components/common/ProductCard'
 import { topSellingProducts as topProducts } from '../../../../data/products'
 
 export default function TopSelling() {

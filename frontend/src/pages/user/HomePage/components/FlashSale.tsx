@@ -6,7 +6,7 @@ import { useRef, useState, useEffect } from 'react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 
-import ProductCard from '@/components/ProductCard'
+import ProductCard from '@/components/common/ProductCard'
 import { useQuery } from '@tanstack/react-query'
 import { productService } from '@/services/product.service'
 

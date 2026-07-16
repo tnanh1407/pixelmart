@@ -19,14 +19,14 @@ import 'swiper/css/free-mode'
 import 'swiper/css/navigation'
 import 'swiper/css/thumbs'
 
-import ProductCard from '../../../components/ProductCard'
+import ProductCard from '@/components/common/ProductCard'
 import { provinces } from '../../../data/products'
 import Lightbox from "yet-another-react-lightbox"
 import "yet-another-react-lightbox/styles.css"
 import { useQuery } from '@tanstack/react-query'
 import { useProduct } from '@/hooks/product/useProduct'
 import { productService } from '@/services/product.service'
-import AppBreadcrumb from '@/components/AppBreadcrumb'
+import AppBreadcrumb from '@/components/common/AppBreadcrumb'
 
 const formatPrice = (price: number) => new Intl.NumberFormat('vi-VN').format(price) + 'đ'
 

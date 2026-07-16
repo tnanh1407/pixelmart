@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Calendar, ArrowRight, Sparkles, Tag } from 'lucide-react'
 import { useBanners } from '@/hooks/banner/useBanners'
-import AppBreadcrumb from '@/components/AppBreadcrumb'
+import AppBreadcrumb from '@/components/common/AppBreadcrumb'
 import dayjs from 'dayjs'
 
 export default function BannerList() {

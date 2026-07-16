@@ -1,6 +1,6 @@
 import { ChevronRight } from 'lucide-react'
 import { useParams } from 'react-router-dom'
-import ProductCard from '../../components/ProductCard'
+import ProductCard from '@/components/common/ProductCard'
 import { categoryProducts } from '../../data/products'
 
 export default function CategoryPage() {
