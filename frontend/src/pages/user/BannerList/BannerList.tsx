@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Calendar, ArrowRight, Sparkles, Tag, ChevronRight } from 'lucide-react'
+import { Calendar, ArrowRight, Sparkles, Tag } from 'lucide-react'
 import { useBanners } from '@/hooks/banner/useBanners'
 import AppBreadcrumb from '@/components/AppBreadcrumb'
 import dayjs from 'dayjs'

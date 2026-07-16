@@ -1,5 +1,5 @@
+import type { IBanner } from '@/types/banner.types';
 import api from './api'
-import type { IBanner } from '@/types/banner.types'
 
 export const bannerService = {
   async getActiveBanners(): Promise<IBanner[]> {

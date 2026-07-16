@@ -4,6 +4,7 @@ import AdminLayout from '../layouts/AdminLayout'
 import AuthLayout from '../layouts/AuthLayout'
 import ProtectedRoute from '../components/auth/ProtectedRoute'
 import PublicRoute from '../components/auth/PublicRoute'
+import BlockAdminRoute from '../components/auth/BlockAdminRoute'
 import HomePage from '../pages/user/HomePage/HomePage'
 import CategoryPage from '../pages/category/CategoryPage'
 import Pointmallvoucher from '../pages/user/Pointmallvoucher/Pointmallvoucher'
@@ -26,8 +27,8 @@ import UsersPage from '../pages/admin/UsersPage'
 import ProductsPage from '../pages/admin/ProductsPage'
 import StoresPage from '../pages/admin/StoresPage'
 import CategoriesPage from '../pages/admin/CategoriesPage'
-import BannersPage from '../pages/admin/BannersPage'
 import NotFoundPage from '../pages/notFound/NotFoundPage'
+import BannersPage from '@/pages/admin/BannerPage/BannersPage'
 
 const router = createBrowserRouter([
   // Public pages - ai cũng truy cập được
@@ -74,18 +75,23 @@ const router = createBrowserRouter([
 
   // Public pages - không cần login
   {
-    path: '/',
-    element: <HomeLayout />,
+    element: <BlockAdminRoute />,
     children: [
-      { index: true, element: <HomePage /> },
-      { path: 'category/:slug', element: <CategoryPage /> },
-      { path: 'pointmall-voucher', element: <Pointmallvoucher /> },
-      { path: 'store-list', element: <Storelist /> },
-      { path: 'store/:id', element: <StoreDetail /> },
-      { path: 'product/:id', element: <ProductDetail /> },
-      { path: 'banner/:id', element: <BannerDetail /> },
-      { path: 'banners', element: <BannerList /> },
-      { path: 'search', element: <Search /> },
+      {
+        path: '/',
+        element: <HomeLayout />,
+        children: [
+          { index: true, element: <HomePage /> },
+          { path: 'category/:slug', element: <CategoryPage /> },
+          { path: 'pointmall-voucher', element: <Pointmallvoucher /> },
+          { path: 'store-list', element: <Storelist /> },
+          { path: 'store/:id', element: <StoreDetail /> },
+          { path: 'product/:id', element: <ProductDetail /> },
+          { path: 'banner/:id', element: <BannerDetail /> },
+          { path: 'banners', element: <BannerList /> },
+          { path: 'search', element: <Search /> },
+        ],
+      },
     ],
   },
 
@@ -94,18 +100,23 @@ const router = createBrowserRouter([
     element: <ProtectedRoute />,
     children: [
       {
-        path: '/cart',
-        element: <HomeLayout />,
+        element: <BlockAdminRoute />,
         children: [
-          { index: true, element: <Cart /> },
-        ],
-      },
-      {
-        path: '/user',
-        element: <UserLayout />,
-        children: [
-          { index: true, element: <ProfilePage /> },
-          { path: 'profile', element: <ProfilePage /> },
+          {
+            path: '/cart',
+            element: <HomeLayout />,
+            children: [
+              { index: true, element: <Cart /> },
+            ],
+          },
+          {
+            path: '/user',
+            element: <UserLayout />,
+            children: [
+              { index: true, element: <ProfilePage /> },
+              { path: 'profile', element: <ProfilePage /> },
+            ],
+          },
         ],
       },
     ],

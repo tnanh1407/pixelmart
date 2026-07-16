@@ -1,9 +1,52 @@
 import Category, { ICategory } from "../models/category.model.js";
 import { AppError } from "../middlewares/error.middleware.js";
+import cloudinary, { CLOUDINARY_FOLDERS } from "../config/cloudinary.js";
 
 class CategoryService {
   async getCategories(query: any = {}) {
-    const filter = { isActive: true, ...query };
+    const { page, limit, search, isActive } = query;
+    const filter: any = {};
+
+    if (isActive !== undefined) {
+      filter.isActive = isActive === "true" || isActive === true;
+    } else {
+      // By default, only show active categories.
+      // But if page or limit is passed (e.g. from admin panel), show both active and inactive.
+      if (page === undefined && limit === undefined) {
+        filter.isActive = true;
+      }
+    }
+
+    if (search) {
+      filter.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { description: { $regex: search, $options: "i" } }
+      ];
+    }
+
+    if (page !== undefined || limit !== undefined) {
+      const p = page ? Number(page) : 1;
+      const l = limit ? Number(limit) : 10;
+      const skipIndex = (p - 1) * l;
+
+      const categories = await Category.find(filter)
+        .sort({ name: 1 })
+        .skip(skipIndex)
+        .limit(l);
+
+      const total = await Category.countDocuments(filter);
+
+      return {
+        categories,
+        pagination: {
+          page: p,
+          limit: l,
+          total,
+          totalPages: Math.ceil(total / l),
+        }
+      };
+    }
+
     return await Category.find(filter).sort({ name: 1 });
   }
 
@@ -72,6 +115,14 @@ class CategoryService {
 
     await Category.findByIdAndDelete(id);
     return { message: "Xóa danh mục thành công" };
+  }
+
+  async uploadCategoryImage(file: Express.Multer.File): Promise<string> {
+    const dataURI = `data:${file.mimetype};base64,${file.buffer.toString("base64")}`;
+    const result = await cloudinary.uploader.upload(dataURI, {
+      folder: CLOUDINARY_FOLDERS.CATEGORIES,
+    });
+    return result.secure_url;
   }
 
   private generateSlug(name: string): string {

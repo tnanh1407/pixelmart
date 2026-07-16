@@ -41,4 +41,13 @@ export const categoriesService = {
   async deleteCategory(id: string): Promise<void> {
     await api.delete(`/categories/${id}`)
   },
+
+  async uploadCategoryImage(file: File): Promise<string> {
+    const formData = new FormData()
+    formData.append('image', file)
+    const { data } = await api.post('/categories/upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+    return data.data.url
+  },
 }

@@ -1,8 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
-import { Search, Trash2, Edit, Plus, X, Loader2, Tag } from 'lucide-react'
+import { Search, Trash2, Edit, Plus, X, Loader2, Tag, Upload } from 'lucide-react'
 import { adminService } from '@/services/admin/admin.service'
 import { toast } from 'sonner'
+import Swal from 'sweetalert2'
 
 export default function CategoriesPage() {
   const queryClient = useQueryClient()
@@ -11,7 +12,26 @@ export default function CategoriesPage() {
   const [searchInput, setSearchInput] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
-  const [form, setForm] = useState({ name: '', description: '' })
+  const [form, setForm] = useState({ name: '', description: '', image: '' })
+  const [isUploading, setIsUploading] = useState(false)
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setIsUploading(true)
+    const toastId = toast.loading('Đang tải ảnh lên...')
+    try {
+      const imageUrl = await adminService.uploadCategoryImage(file)
+      setForm((prev) => ({ ...prev, image: imageUrl }))
+      toast.success('Tải ảnh lên thành công', { id: toastId })
+    } catch (err: any) {
+      console.error(err)
+      toast.error(err?.response?.data?.message || 'Tải ảnh lên thất bại', { id: toastId })
+    } finally {
+      setIsUploading(false)
+    }
+  }
 
   const { data, isLoading } = useQuery({
     queryKey: ['admin-categories', page, search],
@@ -20,33 +40,87 @@ export default function CategoriesPage() {
   })
 
   const createMutation = useMutation({
-    mutationFn: (payload: { name: string; description?: string }) => adminService.createCategory(payload),
+    mutationFn: (payload: { name: string; description?: string; image?: string }) => adminService.createCategory(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-categories'] })
-      toast.success('Tạo danh mục thành công')
+      Swal.fire({
+        title: 'Thành công!',
+        text: 'Thêm mới danh mục thành công.',
+        icon: 'success',
+        confirmButtonColor: '#4f46e5',
+        customClass: {
+          popup: '!rounded-xl',
+          confirmButton: '!rounded-lg !px-6',
+        }
+      })
       closeModal()
     },
-    onError: () => toast.error('Có lỗi xảy ra'),
+    onError: () => Swal.fire({
+      title: 'Thất bại!',
+      text: 'Có lỗi xảy ra khi tạo danh mục.',
+      icon: 'error',
+      confirmButtonColor: '#4f46e5',
+      customClass: {
+        popup: '!rounded-xl',
+        confirmButton: '!rounded-lg !px-6',
+      }
+    }),
   })
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, payload }: { id: string; payload: { name?: string; description?: string } }) =>
+    mutationFn: ({ id, payload }: { id: string; payload: { name?: string; description?: string; image?: string } }) =>
       adminService.updateCategory(id, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-categories'] })
-      toast.success('Cập nhật danh mục thành công')
+      Swal.fire({
+        title: 'Thành công!',
+        text: 'Cập nhật danh mục thành công.',
+        icon: 'success',
+        confirmButtonColor: '#4f46e5',
+        customClass: {
+          popup: '!rounded-xl',
+          confirmButton: '!rounded-lg !px-6',
+        }
+      })
       closeModal()
     },
-    onError: () => toast.error('Có lỗi xảy ra'),
+    onError: () => Swal.fire({
+      title: 'Thất bại!',
+      text: 'Có lỗi xảy ra khi cập nhật danh mục.',
+      icon: 'error',
+      confirmButtonColor: '#4f46e5',
+      customClass: {
+        popup: '!rounded-xl',
+        confirmButton: '!rounded-lg !px-6',
+      }
+    }),
   })
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => adminService.deleteCategory(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-categories'] })
-      toast.success('Xóa danh mục thành công')
+      Swal.fire({
+        title: 'Đã xóa!',
+        text: 'Xóa danh mục thành công.',
+        icon: 'success',
+        confirmButtonColor: '#4f46e5',
+        customClass: {
+          popup: '!rounded-xl',
+          confirmButton: '!rounded-lg !px-6',
+        }
+      })
     },
-    onError: () => toast.error('Không thể xóa danh mục'),
+    onError: () => Swal.fire({
+      title: 'Thất bại!',
+      text: 'Không thể xóa danh mục.',
+      icon: 'error',
+      confirmButtonColor: '#4f46e5',
+      customClass: {
+        popup: '!rounded-xl',
+        confirmButton: '!rounded-lg !px-6',
+      }
+    }),
   })
 
   const handleSearch = (e: React.FormEvent) => {
@@ -57,27 +131,46 @@ export default function CategoriesPage() {
 
   const openCreate = () => {
     setEditingId(null)
-    setForm({ name: '', description: '' })
+    setForm({ name: '', description: '', image: '' })
     setShowModal(true)
   }
 
   const openEdit = (cat: any) => {
     setEditingId(cat._id)
-    setForm({ name: cat.name, description: cat.description || '' })
+    setForm({ name: cat.name, description: cat.description || '', image: cat.image || '' })
     setShowModal(true)
   }
 
   const closeModal = () => {
     setShowModal(false)
     setEditingId(null)
-    setForm({ name: '', description: '' })
+    setForm({ name: '', description: '', image: '' })
   }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!form.name.trim()) return
     if (editingId) {
-      updateMutation.mutate({ id: editingId, payload: form })
+      Swal.fire({
+        title: 'Xác nhận cập nhật?',
+        text: 'Bạn có chắc chắn muốn lưu các thay đổi cho danh mục này?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#4f46e5',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Xác nhận',
+        cancelButtonText: 'Hủy',
+        customClass: {
+          popup: '!rounded-xl',
+          confirmButton: '!rounded-lg !px-6 !ml-2',
+          cancelButton: '!rounded-lg !px-6',
+          actions: '!gap-2',
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          updateMutation.mutate({ id: editingId, payload: form })
+        }
+      })
     } else {
       createMutation.mutate(form)
     }
@@ -102,8 +195,8 @@ export default function CategoriesPage() {
         </button>
       </div>
 
-      <form onSubmit={handleSearch} className="mb-6">
-        <div className="relative max-w-md">
+      <form onSubmit={handleSearch} className="mb-6 flex gap-2 max-w-md">
+        <div className="relative flex-1">
           <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
@@ -113,6 +206,12 @@ export default function CategoriesPage() {
             className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
           />
         </div>
+        <button
+          type="submit"
+          className="px-4 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors whitespace-nowrap"
+        >
+          Tìm kiếm
+        </button>
       </form>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -130,6 +229,7 @@ export default function CategoriesPage() {
             <table className="w-full">
               <thead className="bg-gray-50 border-b border-gray-100">
                 <tr>
+                  <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Hình ảnh</th>
                   <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Tên danh mục</th>
                   <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Mô tả</th>
                   <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Trạng thái</th>
@@ -139,6 +239,17 @@ export default function CategoriesPage() {
               <tbody className="divide-y divide-gray-50">
                 {categories.map((cat: any) => (
                   <tr key={cat._id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4">
+                      <div className="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden border border-gray-100">
+                        {cat.image ? (
+                          <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <Tag size={16} className="text-gray-300" />
+                          </div>
+                        )}
+                      </div>
+                    </td>
                     <td className="px-6 py-4 font-medium text-gray-900 text-sm">{cat.name}</td>
                     <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{cat.description || '—'}</td>
                     <td className="px-6 py-4">
@@ -159,9 +270,26 @@ export default function CategoriesPage() {
                         </button>
                         <button
                           onClick={() => {
-                            if (confirm('Bạn có chắc muốn xóa danh mục này?')) {
-                              deleteMutation.mutate(cat._id)
-                            }
+                            Swal.fire({
+                              title: 'Xác nhận xóa?',
+                              text: 'Bạn có chắc chắn muốn xóa danh mục này? Thao tác này không thể hoàn tác.',
+                              icon: 'warning',
+                              showCancelButton: true,
+                              confirmButtonColor: '#ef4444',
+                              cancelButtonColor: '#6b7280',
+                              confirmButtonText: 'Đồng ý xóa',
+                              cancelButtonText: 'Hủy',
+                              customClass: {
+                                popup: '!rounded-xl',
+                                confirmButton: '!rounded-lg !px-6 !ml-2',
+                                cancelButton: '!rounded-lg !px-6',
+                                actions: '!gap-2',
+                              }
+                            }).then((result) => {
+                              if (result.isConfirmed) {
+                                deleteMutation.mutate(cat._id)
+                              }
+                            })
                           }}
                           disabled={deleteMutation.isPending}
                           className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
@@ -202,6 +330,51 @@ export default function CategoriesPage() {
                   placeholder="Nhập tên danh mục"
                   required
                 />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Hình ảnh danh mục</label>
+                <div className="space-y-2">
+                  <div className="flex gap-3">
+                    <input
+                      type="text"
+                      value={form.image}
+                      onChange={(e) => setForm({ ...form, image: e.target.value })}
+                      className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                      placeholder="URL ảnh hoặc tải ảnh lên"
+                    />
+                    <label className={`flex items-center gap-2 px-4 py-2 border border-dashed rounded-lg text-sm font-medium cursor-pointer transition-colors whitespace-nowrap ${
+                      isUploading
+                        ? 'border-gray-300 bg-gray-50 text-gray-400 cursor-not-allowed'
+                        : 'border-indigo-300 hover:border-indigo-500 hover:bg-indigo-50/50 text-indigo-600'
+                    }`}>
+                      {isUploading ? (
+                        <Loader2 size={16} className="animate-spin" />
+                      ) : (
+                        <Upload size={16} />
+                      )}
+                      <span>Tải ảnh lên</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        disabled={isUploading}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                  {form.image && (
+                    <div className="relative aspect-[16/9] w-full max-w-[150px] rounded-lg overflow-hidden border border-gray-100 bg-gray-50">
+                      <img src={form.image} alt="Category Preview" className="w-full h-full object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => setForm({ ...form, image: '' })}
+                        className="absolute top-1 right-1 p-1 bg-black/60 hover:bg-black/80 text-white rounded-full transition-colors"
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Mô tả</label>

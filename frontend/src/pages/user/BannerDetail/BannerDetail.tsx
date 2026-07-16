@@ -1,5 +1,5 @@
 import { Link, useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Calendar, Tag, ExternalLink, Sparkles, AlertCircle } from 'lucide-react'
+import { ArrowLeft, Calendar, Sparkles, AlertCircle } from 'lucide-react'
 import { useBanner } from '@/hooks/banner/useBanners'
 import dayjs from 'dayjs'
 import AppBreadcrumb from '@/components/AppBreadcrumb'
@@ -68,7 +68,7 @@ export default function BannerDetail() {
       />
 
       {/* Hero Banner Section */}
-      <div className="group relative w-full h-80 sm:h-96 rounded-3xl overflow-hidden shadow-lg border border-gray-100/50 mb-8 bg-slate-50">x
+      <div className="group relative w-full h-80 sm:h-96 rounded-3xl overflow-hidden shadow-lg border border-gray-100/50 mb-8 bg-slate-50">
         <img
           src={banner.image}
           alt={banner.title}
@@ -195,34 +195,7 @@ export default function BannerDetail() {
           </div>
         )}
 
-        {/* Call to Action Button */}
-        {banner.link && (
-          <div className="mt-8 pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-xs sm:text-sm text-gray-500">
-              Khám phá thêm các sản phẩm thuộc chiến dịch này
-            </div>
-            
-            {banner.link.startsWith('http') ? (
-              <a
-                href={banner.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white font-semibold text-sm px-8 py-3 rounded-2xl transition-all duration-300 shadow-md shadow-emerald-600/10 hover:shadow-emerald-600/20 hover:scale-[1.02]"
-              >
-                <span>Tham gia chiến dịch</span>
-                <ExternalLink size={16} />
-              </a>
-            ) : (
-              <Link
-                to={banner.link}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white font-semibold text-sm px-8 py-3 rounded-2xl transition-all duration-300 shadow-md shadow-emerald-600/10 hover:shadow-emerald-600/20 hover:scale-[1.02]"
-              >
-                <span>Khám phá ngay</span>
-                <Sparkles size={16} />
-              </Link>
-            )}
-          </div>
-        )}
+
       </div>
 
       {/* Back to Homepage */}

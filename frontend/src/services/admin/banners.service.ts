@@ -1,18 +1,8 @@
 import api from '../api'
+import type { IBanner } from '@/types/banner.types'
 
 export interface BannerListResponse {
-  banners: Array<{
-    _id: string
-    title: string
-    shortDescription?: string
-    image?: string
-    link?: string
-    isActive: boolean
-    startDate?: string
-    endDate?: string
-    order: number
-    createdAt: string
-  }>
+  banners: IBanner[]
   pagination: {
     page: number
     limit: number
@@ -33,28 +23,11 @@ export const bannersService = {
     }
   },
 
-  async createBanner(payload: {
-    title: string
-    shortDescription?: string
-    image?: string
-    link?: string
-    startDate?: string
-    endDate?: string
-    order?: number
-  }): Promise<void> {
+  async createBanner(payload: Partial<IBanner> & { title: string }): Promise<void> {
     await api.post('/banners', payload)
   },
 
-  async updateBanner(id: string, payload: {
-    title?: string
-    shortDescription?: string
-    image?: string
-    link?: string
-    isActive?: boolean
-    startDate?: string
-    endDate?: string
-    order?: number
-  }): Promise<void> {
+  async updateBanner(id: string, payload: Partial<IBanner>): Promise<void> {
     await api.put(`/banners/${id}`, payload)
   },
 

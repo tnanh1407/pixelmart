@@ -12,6 +12,7 @@ export const CLOUDINARY_FOLDERS = {
   BANNERS: "pixelmart/banners",
   PRODUCTS: "pixelmart/products",
   STORES: "pixelmart/stores",
+  CATEGORIES: "pixelmart/categories",
 };
 
 export default cloudinary;

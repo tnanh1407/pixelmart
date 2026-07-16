@@ -9,7 +9,6 @@ export interface IBanner {
   shortDescription?: string
   content?: string
   image: string
-  link?: string
   isActive: boolean
   startDate?: string
   endDate?: string
@@ -17,7 +16,6 @@ export interface IBanner {
   durationInDays?: string
   createdAt: string
   updatedAt: string
-  // Structured Article fields
   author?: string
   categoryName?: string
   sapo?: string
