@@ -15,6 +15,7 @@ export const bannersService = {
   async getBanners(params: {
     page?: number
     limit?: number
+    search?: string
   } = {}): Promise<BannerListResponse> {
     const { data } = await api.get('/banners/all', { params })
     return {

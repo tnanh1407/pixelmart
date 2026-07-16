@@ -93,8 +93,12 @@ export default function BasicTab({ form, setForm, isUploading, handleFileChange 
             type="date"
             value={form.startDate}
             onChange={(e) => setForm({ ...form, startDate: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            disabled={!!form.durationInDays}
+            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed"
           />
+          {!!form.durationInDays && (
+            <p className="text-[10px] text-gray-400 mt-0.5">Vô hiệu hóa do đã nhập số ngày hiển thị</p>
+          )}
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Ngày kết thúc</label>
@@ -102,8 +106,12 @@ export default function BasicTab({ form, setForm, isUploading, handleFileChange 
             type="date"
             value={form.endDate}
             onChange={(e) => setForm({ ...form, endDate: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            disabled={!!form.durationInDays}
+            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed"
           />
+          {!!form.durationInDays && (
+            <p className="text-[10px] text-gray-400 mt-0.5">Vô hiệu hóa do đã nhập số ngày hiển thị</p>
+          )}
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4">
@@ -123,9 +131,13 @@ export default function BasicTab({ form, setForm, isUploading, handleFileChange 
             type="text"
             value={form.durationInDays}
             onChange={(e) => setForm({ ...form, durationInDays: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            disabled={!!form.startDate || !!form.endDate}
+            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed"
             placeholder="Ví dụ: 30"
           />
+          {(!!form.startDate || !!form.endDate) && (
+            <p className="text-[10px] text-gray-400 mt-0.5">Vô hiệu hóa do đã nhập ngày bắt đầu/kết thúc</p>
+          )}
         </div>
       </div>
     </div>

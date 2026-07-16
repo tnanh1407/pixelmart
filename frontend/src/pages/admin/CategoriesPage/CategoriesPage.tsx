@@ -1,50 +1,26 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
-import { Plus, Search, X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Search, Plus, X } from 'lucide-react'
 import { adminService } from '@/services/admin/admin.service'
 import { toast } from 'sonner'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
-import BannerTable from './BannerTable'
-import BannerFormModal from './BannerFormModal'
+import CategoryTable from './CategoryTable'
+import CategoryFormModal from './CategoryFormModal'
 
-export default function BannersPage() {
+export default function CategoriesPage() {
   const queryClient = useQueryClient()
-  const [showModal, setShowModal] = useState(false)
-  const [editingId, setEditingId] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState<'basic' | 'cms' | 'sections'>('basic')
-  const [form, setForm] = useState({
-    title: '',
-    shortDescription: '',
-    image: '',
-    startDate: '',
-    endDate: '',
-    order: 0,
-    content: '',
-    durationInDays: '',
-    author: '',
-    categoryName: '',
-    sapo: '',
-    highlightsTitle: '',
-    highlights: '',
-    quote: '',
-    quoteAuthor: '',
-    contentSections: [] as Array<{ title: string; content: string }>,
-  })
-  const [isUploading, setIsUploading] = useState(false)
-  const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
   const [searchInput, setSearchInput] = useState('')
+  const [showModal, setShowModal] = useState(false)
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [form, setForm] = useState({ name: '', description: '', image: '' })
+  const [isUploading, setIsUploading] = useState(false)
+  const navigate = useNavigate()
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    setSearch(searchInput)
-    setPage(1)
-  }
-
-  const handleViewDetail = (banner: any) => {
-    navigate(`/admin/banners/${banner._id}`)
+  const handleViewDetail = (cat: any) => {
+    navigate(`/admin/categories/${cat._id}`)
   }
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,7 +30,7 @@ export default function BannersPage() {
     setIsUploading(true)
     const toastId = toast.loading('Đang tải ảnh lên...')
     try {
-      const imageUrl = await adminService.uploadBannerImage(file)
+      const imageUrl = await adminService.uploadCategoryImage(file)
       setForm((prev) => ({ ...prev, image: imageUrl }))
       toast.success('Tải ảnh lên thành công', { id: toastId })
     } catch (err: any) {
@@ -66,18 +42,18 @@ export default function BannersPage() {
   }
 
   const { data, isLoading } = useQuery({
-    queryKey: ['admin-banners', page, search],
-    queryFn: () => adminService.getBanners({ page, limit: 10, search: search || undefined }),
+    queryKey: ['admin-categories', page, search],
+    queryFn: () => adminService.getCategories({ page, limit: 10, search: search || undefined }),
     staleTime: 30 * 1000,
   })
 
   const createMutation = useMutation({
-    mutationFn: (payload: any) => adminService.createBanner(payload),
+    mutationFn: (payload: { name: string; description?: string; image?: string }) => adminService.createCategory(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-banners'] })
+      queryClient.invalidateQueries({ queryKey: ['admin-categories'] })
       Swal.fire({
         title: 'Thành công!',
-        text: 'Thêm mới banner thành công.',
+        text: 'Thêm mới danh mục thành công.',
         icon: 'success',
         confirmButtonColor: '#4f46e5',
         customClass: {
@@ -89,7 +65,7 @@ export default function BannersPage() {
     },
     onError: () => Swal.fire({
       title: 'Thất bại!',
-      text: 'Có lỗi xảy ra khi tạo banner.',
+      text: 'Có lỗi xảy ra khi tạo danh mục.',
       icon: 'error',
       confirmButtonColor: '#4f46e5',
       customClass: {
@@ -100,13 +76,13 @@ export default function BannersPage() {
   })
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, payload }: { id: string; payload: any }) =>
-      adminService.updateBanner(id, payload),
+    mutationFn: ({ id, payload }: { id: string; payload: { name?: string; description?: string; image?: string } }) =>
+      adminService.updateCategory(id, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-banners'] })
+      queryClient.invalidateQueries({ queryKey: ['admin-categories'] })
       Swal.fire({
         title: 'Thành công!',
-        text: 'Cập nhật banner thành công.',
+        text: 'Cập nhật danh mục thành công.',
         icon: 'success',
         confirmButtonColor: '#4f46e5',
         customClass: {
@@ -118,7 +94,7 @@ export default function BannersPage() {
     },
     onError: () => Swal.fire({
       title: 'Thất bại!',
-      text: 'Có lỗi xảy ra khi cập nhật banner.',
+      text: 'Có lỗi xảy ra khi cập nhật danh mục.',
       icon: 'error',
       confirmButtonColor: '#4f46e5',
       customClass: {
@@ -129,12 +105,12 @@ export default function BannersPage() {
   })
 
   const deleteMutation = useMutation({
-    mutationFn: (id: string) => adminService.deleteBanner(id),
+    mutationFn: (id: string) => adminService.deleteCategory(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-banners'] })
+      queryClient.invalidateQueries({ queryKey: ['admin-categories'] })
       Swal.fire({
         title: 'Đã xóa!',
-        text: 'Xóa banner thành công.',
+        text: 'Xóa danh mục thành công.',
         icon: 'success',
         confirmButtonColor: '#4f46e5',
         customClass: {
@@ -145,7 +121,7 @@ export default function BannersPage() {
     },
     onError: () => Swal.fire({
       title: 'Thất bại!',
-      text: 'Không thể xóa banner.',
+      text: 'Không thể xóa danh mục.',
       icon: 'error',
       confirmButtonColor: '#4f46e5',
       customClass: {
@@ -155,86 +131,37 @@ export default function BannersPage() {
     }),
   })
 
-  const toggleActiveMutation = useMutation({
-    mutationFn: ({ id, isActive }: { id: string; isActive: boolean }) =>
-      adminService.updateBanner(id, { isActive: !isActive }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-banners'] })
-      toast.success('Cập nhật thành công')
-    },
-    onError: () => toast.error('Có lỗi xảy ra'),
-  })
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    setSearch(searchInput)
+    setPage(1)
+  }
 
   const openCreate = () => {
     setEditingId(null)
-    setForm({
-      title: '',
-      shortDescription: '',
-      image: '',
-      startDate: '',
-      endDate: '',
-      order: 0,
-      content: '',
-      durationInDays: '',
-      author: '',
-      categoryName: '',
-      sapo: '',
-      highlightsTitle: '',
-      highlights: '',
-      quote: '',
-      quoteAuthor: '',
-      contentSections: [],
-    })
-    setActiveTab('basic')
+    setForm({ name: '', description: '', image: '' })
     setShowModal(true)
   }
 
-  const openEdit = (banner: any) => {
-    setEditingId(banner._id)
-    setForm({
-      title: banner.title || '',
-      shortDescription: banner.shortDescription || '',
-      image: banner.image || '',
-      startDate: banner.startDate ? banner.startDate.split('T')[0] : '',
-      endDate: banner.endDate ? banner.endDate.split('T')[0] : '',
-      order: banner.order || 0,
-      content: banner.content || '',
-      durationInDays: banner.durationInDays || '',
-      author: banner.author || '',
-      categoryName: banner.categoryName || '',
-      sapo: banner.sapo || '',
-      highlightsTitle: banner.highlightsTitle || '',
-      highlights: banner.highlights ? banner.highlights.join('\n') : '',
-      quote: banner.quote || '',
-      quoteAuthor: banner.quoteAuthor || '',
-      contentSections: banner.contentSections || [],
-    })
-    setActiveTab('basic')
+  const openEdit = (cat: any) => {
+    setEditingId(cat._id)
+    setForm({ name: cat.name, description: cat.description || '', image: cat.image || '' })
     setShowModal(true)
   }
 
   const closeModal = () => {
     setShowModal(false)
     setEditingId(null)
+    setForm({ name: '', description: '', image: '' })
   }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!form.title.trim()) return
-
-    const parsedHighlights = form.highlights
-      ? form.highlights.split('\n').map((h) => h.trim()).filter(Boolean)
-      : []
-
-    const payload = {
-      ...form,
-      highlights: parsedHighlights,
-    }
-
+    if (!form.name.trim()) return
     if (editingId) {
       Swal.fire({
         title: 'Xác nhận cập nhật?',
-        text: 'Bạn có chắc chắn muốn lưu các thay đổi cho banner này?',
+        text: 'Bạn có chắc chắn muốn lưu các thay đổi cho danh mục này?',
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#4f46e5',
@@ -249,30 +176,30 @@ export default function BannersPage() {
         }
       }).then((result) => {
         if (result.isConfirmed) {
-          updateMutation.mutate({ id: editingId, payload })
+          updateMutation.mutate({ id: editingId, payload: form })
         }
       })
     } else {
-      createMutation.mutate(payload)
+      createMutation.mutate(form)
     }
   }
 
-  const banners = data?.banners || []
+  const categories = data?.categories || []
   const pagination = data?.pagination || { page: 1, limit: 10, total: 0, totalPages: 0 }
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Quản lý banner</h1>
-          <p className="text-sm text-gray-500 mt-1">{pagination.total} banner</p>
+          <h1 className="text-2xl font-bold text-gray-900">Quản lý danh mục</h1>
+          <p className="text-sm text-gray-500 mt-1">{pagination.total} danh mục</p>
         </div>
         <button
           onClick={openCreate}
           className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
         >
           <Plus size={18} />
-          Thêm banner
+          Thêm danh mục
         </button>
       </div>
 
@@ -281,7 +208,7 @@ export default function BannersPage() {
           <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
-            placeholder="Tìm kiếm banner..."
+            placeholder="Tìm kiếm danh mục..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             className={`w-full pl-10 ${
@@ -312,48 +239,23 @@ export default function BannersPage() {
       </form>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <BannerTable
-          banners={banners}
+        <CategoryTable
+          categories={categories}
           isLoading={isLoading}
           onDelete={(id) => deleteMutation.mutate(id)}
-          onToggleActive={(id, isActive) => toggleActiveMutation.mutate({ id, isActive })}
           isDeleting={deleteMutation.isPending}
+          pagination={pagination}
+          page={page}
+          setPage={setPage}
           onViewDetail={handleViewDetail}
         />
-
-        {/* Pagination */}
-        {!isLoading && pagination.totalPages > 1 && (
-          <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100 bg-white">
-            <p className="text-sm text-gray-500">
-              Trang {pagination.page} / {pagination.totalPages}
-            </p>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page === 1}
-                className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              <button
-                onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
-                disabled={page === pagination.totalPages}
-                className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                <ChevronRight size={16} />
-              </button>
-            </div>
-          </div>
-        )}
       </div>
 
-      <BannerFormModal
+      <CategoryFormModal
         showModal={showModal}
         editingId={editingId}
         form={form}
         setForm={setForm}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
         isUploading={isUploading}
         handleFileChange={handleFileChange}
         handleSubmit={handleSubmit}

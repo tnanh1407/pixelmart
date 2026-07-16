@@ -1,25 +1,20 @@
-import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
-import AdminHeader from '../components/AdminHeader'
-import AdminSidebar from '../components/AdminSidebar'
+import { AppSidebar } from '@/components/app-sidebar'
+import { SiteHeader } from '@/components/site-header'
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 
 export default function AdminLayout() {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
-
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      <AdminSidebar
-        collapsed={sidebarCollapsed}
-        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-      />
+    <SidebarProvider>
+      <AppSidebar />
 
-      <div className="flex-1 flex flex-col min-w-0">
-        <AdminHeader onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)} />
+      <SidebarInset>
+        <SiteHeader />
 
-        <main className="flex-1 p-6">
+        <main className="flex flex-1 flex-col gap-4 p-4 lg:p-6">
           <Outlet />
         </main>
-      </div>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   )
 }

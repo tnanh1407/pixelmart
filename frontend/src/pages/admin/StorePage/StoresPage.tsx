@@ -4,6 +4,7 @@ import { adminService } from '@/services/admin/admin.service'
 import { toast } from 'sonner'
 import { Plus } from 'lucide-react'
 import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom'
 import StoreSearchBar from './StoreSearchBar'
 import StoresTable from './StoresTable'
 import StorePagination from './StorePagination'
@@ -51,6 +52,13 @@ export default function StoresPage() {
     isActive: true,
     ownerId: '',
   })
+
+  // Navigation
+  const navigate = useNavigate()
+
+  const handleViewDetail = (store: any) => {
+    navigate(`/admin/stores/${store._id}`)
+  }
 
   // Queries
   const { data, isLoading } = useQuery({
@@ -267,9 +275,9 @@ export default function StoresPage() {
           isToggleVerifiedPending={toggleVerifiedMutation.isPending}
           onToggleActive={toggleActiveMutation.mutate}
           isToggleActivePending={toggleActiveMutation.isPending}
-          onEdit={openEdit}
           onDelete={deleteMutation.mutate}
           isDeletePending={deleteMutation.isPending}
+          onViewDetail={handleViewDetail}
         />
 
         {!isLoading && stores.length > 0 && (

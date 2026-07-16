@@ -18,10 +18,17 @@ class BannerService {
   }
 
   async getAllBanners(query: any = {}) {
-    const { page = 1, limit = 50, isActive } = query;
+    const { page = 1, limit = 50, isActive, search } = query;
     const filter: any = {};
 
     if (isActive !== undefined) filter.isActive = isActive === "true" || isActive === true;
+
+    if (search) {
+      filter.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { shortDescription: { $regex: search, $options: "i" } },
+      ];
+    }
 
     const skipIndex = (Number(page) - 1) * Number(limit);
     const banners = await Banner.find(filter)

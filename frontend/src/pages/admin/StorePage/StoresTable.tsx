@@ -1,5 +1,8 @@
-import {type StoreListResponse } from '@/services/admin/admin.service'
-import { Trash2, CheckCircle, XCircle, Loader2, Store, Edit } from 'lucide-react'
+import { type StoreListResponse } from '@/services/admin/admin.service'
+import { Trash2, CheckCircle, XCircle, Loader2, Store, Edit, ShieldCheck } from 'lucide-react'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 type StoreItem = StoreListResponse['stores'][number]
 
@@ -10,9 +13,9 @@ interface StoresTableProps {
   isToggleVerifiedPending: boolean
   onToggleActive: (id: string) => void
   isToggleActivePending: boolean
-  onEdit: (store: StoreItem) => void
   onDelete: (id: string) => void
   isDeletePending: boolean
+  onViewDetail: (store: StoreItem) => void
 }
 
 export default function StoresTable({
@@ -22,9 +25,9 @@ export default function StoresTable({
   isToggleVerifiedPending,
   onToggleActive,
   isToggleActivePending,
-  onEdit,
   onDelete,
   isDeletePending,
+  onViewDetail,
 }: StoresTableProps) {
   if (isLoading) {
     return (
@@ -44,23 +47,26 @@ export default function StoresTable({
   }
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full">
-        <thead className="bg-gray-50 border-b border-gray-100">
-          <tr>
-            <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Cửa hàng</th>
-            <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Liên hệ</th>
-            <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Đánh giá</th>
-            <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Trạng thái</th>
-            <th className="text-right px-6 py-3 text-sm font-medium text-gray-500">Thao tác</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-50">
+    <div className="w-full">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="px-6">Cửa hàng</TableHead>
+            <TableHead className="px-6">Liên hệ</TableHead>
+            <TableHead className="px-6">Đánh giá</TableHead>
+            <TableHead className="px-6">Trạng thái</TableHead>
+            <TableHead className="text-right px-6">Thao tác</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {stores.map((store) => (
-            <tr key={store._id} className="hover:bg-gray-50">
-              <td className="px-6 py-4">
+            <TableRow key={store._id}>
+              <TableCell className="px-6 py-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gray-100 rounded-lg overflow-hidden shrink-0">
+                  <div
+                    onClick={() => onViewDetail(store)}
+                    className="w-10 h-10 bg-gray-100 rounded-lg overflow-hidden shrink-0 cursor-pointer hover:opacity-85 transition-opacity border border-gray-100"
+                  >
                     {store.logo ? (
                       <img src={store.logo} alt={store.name} className="w-full h-full object-cover" />
                     ) : (
@@ -70,78 +76,88 @@ export default function StoresTable({
                     )}
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900 text-sm">{store.name}</p>
+                    <p
+                      onClick={() => onViewDetail(store)}
+                      className="font-medium text-gray-900 text-sm cursor-pointer hover:text-indigo-600 transition-colors"
+                    >
+                      {store.name}
+                    </p>
                     <p className="text-xs text-gray-500">{store.email || 'N/A'}</p>
                   </div>
                 </div>
-              </td>
-              <td className="px-6 py-4 text-sm text-gray-600">{store.phone || 'N/A'}</td>
-              <td className="px-6 py-4 text-sm text-gray-700">
-                {store.ratingsAverage?.toFixed(1) || '0.0'}
-              </td>
-              <td className="px-6 py-4">
-                <div className="flex items-center gap-2">
-                  <span
-                    className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                      store.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+              </TableCell>
+              <TableCell className="px-6 py-4 text-sm text-gray-600">{store.phone || 'N/A'}</TableCell>
+              <TableCell className="px-6 py-4 text-sm text-gray-700">
+                <span className="font-semibold">{store.ratingsAverage?.toFixed(1) || '0.0'}</span>
+                <span className="text-xs text-gray-400 ml-0.5"> ({store.ratingsQuantity || 0})</span>
+              </TableCell>
+              <TableCell className="px-6 py-4">
+                <div className="flex items-center gap-1.5">
+                  <Badge
+                    variant={store.isActive ? 'default' : 'destructive'}
+                    className={`shadow-none border-none ${
+                      store.isActive ? 'bg-green-500/10 hover:bg-green-500/20 text-green-700' : ''
                     }`}
                   >
                     {store.isActive ? 'Hoạt động' : 'Ẩn'}
-                  </span>
+                  </Badge>
                   {store.isVerified && (
-                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
-                      Đã xác minh
-                    </span>
+                    <Badge
+                      variant="secondary"
+                      className="bg-blue-500/10 hover:bg-blue-500/20 text-blue-700 shadow-none border-none flex items-center gap-1"
+                    >
+                      <ShieldCheck size={10} className="fill-blue-700 text-white" />
+                      Xác minh
+                    </Badge>
                   )}
                 </div>
-              </td>
-              <td className="px-6 py-4">
+              </TableCell>
+              <TableCell className="px-6 py-4 text-right">
                 <div className="flex items-center justify-end gap-1">
-                  <button
+                  <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={() => onToggleVerified(store._id)}
                     disabled={isToggleVerifiedPending}
-                    className={`p-1.5 rounded-lg transition-colors ${
-                      store.isVerified ? 'text-blue-600 hover:bg-blue-50' : 'text-gray-400 hover:bg-gray-100'
+                    className={`h-8 w-8 transition-colors ${
+                      store.isVerified ? 'text-blue-600 hover:bg-blue-50 hover:text-blue-700' : 'text-gray-400 hover:bg-gray-100'
                     }`}
                     title={store.isVerified ? 'Bỏ xác minh' : 'Xác minh'}
                   >
                     <CheckCircle size={16} />
-                  </button>
-                  <button
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={() => onToggleActive(store._id)}
                     disabled={isToggleActivePending}
-                    className={`p-1.5 rounded-lg transition-colors ${
-                      store.isActive ? 'text-green-600 hover:bg-green-50' : 'text-gray-400 hover:bg-gray-100'
+                    className={`h-8 w-8 transition-colors ${
+                      store.isActive ? 'text-green-600 hover:bg-green-50 hover:text-green-700' : 'text-gray-400 hover:bg-gray-100'
                     }`}
                     title={store.isActive ? 'Ẩn cửa hàng' : 'Hiện cửa hàng'}
                   >
                     {store.isActive ? <CheckCircle size={16} /> : <XCircle size={16} />}
-                  </button>
-                   <button
-                    onClick={() => onEdit(store)}
-                    className="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
-                    title="Sửa"
-                  >
-                    <Edit size={16} />
-                  </button>
-                  <button
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={() => {
                       if (confirm('Bạn có chắc muốn xóa cửa hàng này?')) {
                         onDelete(store._id)
                       }
                     }}
                     disabled={isDeletePending}
-                    className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                    className="h-8 w-8 text-red-500 hover:bg-red-50 hover:text-red-600"
                     title="Xóa"
                   >
                     <Trash2 size={16} />
-                  </button>
+                  </Button>
                 </div>
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   )
 }

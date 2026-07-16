@@ -26,9 +26,12 @@ import DashboardPage from '../pages/admin/DashboardPage'
 import UsersPage from '../pages/admin/UsersPage'
 import ProductsPage from '../pages/admin/ProductsPage'
 import StoresPage from '../pages/admin/StorePage/StoresPage'
-import CategoriesPage from '../pages/admin/CategoriesPage'
 import NotFoundPage from '../pages/notFound/NotFoundPage'
 import BannersPage from '@/pages/admin/BannerPage/BannersPage'
+import BannerDetailPage from '@/pages/admin/BannerPage/BannerDetailPage'
+import CategoriesPage from '@/pages/admin/CategoriesPage/CategoriesPage'
+import CategoryDetailPage from '@/pages/admin/CategoriesPage/CategoryDetailPage'
+import StoreDetailPage from '@/pages/admin/StorePage/StoreDetailPage'
 
 const router = createBrowserRouter([
   // Public pages - ai cũng truy cập được
@@ -134,8 +137,11 @@ const router = createBrowserRouter([
           { path: 'users', element: <UsersPage /> },
           { path: 'products', element: <ProductsPage /> },
           { path: 'stores', element: <StoresPage /> },
+          { path: 'stores/:id', element: <StoreDetailPage /> },
           { path: 'categories', element: <CategoriesPage /> },
+          { path: 'categories/:id', element: <CategoryDetailPage /> },
           { path: 'banners', element: <BannersPage /> },
+          { path: 'banners/:id', element: <BannerDetailPage /> },
         ],
       },
     ],

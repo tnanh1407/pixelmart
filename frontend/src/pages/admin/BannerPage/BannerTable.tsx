@@ -1,5 +1,8 @@
 import { Trash2, Edit, Image, Loader2 } from 'lucide-react'
 import Swal from 'sweetalert2'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 interface Banner {
   _id: string
@@ -15,19 +18,19 @@ interface Banner {
 interface BannerTableProps {
   banners: Banner[]
   isLoading: boolean
-  onEdit: (banner: Banner) => void
   onDelete: (id: string) => void
   onToggleActive: (id: string, isActive: boolean) => void
   isDeleting: boolean
+  onViewDetail: (banner: Banner) => void
 }
 
 export default function BannerTable({
   banners,
   isLoading,
-  onEdit,
   onDelete,
   onToggleActive,
   isDeleting,
+  onViewDetail,
 }: BannerTableProps) {
   if (isLoading) {
     return (
@@ -47,23 +50,26 @@ export default function BannerTable({
   }
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full">
-        <thead className="bg-gray-50 border-b border-gray-100">
-          <tr>
-            <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Hình ảnh</th>
-            <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Tiêu đề</th>
-            <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Thứ tự</th>
-            <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Thời gian</th>
-            <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Trạng thái</th>
-            <th className="text-right px-6 py-3 text-sm font-medium text-gray-500">Thao tác</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-50">
+    <div className="w-full">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-25 px-6">Hình ảnh</TableHead>
+            <TableHead className="px-6">Tiêu đề</TableHead>
+            <TableHead className="px-6">Thứ tự</TableHead>
+            <TableHead className="px-6">Thời gian</TableHead>
+            <TableHead className="px-6">Trạng thái</TableHead>
+            <TableHead className="text-right px-6">Thao tác</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {banners.map((banner) => (
-            <tr key={banner._id} className="hover:bg-gray-50">
-              <td className="px-6 py-4">
-                <div className="w-20 h-12 bg-gray-100 rounded-lg overflow-hidden">
+            <TableRow key={banner._id}>
+              <TableCell className="px-6 py-4">
+                <div
+                  onClick={() => onViewDetail(banner)}
+                  className="w-20 h-12 bg-gray-100 rounded-lg overflow-hidden border border-gray-100 cursor-pointer hover:opacity-85 transition-opacity"
+                >
                   {banner.image ? (
                     <img src={banner.image} alt={banner.title} className="w-full h-full object-cover" />
                   ) : (
@@ -72,41 +78,45 @@ export default function BannerTable({
                     </div>
                   )}
                 </div>
-              </td>
-              <td className="px-6 py-4">
-                <div>
-                  <p className="font-medium text-gray-900 text-sm">{banner.title}</p>
+              </TableCell>
+              <TableCell className="px-6 py-4">
+                <div className="max-w-75">
+                  <p
+                    onClick={() => onViewDetail(banner)}
+                    className="font-medium text-gray-900 text-sm truncate cursor-pointer hover:text-indigo-600 transition-colors"
+                  >
+                    {banner.title}
+                  </p>
                   {banner.shortDescription && (
-                    <p className="text-xs text-gray-500 max-w-[200px] truncate">{banner.shortDescription}</p>
+                    <p className="text-xs text-gray-500 truncate mt-0.5">{banner.shortDescription}</p>
                   )}
                 </div>
-              </td>
-              <td className="px-6 py-4 text-sm text-gray-700">{banner.order}</td>
-              <td className="px-6 py-4 text-xs text-gray-500">
+              </TableCell>
+              <TableCell className="px-6 py-4 text-sm text-gray-700">{banner.order}</TableCell>
+              <TableCell className="px-6 py-4 text-xs text-gray-500">
                 {banner.startDate ? new Date(banner.startDate).toLocaleDateString('vi-VN') : '—'}
                 {' → '}
                 {banner.endDate ? new Date(banner.endDate).toLocaleDateString('vi-VN') : '—'}
-              </td>
-              <td className="px-6 py-4">
+              </TableCell>
+              <TableCell className="px-6 py-4">
                 <button
+                  type="button"
                   onClick={() => onToggleActive(banner._id, banner.isActive)}
-                  className={`px-2 py-0.5 rounded-full text-xs font-medium cursor-pointer ${
-                    banner.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                  }`}
+                  className="cursor-pointer"
                 >
-                  {banner.isActive ? 'Hiện' : 'Ẩn'}
-                </button>
-              </td>
-              <td className="px-6 py-4">
-                <div className="flex items-center justify-end gap-1">
-                  <button
-                    onClick={() => onEdit(banner)}
-                    className="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
-                    title="Chỉnh sửa"
+                  <Badge
+                    variant={banner.isActive ? 'default' : 'destructive'}
+                    className={banner.isActive ? 'bg-green-500/10 hover:bg-green-500/20 text-green-700 shadow-none border-none' : 'shadow-none border-none'}
                   >
-                    <Edit size={16} />
-                  </button>
-                  <button
+                    {banner.isActive ? 'Hiện' : 'Ẩn'}
+                  </Badge>
+                </button>
+              </TableCell>
+              <TableCell className="px-6 py-4 text-right">
+                <div className="flex items-center justify-end gap-1">
+                  <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={() => {
                       Swal.fire({
                         title: 'Xác nhận xóa?',
@@ -130,17 +140,17 @@ export default function BannerTable({
                       })
                     }}
                     disabled={isDeleting}
-                    className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                    className="h-8 w-8 text-red-500 hover:bg-red-50 hover:text-red-600"
                     title="Xóa"
                   >
                     <Trash2 size={16} />
-                  </button>
+                  </Button>
                 </div>
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   )
 }
