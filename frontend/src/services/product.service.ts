@@ -21,7 +21,7 @@ export const productService = {
   },
 
   async updateProduct(id: string, payload: Partial<IProduct>): Promise<IProduct> {
-    const { data } = await api.put(`/products/${id}`, payload)
+    const { data } = await api.patch(`/products/${id}`, payload)
     return data.data
   },
 

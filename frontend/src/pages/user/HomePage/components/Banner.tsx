@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, Pagination } from 'swiper/modules'
-import { useBanners } from '@/hooks/banner/useBanners'
+import { useCampaigns } from '@/hooks/campaign/useCampaigns'
 
 import 'swiper/css'
 import 'swiper/css/pagination'
 export default function Banner() {
-  const { data: banners, isLoading } = useBanners()
+  const { data: banners, isLoading } = useCampaigns()
 
   const displayBanners = banners && banners.length > 0 ? banners : null
 
@@ -24,7 +24,7 @@ export default function Banner() {
         >
           {displayBanners.map((banner) => (
             <SwiperSlide key={banner._id}>
-              <Link to={`/banner/${banner._id}`} className="block w-full overflow-hidden">
+              <Link to={`/campaign/${banner._id}`} className="block w-full overflow-hidden">
                 <img
                   src={banner.image}
                   alt={banner.title}

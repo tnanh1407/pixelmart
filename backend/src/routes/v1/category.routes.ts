@@ -12,7 +12,7 @@ router.get("/:id", asyncHandler(categoryController.getCategoryById.bind(category
 // Admin only actions
 router.post("/", auth, checkRole("admin"), asyncHandler(categoryController.createCategory.bind(categoryController)));
 router.post("/upload", auth, checkRole("admin"), ...uploadCategoryImage, asyncHandler(categoryController.uploadCategoryImage.bind(categoryController)));
-router.put("/:id", auth, checkRole("admin"), asyncHandler(categoryController.updateCategory.bind(categoryController)));
+router.patch("/:id", auth, checkRole("admin"), asyncHandler(categoryController.updateCategory.bind(categoryController)));
 router.delete("/:id", auth, checkRole("admin"), asyncHandler(categoryController.deleteCategory.bind(categoryController)));
 
 export default router;

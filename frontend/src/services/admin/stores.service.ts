@@ -39,7 +39,7 @@ export const storesService = {
   },
 
   async updateStore(id: string, payload: any): Promise<void> {
-    await api.put(`/stores/${id}`, payload)
+    await api.patch(`/stores/${id}`, payload)
   },
 
   async createStore(payload: any): Promise<void> {

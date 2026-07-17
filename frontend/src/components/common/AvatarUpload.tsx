@@ -4,7 +4,7 @@ import Swal from 'sweetalert2'
 import useUserStore from '@/stores/useUserStore'
 
 export default function AvatarUpload() {
-  const { user, uploadAvatar } = useUserStore()
+  const { user, updateProfile } = useUserStore()
   const [isUploading, setIsUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -94,7 +94,7 @@ export default function AvatarUpload() {
     if (result.isConfirmed) {
       setIsUploading(true)
       try {
-        await uploadAvatar(file)
+        await updateProfile({ avatar: file })
         Swal.fire({
           icon: 'success',
           title: 'Cập nhật ảnh đại diện thành công!',

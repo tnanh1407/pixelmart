@@ -50,8 +50,8 @@ const navMain = [
     icon: TagsIcon,
   },
   {
-    title: "Banner",
-    url: "/admin/banners",
+    title: "Chiến dịch",
+    url: "/admin/campaigns",
     icon: ImageIcon,
   },
 ]
@@ -63,6 +63,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <SidebarMenu>
+          
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
@@ -70,7 +71,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <Link to="/admin">
                 <img src="/core/logo_web.svg" alt="PixelMart" className="size-6" />
-                <span className="text-base font-semibold">PixelMart Admin</span>
+                <span className="text-xl font-semibold capitalize">Trang quản lý</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

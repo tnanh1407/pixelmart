@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import { EllipsisVerticalIcon, LogOutIcon, StoreIcon } from "lucide-react"
+import { EllipsisVerticalIcon, LogOutIcon, Settings, StoreIcon } from "lucide-react"
 
 import {
   Avatar,
@@ -93,13 +93,17 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem className="capitalize">
                 <StoreIcon />
-                Trang quản trị
+                Thông tin cá nhân
+              </DropdownMenuItem>
+              <DropdownMenuItem className="capitalize">
+                <Settings />
+                Cài đặt giao diện
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive" onClick={handleLogout}>
+            <DropdownMenuItem variant="destructive" onClick={handleLogout} className="cursor-pointer">
               <LogOutIcon />
               Đăng xuất
             </DropdownMenuItem>

@@ -38,7 +38,7 @@ export const uploadAvatar = [
   },
 ];
 
-export const uploadBannerImage = [
+export const uploadCampaignImage = [
   upload.single("image"),
   async (req: Request, _res: Response, next: NextFunction) => {
     const file = req.file;

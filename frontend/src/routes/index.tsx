@@ -12,8 +12,8 @@ import Cart from '../pages/user/HomePage/Cart/Cart'
 import Storelist from '../pages/user/Storelist/Storelist'
 import StoreDetail from '../pages/user/StoreDetail/StoreDetail'
 import ProductDetail from '../pages/user/ProductDetail/ProductDetail'
-import BannerDetail from '../pages/user/BannerDetail/BannerDetail'
-import BannerList from '../pages/user/BannerList/BannerList'
+import CampaignDetail from '../pages/user/CampaignDetail/CampaignDetail'
+import CampaignList from '../pages/user/CampaignList/CampaignList'
 import Search from '../pages/user/Search/Search'
 import LoginPage from '../pages/auth/LoginPage/LoginPage'
 import RegisterPage from '../pages/auth/RegisterPage/RegisterPage'
@@ -24,11 +24,11 @@ import UserLayout from '../layouts/UserLayout'
 import ProfilePage from '../pages/user/Profile/ProfilePage'
 import DashboardPage from '../pages/admin/DashboardPage'
 import UsersPage from '../pages/admin/UsersPage'
-import ProductsPage from '../pages/admin/ProductsPage'
+import ProductsPage from '../pages/admin/ProductsPage/ProductsPage'
 import StoresPage from '../pages/admin/StorePage/StoresPage'
 import NotFoundPage from '../pages/notFound/NotFoundPage'
-import BannersPage from '@/pages/admin/BannerPage/BannersPage'
-import BannerDetailPage from '@/pages/admin/BannerPage/BannerDetailPage'
+import CampaignsPage from '@/pages/admin/CampaignPage/CampaignsPage'
+import CampaignDetailPage from '@/pages/admin/CampaignPage/CampaignDetailPage'
 import CategoriesPage from '@/pages/admin/CategoriesPage/CategoriesPage'
 import CategoryDetailPage from '@/pages/admin/CategoriesPage/CategoryDetailPage'
 import StoreDetailPage from '@/pages/admin/StorePage/StoreDetailPage'
@@ -90,8 +90,8 @@ const router = createBrowserRouter([
           { path: 'store-list', element: <Storelist /> },
           { path: 'store/:id', element: <StoreDetail /> },
           { path: 'product/:id', element: <ProductDetail /> },
-          { path: 'banner/:id', element: <BannerDetail /> },
-          { path: 'banners', element: <BannerList /> },
+          { path: 'campaign/:id', element: <CampaignDetail /> },
+          { path: 'campaigns', element: <CampaignList /> },
           { path: 'search', element: <Search /> },
         ],
       },
@@ -140,8 +140,8 @@ const router = createBrowserRouter([
           { path: 'stores/:id', element: <StoreDetailPage /> },
           { path: 'categories', element: <CategoriesPage /> },
           { path: 'categories/:id', element: <CategoryDetailPage /> },
-          { path: 'banners', element: <BannersPage /> },
-          { path: 'banners/:id', element: <BannerDetailPage /> },
+          { path: 'campaigns', element: <CampaignsPage /> },
+          { path: 'campaigns/:id', element: <CampaignDetailPage /> },
         ],
       },
     ],

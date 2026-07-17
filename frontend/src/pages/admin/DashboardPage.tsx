@@ -52,8 +52,7 @@ export default function DashboardPage() {
     { name: 'Quản lý sản phẩm', path: '/admin/products', icon: Package, color: 'text-green-600 bg-green-50' },
     { name: 'Quản lý cửa hàng', path: '/admin/stores', icon: Store, color: 'text-purple-600 bg-purple-50' },
     { name: 'Quản lý danh mục', path: '/admin/categories', icon: Tag, color: 'text-orange-600 bg-orange-50' },
-    { name: 'Quản lý banner', path: '/admin/banners', icon: BarChart3, color: 'text-pink-600 bg-pink-50' },
-    { name: 'Quản lý banner', path: '/admin/banners', icon: BarChart3, color: 'text-pink-600 bg-pink-50' },
+    { name: 'Quản lý chiến dịch', path: '/admin/campaigns', icon: BarChart3, color: 'text-pink-600 bg-pink-50' },
     
   ]
 
@@ -180,7 +179,7 @@ export default function DashboardPage() {
           <div className="text-center p-4 bg-gray-50 rounded-lg">
             <ShoppingCart size={24} className="mx-auto text-gray-400 mb-2" />
             <p className="text-xs text-gray-500">Banner hoạt động</p>
-            <p className="text-lg font-bold text-gray-900">{stats?.totalBanners ?? 0}</p>
+            <p className="text-lg font-bold text-gray-900">{stats?.totalCampaigns ?? 0}</p>
           </div>
           <div className="text-center p-4 bg-gray-50 rounded-lg">
             <Store size={24} className="mx-auto text-gray-400 mb-2" />

@@ -12,7 +12,7 @@ import addressRoutes from "./routes/v1/address.routes.ts";
 import categoryRoutes from "./routes/v1/category.routes.ts";
 import storeRoutes from "./routes/v1/store.routes.ts";
 import productRoutes from "./routes/v1/product.routes.ts";
-import bannerRoutes from "./routes/v1/banner.routes.ts";
+import campaignRoutes from "./routes/v1/campaign.routes.ts";
 
 const app = express();
 
@@ -50,7 +50,7 @@ app.use("/api/v1/addresses", addressRoutes);
 app.use("/api/v1/categories", categoryRoutes);
 app.use("/api/v1/stores", storeRoutes);
 app.use("/api/v1/products", productRoutes);
-app.use("/api/v1/banners", bannerRoutes);
+app.use("/api/v1/campaigns", campaignRoutes);
 
 app.use(errorHandler);
 

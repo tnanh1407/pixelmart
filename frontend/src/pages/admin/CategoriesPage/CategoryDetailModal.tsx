@@ -1,4 +1,5 @@
-import { X, Calendar, Info, Tag, CheckCircle, XCircle } from 'lucide-react'
+import { Calendar, Info, Tag, CheckCircle, XCircle } from 'lucide-react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 interface Category {
   _id: string
@@ -17,20 +18,15 @@ interface CategoryDetailModalProps {
 }
 
 export default function CategoryDetailModal({ show, category, onClose }: CategoryDetailModalProps) {
-  if (!show || !category) return null
+  if (!category) return null
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
-      <div className="bg-white rounded-xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50/50">
-          <div className="flex items-center gap-2">
-            <Tag size={18} className="text-indigo-600" />
-            <h3 className="text-lg font-semibold text-gray-900">Chi tiết danh mục</h3>
-          </div>
-          <button onClick={onClose} className="p-1 hover:bg-gray-200 rounded-lg transition-colors">
-            <X size={20} className="text-gray-500" />
-          </button>
-        </div>
+    <Dialog open={show} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="sm:max-w-md p-0 gap-0 overflow-hidden">
+        <DialogHeader className="px-6 py-4 border-b border-gray-100 bg-gray-50/50 flex-row items-center gap-2 space-y-0">
+          <Tag size={18} className="text-indigo-600" />
+          <DialogTitle>Chi tiết danh mục</DialogTitle>
+        </DialogHeader>
 
         <div className="p-6 space-y-5">
           {category.image ? (
@@ -102,16 +98,7 @@ export default function CategoryDetailModal({ show, category, onClose }: Categor
             </div>
           </div>
         </div>
-
-        <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-lg transition-colors shadow-sm"
-          >
-            Đóng
-          </button>
-        </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   )
 }

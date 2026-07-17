@@ -1,22 +1,26 @@
 import { Router } from "express";
 import storeController from "../../controllers/store.controller.js";
 import asyncHandler from "../../middlewares/asyncHandler.js";
-import { auth } from "../../middlewares/auth.middleware.js";
+import { auth, checkRole } from "../../middlewares/auth.middleware.js";
+import { ROLES } from "../../constants/roles.js";
 
 const router = Router();
 
+// Public
 router.get("/", asyncHandler(storeController.getStores.bind(storeController)));
-router.get("/me", auth, asyncHandler(storeController.getMyStore.bind(storeController)));
-router.get("/followed", auth, asyncHandler(storeController.getFollowedStores.bind(storeController)));
 router.get("/:id", asyncHandler(storeController.getStoreById.bind(storeController)));
 router.get("/:id/followers", asyncHandler(storeController.getStoreFollowers.bind(storeController)));
 
-// Authenticated users
-router.post("/", auth, asyncHandler(storeController.createStore.bind(storeController)));
-router.put("/:id", auth, asyncHandler(storeController.updateStore.bind(storeController)));
-router.delete("/:id", auth, asyncHandler(storeController.deleteStore.bind(storeController)));
+// Authenticated
+router.get("/me", auth, asyncHandler(storeController.getMyStore.bind(storeController)));
+router.get("/followed", auth, asyncHandler(storeController.getFollowedStores.bind(storeController)));
 
-// Follow/Unfollow
+// Vendor & Admin only
+router.post("/", auth, checkRole(ROLES.VENDOR, ROLES.ADMIN), asyncHandler(storeController.createStore.bind(storeController)));
+router.patch("/:id", auth, checkRole(ROLES.VENDOR, ROLES.ADMIN), asyncHandler(storeController.updateStore.bind(storeController)));
+router.delete("/:id", auth, checkRole(ROLES.VENDOR, ROLES.ADMIN), asyncHandler(storeController.deleteStore.bind(storeController)));
+
+// Follow/Unfollow (all authenticated users)
 router.post("/:id/follow", auth, asyncHandler(storeController.followStore.bind(storeController)));
 router.delete("/:id/follow", auth, asyncHandler(storeController.unfollowStore.bind(storeController)));
 router.get("/:id/follow/status", auth, asyncHandler(storeController.checkFollowStatus.bind(storeController)));

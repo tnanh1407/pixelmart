@@ -3,11 +3,11 @@ import { Loader2 } from 'lucide-react'
 import { useAuth } from '@/hooks/auth'
 
 interface ProtectedRouteProps {
-  requiredRole?: 'admin' | 'user'
+  requiredRole?: 'admin' | 'vendor' | 'user'
 }
 
 export default function ProtectedRoute({ requiredRole }: ProtectedRouteProps) {
-  const { isAuthenticated, isLoading, isAdmin } = useAuth()
+  const { isAuthenticated, isLoading, isAdmin, isVendor } = useAuth()
 
   if (isLoading) {
     return (
@@ -22,6 +22,10 @@ export default function ProtectedRoute({ requiredRole }: ProtectedRouteProps) {
   }
 
   if (requiredRole === 'admin' && !isAdmin) {
+    return <Navigate to="/" replace />
+  }
+
+  if (requiredRole === 'vendor' && !isVendor && !isAdmin) {
     return <Navigate to="/" replace />
   }
 

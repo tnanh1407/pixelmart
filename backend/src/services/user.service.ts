@@ -1,7 +1,8 @@
 import userRepository from "../repositories/user.repository.js";
 import { type IUser, type IAddress } from "../models/user.model.js";
 import { AppError } from "../middlewares/error.middleware.js";
-import cloudinary, { CLOUDINARY_FOLDERS } from "../config/cloudinary.js";
+import cloudinary, { CLOUDINARY_FOLDERS, getUserFolder } from "../config/cloudinary.js";
+import { extractPublicId } from "../utils/cloudinary/cloudinaryHelps.js";
 
 
 class UserService {
@@ -61,11 +62,61 @@ class UserService {
     return updatedUser;
   }
 
+  async uploadAvatar(userId: string, file: Express.Multer.File) {
+    const user = await userRepository.findById(userId);
+    if (!user) {
+      throw new AppError("User not found", 404);
+    }
+
+    const userFolders = getUserFolder(userId);
+
+    // Delete old avatar if exists
+    if (user.avatar && user.avatar.includes("cloudinary")) {
+      const publicId = extractPublicId(user.avatar);
+      if (publicId) {
+        await cloudinary.uploader.destroy(publicId);
+      }
+    }
+
+    const b64 = Buffer.from(file.buffer).toString("base64");
+    const dataURI = `data:${file.mimetype};base64,${b64}`;
+    const result = await cloudinary.uploader.upload(dataURI, {
+      folder: userFolders.avatars,
+      public_id: "avatar",
+      format: "webp",
+      overwrite: true,
+      transformation: [
+        { width: 256, height: 256, crop: "fill", quality: "auto" },
+      ],
+    });
+
+    const updatedUser = await userRepository.update(userId, { avatar: result.secure_url });
+    return updatedUser;
+  }
+
   async deleteUser(id: string) {
     const user = await userRepository.findById(id);
     if (!user) {
       throw new AppError("User not found", 404);
     }
+
+    // Delete avatar from Cloudinary if exists
+    if (user.avatar && user.avatar.includes("cloudinary")) {
+      const publicId = extractPublicId(user.avatar);
+      if (publicId) {
+        await cloudinary.uploader.destroy(publicId);
+      }
+    }
+
+    // Delete user's Cloudinary folder (avatars + reviews)
+    const userFolders = getUserFolder(id);
+    try {
+      await cloudinary.api.delete_folder(userFolders.avatars);
+      await cloudinary.api.delete_folder(userFolders.reviews);
+    } catch {
+      // Folder may not exist, ignore error
+    }
+
     return await userRepository.delete(id);
   }
 
@@ -76,35 +127,6 @@ class UserService {
     }
 
     const updatedUser = await userRepository.update(id, { isActive: !user.isActive });
-    return updatedUser;
-  }
-
-  async uploadAvatar(userId: string, file: Express.Multer.File) {
-    const user = await userRepository.findById(userId);
-    if (!user) {
-      throw new AppError("User not found", 404);
-    }
-
-    if (user.avatar && user.avatar.includes("cloudinary")) {
-      const parts = user.avatar.split("/");
-      const filename = parts[parts.length - 1];
-      const publicId = filename.split(".")[0];
-      await cloudinary.uploader.destroy(`${CLOUDINARY_FOLDERS.AVATARS}/${publicId}`);
-    }
-
-    const b64 = Buffer.from(file.buffer).toString("base64");
-    const dataURI = `data:${file.mimetype};base64,${b64}`;
-    const result = await cloudinary.uploader.upload(dataURI, {
-      folder: CLOUDINARY_FOLDERS.AVATARS,
-      public_id: userId,
-      format: "webp",
-      overwrite: true,
-      transformation: [
-        { width: 256, height: 256, crop: "fill", quality: "auto" },
-      ],
-    });
-
-    const updatedUser = await userRepository.update(userId, { avatar: result.secure_url });
     return updatedUser;
   }
 

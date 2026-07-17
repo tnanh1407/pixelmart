@@ -60,7 +60,7 @@ export default function Header() {
           </Link>
           <div className="flex items-center gap-6">
             <Link to="/" className="transition-colors duration-300 hover:text-secondary font-medium capitalize">Tiếng Việt</Link>
-              <Link to="/banners" className="transition-colors duration-300 hover:text-secondary font-medium capitalize">Chiến dịch</Link>
+              <Link to="/campaigns" className="transition-colors duration-300 hover:text-secondary font-medium capitalize">Chiến dịch</Link>
             <Link to="/" className="transition-colors duration-300 hover:text-secondary font-medium capitalize">Thông báo</Link>
             <Link to="/store-list" className="transition-colors duration-300 hover:text-secondary font-medium capitalize">Gian hàng</Link>
             <Link to="/pointmall-voucher" className="transition-colors duration-300 hover:text-secondary font-medium capitalize">Mã giảm giá</Link>

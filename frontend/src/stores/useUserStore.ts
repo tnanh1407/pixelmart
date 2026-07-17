@@ -18,13 +18,13 @@ interface UserState {
   googleLogin: (payload: {
     googleId: string
     email: string
-    name : string
+    name: string
     avatar?: string | undefined
   }) => Promise<void>
   logout: () => Promise<void>
   fetchUser: () => Promise<void>
   setUser: (user: User) => void
-  uploadAvatar: (file: File) => Promise<void>
+  updateProfile: (payload: { name?: string; gender?: string; dob?: string; phone?: string; avatar?: File }) => Promise<void>
 }
 
 const useUserStore = create<UserState>()(
@@ -98,8 +98,8 @@ const useUserStore = create<UserState>()(
 
       setUser: (user) => set({ user, isAuthenticated: true }),
 
-      uploadAvatar: async (file) => {
-        const user = await authService.uploadAvatar(file)
+      updateProfile: async (payload) => {
+        const user = await authService.updateProfile(payload)
         set({ user })
       },
     }),

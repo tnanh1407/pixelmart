@@ -26,7 +26,7 @@ export const storeService = {
   },
 
   async updateStore(id: string, payload: Partial<IStore>): Promise<IStore> {
-    const { data } = await api.put(`/stores/${id}`, payload)
+    const { data } = await api.patch(`/stores/${id}`, payload)
     return data.data
   },
 

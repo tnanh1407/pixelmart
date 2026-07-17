@@ -87,12 +87,24 @@ export const authService = {
     return data.data
   },
 
-  async uploadAvatar(file: File): Promise<User> {
-    const formData = new FormData()
-    formData.append('avatar', file)
-    const { data } = await api.patch('/users/avatar', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    })
+  async updateProfile(payload: { name?: string; gender?: string; dob?: string; phone?: string; avatar?: File }): Promise<User> {
+    // If avatar is included, use FormData for multipart upload
+    if (payload.avatar) {
+      const formData = new FormData()
+      formData.append('data', JSON.stringify({
+        name: payload.name,
+        gender: payload.gender,
+        dob: payload.dob,
+        phone: payload.phone,
+      }))
+      formData.append('avatar', payload.avatar)
+      const { data } = await api.patch('/users/profile', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      return data.data
+    }
+    // Otherwise, use regular JSON
+    const { data } = await api.patch('/users/profile', payload)
     return data.data
   },
 
@@ -100,7 +112,7 @@ export const authService = {
     await api.post('/auth/change-password', { currentPassword, newPassword, confirmPassword })
   },
 
-  async updateProfile(payload: { name?: string; gender?: string; dob?: string; phone?: string }): Promise<User> {
+  async updateProfile(payload: { name?: string; gender?: string; dob?: string; phone?: string; avatar?: File }): Promise<User> {
     const { data } = await api.patch('/users/profile', payload)
     return data.data
   },
@@ -111,7 +123,7 @@ export const authService = {
   },
 
   async updateAddress(addressId: string, payload: Partial<Address>): Promise<Address[]> {
-    const { data } = await api.put(`/users/addresses/${addressId}`, payload)
+    const { data } = await api.patch(`/users/addresses/${addressId}`, payload)
     return data.data
   },
 

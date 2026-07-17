@@ -63,30 +63,38 @@ class UserController {
     });
   }
 
-  async uploadAvatar(req: Request, res: Response) {
-    const id = String(req.user?.userId);
-    const file = req.file as Express.Multer.File;
-
-    if (!file) {
-      res.status(400).json({
-        success: false,
-        message: "No file uploaded",
-      });
-      return;
-    }
-
-    const user = await userService.uploadAvatar(id, file);
-    res.json({
-      success: true,
-      message: "Avatar uploaded successfully",
-      data: user,
-    });
-  }
-
   async updateProfile(req: Request, res: Response) {
     const id = String(req.user?.userId);
-    const data = req.body;
-    const user = await userService.updateUser(id, data);
+    const file = req.file as Express.Multer.File | undefined;
+
+    // Parse body data - handle both JSON and form-data
+    let data: any = {};
+    if (req.body.data) {
+      try {
+        data = JSON.parse(req.body.data);
+      } catch {
+        data = req.body;
+      }
+    } else {
+      data = req.body;
+    }
+
+    // Update text fields if provided
+    let user;
+    if (Object.keys(data).length > 0) {
+      user = await userService.updateUser(id, data);
+    }
+
+    // Upload avatar if file provided
+    if (file) {
+      user = await userService.uploadAvatar(id, file);
+    }
+
+    // Fetch latest user data
+    if (!user) {
+      user = await userService.getUserById(id);
+    }
+
     res.json({
       success: true,
       message: "Profile updated successfully",

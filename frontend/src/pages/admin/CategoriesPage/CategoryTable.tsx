@@ -165,6 +165,9 @@ export default function CategoryTable({
           </div>
         </div>
       )}
+      
     </>
+    
   )
+  
 }

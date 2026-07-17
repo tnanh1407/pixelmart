@@ -35,7 +35,7 @@ export const categoriesService = {
   },
 
   async updateCategory(id: string, payload: { name?: string; description?: string; image?: string; isActive?: boolean }): Promise<void> {
-    await api.put(`/categories/${id}`, payload)
+    await api.patch(`/categories/${id}`, payload)
   },
 
   async deleteCategory(id: string): Promise<void> {
