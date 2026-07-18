@@ -32,6 +32,9 @@ import CampaignDetailPage from '@/pages/admin/CampaignDetailPage'
 import CategoriesPage from '@/pages/admin/CategoriesPage'
 import CategoryDetailPage from '@/pages/admin/CategoryDetailPage'
 import StoreDetailPage from '@/pages/admin/StoreDetailPage'
+import NotificationListPage from '@/pages/admin/notifications/NotificationListPage'
+import ReportPage from '@/pages/admin/reports/ReportPage'
+import SettingsPage from '@/pages/admin/settings/SettingsPage'
 
 const router = createBrowserRouter([
   // Public pages - ai cũng truy cập được
@@ -142,6 +145,9 @@ const router = createBrowserRouter([
           { path: 'categories/:id', element: <CategoryDetailPage /> },
           { path: 'campaigns', element: <CampaignsPage /> },
           { path: 'campaigns/:id', element: <CampaignDetailPage /> },
+          { path: 'notifications', element: <NotificationListPage /> },
+          { path: 'reports', element: <ReportPage /> },
+          { path: 'settings', element: <SettingsPage /> },
         ],
       },
     ],

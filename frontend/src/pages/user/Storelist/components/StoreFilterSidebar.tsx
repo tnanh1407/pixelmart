@@ -1,6 +1,6 @@
 import { Search } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
-import api from '@/services/api'
+import api from '@/services/client'
 
 interface StoreFilterSidebarProps {
   search: string

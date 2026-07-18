@@ -58,14 +58,11 @@ dotenv.config();
 const args = process.argv.slice(2);
 const SKIP_CLOUDINARY = args.includes("--skip-cloudinary");
 const DRY_RUN = args.includes("--dry-run");
-const RESET = !args.includes("--no-reset"); // reset by default
+const RESET = !args.includes("--no-reset");
 
 // ─── Config ─────────────────────────────────────────────────
 const mongoUri = process.env.URL_MONGODB;
-if (!mongoUri) {
-  console.error("Missing URL_MONGODB env variable");
-  process.exit(1);
-}
+if (!mongoUri) { console.error("Missing URL_MONGODB env variable"); process.exit(1); }
 
 if (!SKIP_CLOUDINARY) {
   cloudinary.config({
@@ -75,23 +72,84 @@ if (!SKIP_CLOUDINARY) {
   });
 }
 
-// ─── Helpers ────────────────────────────────────────────────
-const avatarCache = new Map<string, string>();
+// ─── Cloudinary Upload Helpers ──────────────────────────────
+const imageCache = new Map<string, string>();
 
-async function uploadAvatar(url: string, userId: string): Promise<string | null> {
-  if (!url || SKIP_CLOUDINARY) return null;
-  if (avatarCache.has(url)) return avatarCache.get(url)!;
+async function uploadToCloudinary(url: string, folder: string, publicId?: string): Promise<string> {
+  if (!url || SKIP_CLOUDINARY) return url;
+
+  if (imageCache.has(url)) return imageCache.get(url)!;
+
   try {
     const result = await cloudinary.uploader.upload(url, {
-      folder: `pixelmart/users/${userId}/avatars`,
+      folder,
       resource_type: "image",
-      public_id: "avatar",
+      public_id: publicId,
+      overwrite: !!publicId,
     });
-    avatarCache.set(url, result.secure_url);
+    imageCache.set(url, result.secure_url);
     return result.secure_url;
-  } catch {
-    return null;
+  } catch (err: any) {
+    console.log(`  ⚠  Upload failed: ${url} → ${err?.message?.slice(0, 80)}`);
+    return url; // fallback to original URL
   }
+}
+
+async function processSeedImages(
+  name: string,
+  data: any[],
+  options: {
+    stringFields?: string[];       // single image URL fields
+    arrayFields?: string[];        // array of image URLs
+    idField?: string;              // field to use as folder prefix
+    folderFn?: (item: any) => string; // custom folder function
+  }
+): Promise<any[]> {
+  if (SKIP_CLOUDINARY || data.length === 0) return data;
+
+  console.log(`  📷 ${name}: uploading images...`);
+  const processed = [];
+
+  for (let i = 0; i < data.length; i++) {
+    const item = { ...data[i] };
+    const itemId = options.idField ? item[options.idField] : (item._id || `item-${i}`);
+    const folder = options.folderFn ? options.folderFn(item) : `pixelmart/${name.toLowerCase()}/${itemId}`;
+
+    // Upload single URL fields
+    if (options.stringFields) {
+      for (const field of options.stringFields) {
+        if (item[field]) {
+          const publicId = field;
+          item[field] = await uploadToCloudinary(item[field], `${folder}/${field}`, publicId);
+        }
+      }
+    }
+
+    // Upload array URL fields
+    if (options.arrayFields) {
+      for (const field of options.arrayFields) {
+        if (item[field] && Array.isArray(item[field])) {
+          const urls = [];
+          for (let j = 0; j < item[field].length; j++) {
+            const url = item[field][j];
+            if (url) {
+              urls.push(await uploadToCloudinary(url, `${folder}/${field}`, `${field}-${j}`));
+            } else {
+              urls.push(url);
+            }
+          }
+          item[field] = urls;
+        }
+      }
+    }
+
+    processed.push(item);
+    if ((i + 1) % 5 === 0 || i === data.length - 1) {
+      process.stdout.write(`    ${i + 1}/${data.length}\r`);
+    }
+  }
+  console.log(`    ✓ ${data.length} items processed`);
+  return processed;
 }
 
 // ─── Reset DB ───────────────────────────────────────────────
@@ -105,23 +163,62 @@ const allModels: any[] = [
 
 async function resetDatabase() {
   console.log("Clearing all collections...");
-  for (const model of allModels) {
-    await model.deleteMany({});
-  }
+  for (const model of allModels) await model.deleteMany({});
   console.log("All collections cleared.\n");
+}
+
+// ─── Clear Cloudinary ──────────────────────────────────────
+async function clearCloudinary() {
+  if (SKIP_CLOUDINARY) return;
+
+  console.log("🗑️  Clearing Cloudinary images...");
+
+  const prefixes = [
+    "pixelmart/users",
+    "pixelmart/vendors",
+    "pixelmart/products",
+    "pixelmart/stores",
+    "pixelmart/categories",
+    "pixelmart/campaigns",
+    "pixelmart/banners",
+    "pixelmart/reviews",
+    "pixelmart/returns",
+    "pixelmart/chat",
+  ];
+
+  let totalDeleted = 0;
+
+  for (const prefix of prefixes) {
+    try {
+      const result = await cloudinary.api.delete_resources_by_prefix(prefix, {
+        resource_type: "image",
+      });
+      const count = Object.keys(result.deleted || {}).length;
+      totalDeleted += count;
+      if (count > 0) console.log(`  ${prefix}: deleted ${count} images`);
+    } catch (err: any) {
+      // Ignore "no resources found" errors
+      if (err?.http_code !== 404) {
+        console.log(`  ⚠  ${prefix}: ${err?.message?.slice(0, 80)}`);
+      }
+    }
+  }
+
+  // Clear cache after deleting
+  imageCache.clear();
+
+  if (totalDeleted > 0) {
+    console.log(`  ✓  Total deleted: ${totalDeleted} images\n`);
+  } else {
+    console.log(`  (no images found)\n`);
+  }
 }
 
 // ─── Seed Helpers ───────────────────────────────────────────
 async function seedCollection(name: string, model: any, data: any[]) {
-  if (!data || data.length === 0) {
-    console.log(`  ⏭  ${name}: no data`);
-    return [];
-  }
-  if (DRY_RUN) {
-    console.log(`  🔍 ${name}: ${data.length} records (dry-run)`);
-    return [];
-  }
-  const result = await model.insertMany(data as any[]);
+  if (!data || data.length === 0) { console.log(`  ⏭  ${name}: no data`); return []; }
+  if (DRY_RUN) { console.log(`  🔍 ${name}: ${data.length} records (dry-run)`); return []; }
+  const result = await model.insertMany(data);
   console.log(`  ✓  ${name}: ${result.length} records`);
   return result;
 }
@@ -137,7 +234,10 @@ async function seed() {
   await mongoose.connect(mongoUri as string);
   console.log(`Connected to: ${mongoose.connection.host}\n`);
 
-  if (RESET) await resetDatabase();
+  if (RESET) {
+    await resetDatabase();
+    await clearCloudinary();
+  }
 
   // ─── Tier 1: Users ──────────────────────────────────────
   console.log("─── Tier 1: Users & Auth ───");
@@ -149,7 +249,7 @@ async function seed() {
 
     let avatarUrl = null;
     if (!SKIP_CLOUDINARY && data.avatar) {
-      avatarUrl = await uploadAvatar(data.avatar, userId);
+      avatarUrl = await uploadToCloudinary(data.avatar, `pixelmart/users/${userId}/avatar`, "avatar");
       if (avatarUrl) process.stdout.write(`  ${i + 1}/${userSeedData.length} ${data.name}\r`);
     }
 
@@ -183,19 +283,63 @@ async function seed() {
 
   // ─── Tier 2: Core Entities ──────────────────────────────
   console.log("\n─── Tier 2: Core Entities ───");
-  await seedCollection("Vendors", Vendor, vendorSeedData);
-  await seedCollection("Categories", Category, categorySeedData);
-  await seedCollection("Stores", Store, storeSeedData);
-  await seedCollection("Products", Product, productSeedData);
+
+  // Vendors: avatar + banner
+  const vendorData = await processSeedImages("Vendors", [...vendorSeedData], {
+    stringFields: ["avatar", "banner"],
+    idField: "_id",
+    folderFn: (item: any) => `pixelmart/vendors/${item._id}`,
+  });
+  await seedCollection("Vendors", Vendor, vendorData);
+
+  // Categories: image
+  const catData = await processSeedImages("Categories", [...categorySeedData], {
+    stringFields: ["image"],
+    idField: "_id",
+    folderFn: (item: any) => `pixelmart/categories/${item._id}`,
+  });
+  await seedCollection("Categories", Category, catData);
+
+  // Stores: logo
+  const storeData = await processSeedImages("Stores", [...storeSeedData], {
+    stringFields: ["logo"],
+    idField: "_id",
+    folderFn: (item: any) => `pixelmart/stores/${item._id}`,
+  });
+  await seedCollection("Stores", Store, storeData);
+
+  // Products: images[] + gallery[]
+  const prodData = await processSeedImages("Products", [...productSeedData], {
+    stringFields: [],
+    arrayFields: ["images", "gallery"],
+    idField: "_id",
+    folderFn: (item: any) => `pixelmart/products/${item._id}`,
+  });
+  await seedCollection("Products", Product, prodData);
 
   // ─── Tier 3: Marketing ──────────────────────────────────
   console.log("\n─── Tier 3: Marketing ───");
   await seedCollection("FlashSales", FlashSale, flashSaleSeedData);
   await seedCollection("FlashSaleItems", FlashSaleItem, flashSaleItemSeedData);
-  await seedCollection("Campaigns", Campaign, campaignSeedData);
+
+  // Campaigns: sourceUrl
+  const campData = await processSeedImages("Campaigns", [...campaignSeedData], {
+    stringFields: ["sourceUrl"],
+    idField: "_id",
+    folderFn: (item: any) => `pixelmart/campaigns/${item._id}`,
+  });
+  await seedCollection("Campaigns", Campaign, campData);
+
   await seedCollection("CampaignItems", CampaignItem, campaignItemSeedData);
   await seedCollection("Vouchers", Voucher, voucherSeedData);
-  await seedCollection("Banners", Banner, bannerSeedData);
+
+  // Banners: image
+  const bannerData = await processSeedImages("Banners", [...bannerSeedData], {
+    stringFields: ["image"],
+    idField: "_id",
+    folderFn: (item: any) => `pixelmart/banners/${item._id}`,
+  });
+  await seedCollection("Banners", Banner, bannerData);
 
   // ─── Tier 4: User Data ──────────────────────────────────
   console.log("\n─── Tier 4: User Data ───");
@@ -203,8 +347,23 @@ async function seed() {
   await seedCollection("Orders", Order, orderSeedData);
   await seedCollection("PaymentTransactions", PaymentTransaction, paymentTransactionSeedData);
   await seedCollection("VoucherUsages", VoucherUsage, voucherUsageSeedData);
-  await seedCollection("ReturnRequests", ReturnRequest, returnRequestSeedData);
-  await seedCollection("Reviews", Review, reviewSeedData);
+
+  // ReturnRequests: images[]
+  const returnData = await processSeedImages("ReturnRequests", [...returnRequestSeedData], {
+    arrayFields: ["images"],
+    idField: "_id",
+    folderFn: (item: any) => `pixelmart/returns/${item._id}`,
+  });
+  await seedCollection("ReturnRequests", ReturnRequest, returnData);
+
+  // Reviews: images[]
+  const revData = await processSeedImages("Reviews", [...reviewSeedData], {
+    arrayFields: ["images"],
+    idField: "_id",
+    folderFn: (item: any) => `pixelmart/reviews/${item._id}`,
+  });
+  await seedCollection("Reviews", Review, revData);
+
   await seedCollection("Wishlists", Wishlist, wishlistSeedData);
   await seedCollection("StoreFollows", StoreFollow, storeFollowSeedData);
 
@@ -219,6 +378,10 @@ async function seed() {
   console.log(`\n╔══════════════════════════════════════╗`);
   console.log(`║   Seed completed in ${elapsed}s                  ║`);
   console.log(`╚══════════════════════════════════════╝`);
+
+  if (!SKIP_CLOUDINARY) {
+    console.log(`\n📷 All images uploaded to Cloudinary (cache: ${imageCache.size} unique URLs)`);
+  }
 
   console.log("\nAccounts for testing:");
   console.log("  Admin:   admin1@gmail.com  / Password123!");

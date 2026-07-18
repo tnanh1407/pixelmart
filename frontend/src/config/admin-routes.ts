@@ -5,6 +5,9 @@ export const adminPathLabels: Record<string, string> = {
   stores: "Cửa hàng",
   categories: "Danh mục",
   campaigns: "Chiến dịch",
+  notifications: "Thông báo",
+  reports: "Báo cáo",
+  settings: "Cài đặt",
 }
 
 export const adminDetailLabels: Record<string, string> = {

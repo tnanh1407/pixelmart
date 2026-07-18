@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { X, Loader2, Upload, Search, Check, Store } from 'lucide-react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { adminService } from '@/services/admin/admin.service'
-import api from '@/services/api'
+import api from '@/services/client'
 import { toast } from 'sonner'
 
 interface StoreForm {

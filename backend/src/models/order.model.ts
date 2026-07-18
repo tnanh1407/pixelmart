@@ -301,7 +301,6 @@ const orderSchema = new mongoose.Schema<IOrderDocument>(
 orderSchema.index({ userId: 1, status: 1, createdAt: -1 });
 orderSchema.index({ storeId: 1, status: 1, createdAt: -1 });
 orderSchema.index({ paymentStatus: 1, createdAt: -1 });
-orderSchema.index({ orderCode: 1 });
 
 // Auto-set timestamps on status changes
 orderSchema.pre("save", function () {

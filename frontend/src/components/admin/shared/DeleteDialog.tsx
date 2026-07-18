@@ -30,12 +30,16 @@ export default function DeleteDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>Xác nhận xóa?</AlertDialogTitle>
           <AlertDialogDescription>
-            Bạn có chắc chắn muốn xóa {entityLabel} {itemName ? `"${itemName}"` : 'này'}? Thao tác này không thể hoàn tác.
+            Bạn có chắc chắn muốn xóa {entityLabel}{' '}
+            {itemName ? `"${itemName}"` : 'này'}? Thao tác này không thể hoàn
+            tác.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => onOpenChange(false)}>Hủy</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm}>Đồng ý xóa</AlertDialogAction>
+          <AlertDialogCancel>Hủy</AlertDialogCancel>
+          <AlertDialogAction variant="destructive" onClick={onConfirm}>
+            Đồng ý xóa
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

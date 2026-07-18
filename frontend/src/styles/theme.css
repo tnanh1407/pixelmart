@@ -1,43 +1,108 @@
 :root {
+  /* ─── Backgrounds ─── */
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 150);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 150);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.129 0.042 150);
+  --muted: oklch(0.965 0.018 150);
+  --muted-foreground: oklch(0.552 0.016 150);
+
+  /* ─── Brand Colors ─── */
   --primary: oklch(0.527 0.154 150);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: rgba(246, 158, 0, 1);
+  --primary-hover: oklch(0.45 0.14 150);
+  --primary-light: oklch(0.9 0.05 150);
+  --secondary: oklch(0.73 0.16 75);
   --secondary-foreground: oklch(0.266 0.076 150);
-  --muted: oklch(0.962 0.018 150);
-  --muted-foreground: oklch(0.552 0.016 150);
-  --accent: oklch(0.962 0.018 150);
+
+  /* ─── Accent / Interactive ─── */
+  --accent: oklch(0.965 0.018 150);
   --accent-foreground: oklch(0.266 0.076 150);
+  --ring: oklch(0.527 0.154 150);
+
+  /* ─── Destructive ─── */
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
+  --destructive-light: oklch(0.95 0.05 27);
+
+  /* ─── Success / Warning / Info ─── */
+  --success: oklch(0.58 0.18 145);
+  --success-foreground: oklch(0.985 0 0);
+  --success-light: oklch(0.95 0.05 145);
+  --warning: oklch(0.75 0.16 80);
+  --warning-foreground: oklch(0.15 0.02 80);
+  --warning-light: oklch(0.97 0.05 80);
+  --info: oklch(0.55 0.15 240);
+  --info-foreground: oklch(0.985 0 0);
+  --info-light: oklch(0.94 0.04 240);
+
+  /* ─── UI Elements ─── */
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
-  --ring: oklch(0.527 0.154 150);
   --radius: 0.625rem;
+  --radius-sm: 0.375rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  /* ─── Shadows ─── */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.03);
+  --shadow-md: 0 2px 4px 0 rgb(0 0 0 / 0.04), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+  --shadow-lg: 0 4px 8px -2px rgb(0 0 0 / 0.06), 0 2px 4px -2px rgb(0 0 0 / 0.04);
+  --shadow-xl: 0 8px 16px -4px rgb(0 0 0 / 0.08), 0 4px 8px -6px rgb(0 0 0 / 0.04);
+
+  /* ─── Sidebar ─── */
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.527 0.154 150);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.962 0.018 150);
+  --sidebar-accent: oklch(0.965 0.018 150);
   --sidebar-accent-foreground: oklch(0.266 0.076 150);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.527 0.154 150);
 
-  /* định nghĩa */
-  --cl-text: rgb(16, 24, 40);
-  --cl-text-second: rgb(106, 117, 107);
-  --cl-price: rgba(255, 116, 16, 1);
-
+  /* ─── Charts ─── */
   --chart-1: oklch(0.527 0.154 150);
   --chart-2: oklch(0.6 0.2 240);
   --chart-3: oklch(0.7 0.15 75);
   --chart-4: oklch(0.6 0.15 300);
   --chart-5: oklch(0.6 0.2 15);
+
+  /* ─── Typography Scale ─── */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.8125rem;
+  --font-size-base: 0.875rem;
+  --font-size-lg: 1rem;
+  --font-size-xl: 1.125rem;
+  --font-size-2xl: 1.25rem;
+  --font-size-3xl: 1.5rem;
+  --font-size-4xl: 1.875rem;
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ─── Spacing ─── */
+  --spacing-0: 0px;
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-10: 2.5rem;
+
+  /* ─── Animation ─── */
+  --animate-duration: 200ms;
+  --animate-duration-slow: 300ms;
+  --animate-timing: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ─── Sidebar Widths ─── */
+  --sidebar-width: 16rem;
+  --sidebar-width-collapsed: 3rem;
 }
 
 .dark {
@@ -47,21 +112,34 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.129 0.042 150);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.723 0.219 142.18);
-  --primary-foreground: oklch(0.129 0.042 150);
-  --secondary: oklch(0.205 0.05 150);
-  --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.205 0.05 150);
   --muted-foreground: oklch(0.708 0.015 150);
+  --primary: oklch(0.723 0.219 142.18);
+  --primary-foreground: oklch(0.129 0.042 150);
+  --primary-hover: oklch(0.65 0.2 142);
+  --primary-light: oklch(0.25 0.05 150);
+  --secondary: oklch(0.205 0.05 150);
+  --secondary-foreground: oklch(0.985 0 0);
   --accent: oklch(0.205 0.05 150);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.395 0.109 25.723);
   --destructive-foreground: oklch(0.985 0 0);
+  --destructive-light: oklch(0.3 0.08 27);
+  --success: oklch(0.6 0.16 145);
+  --success-light: oklch(0.25 0.05 145);
+  --warning: oklch(0.7 0.14 80);
+  --warning-light: oklch(0.28 0.04 80);
+  --info: oklch(0.55 0.14 240);
+  --info-light: oklch(0.22 0.04 240);
   --border: oklch(0.269 0.005 150);
   --input: oklch(0.269 0.005 150);
   --ring: oklch(0.723 0.219 142.18);
-  /* định nghĩa */
-  --cl-text: rgb(16, 24, 40);
-  --cl-text-second: rgb(106, 117, 107);
-  --cl-price: rgba(255, 116, 16, 1);
+  --sidebar: oklch(0.129 0.042 150);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.723 0.219 142.18);
+  --sidebar-primary-foreground: oklch(0.129 0.042 150);
+  --sidebar-accent: oklch(0.205 0.05 150);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0.005 150);
+  --sidebar-ring: oklch(0.723 0.219 142.18);
 }

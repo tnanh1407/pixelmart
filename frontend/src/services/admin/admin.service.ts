@@ -9,6 +9,7 @@ import { adminVoucherService } from './vouchers.service'
 import { adminBannerService } from './banners.service'
 import { adminVendorService } from './vendors.service'
 import { adminReviewService } from './reviews.service'
+import { flashSalesService } from './flash-sales.service'
 
 export * from './stats.service'
 export * from './users.service'
@@ -21,6 +22,7 @@ export * from './vouchers.service'
 export * from './banners.service'
 export * from './vendors.service'
 export * from './reviews.service'
+export * from './flash-sales.service'
 
 export const adminService = {
   ...statsService,
@@ -34,4 +36,5 @@ export const adminService = {
   ...adminBannerService,
   ...adminVendorService,
   ...adminReviewService,
+  ...flashSalesService,
 }

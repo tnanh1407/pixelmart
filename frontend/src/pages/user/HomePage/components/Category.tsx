@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation } from 'swiper/modules'
 import { useRef, useState, useEffect } from 'react'
-import api from '@/services/api'
+import api from '@/services/client'
 import 'swiper/css'
 import 'swiper/css/navigation'
 

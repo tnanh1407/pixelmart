@@ -17,6 +17,7 @@ interface ConfirmDialogProps {
   onConfirm: () => void
   confirmLabel?: string
   cancelLabel?: string
+  variant?: 'default' | 'destructive'
 }
 
 export default function ConfirmDialog({
@@ -27,6 +28,7 @@ export default function ConfirmDialog({
   onConfirm,
   confirmLabel = 'Xác nhận',
   cancelLabel = 'Hủy',
+  variant = 'default',
 }: ConfirmDialogProps) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
@@ -36,10 +38,11 @@ export default function ConfirmDialog({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => onOpenChange(false)}>
-            {cancelLabel}
-          </AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm}>
+          <AlertDialogCancel>{cancelLabel}</AlertDialogCancel>
+          <AlertDialogAction
+            variant={variant === 'destructive' ? 'destructive' : 'default'}
+            onClick={onConfirm}
+          >
             {confirmLabel}
           </AlertDialogAction>
         </AlertDialogFooter>
