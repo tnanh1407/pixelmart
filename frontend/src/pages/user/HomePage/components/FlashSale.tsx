@@ -8,7 +8,7 @@ import 'swiper/css/navigation'
 
 import ProductCard from '@/components/common/ProductCard'
 import { useQuery } from '@tanstack/react-query'
-import { productService } from '@/services/product.service'
+import { productService } from '@/services/user/product.service'
 
 const CountdownTimer = () => {
   const [time, setTime] = useState({ hours: 2, minutes: 0, seconds: 0 })

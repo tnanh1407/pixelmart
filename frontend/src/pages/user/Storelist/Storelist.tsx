@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { storeService } from '@/services/store.service'
+import { storeService } from '@/services/user/store.service'
 import { provinces } from '../../../data/products'
 import StoreBanner from './components/StoreBanner'
 import StoreFilterSidebar from './components/StoreFilterSidebar'

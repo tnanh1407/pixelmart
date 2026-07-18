@@ -1,151 +1,212 @@
+import { useState, useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Users, Package, Store, Tag, TrendingUp, Activity, ShoppingCart, BarChart3 } from 'lucide-react'
-import { adminService } from '@/services/admin/admin.service'
-import { Link } from 'react-router-dom'
-import { PageHeader } from '@/components/admin/shared'
+import {
+  DollarSign, ShoppingCart, Package, Users, Store, MousePointerClick,
+  ShoppingBag, Megaphone, RefreshCw, Download, Calendar,
+} from 'lucide-react'
+import { analyticsService, type DashboardAnalytics } from '@/services/admin/analytics.service'
+import { Button } from '@/components/ui/button'
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
+import {
+  KPICard, RevenueChart, OrderStats, StorePerformance,
+  ProductPerformance, UserAnalytics, SystemHealth,
+  RecentActivity, QuickActions,
+} from '@/components/admin/dashboard'
 
-const formatNumber = (n: number) => new Intl.NumberFormat('vi-VN').format(n)
+const kpiConfig = (data: DashboardAnalytics | undefined) => [
+  {
+    title: 'Doanh thu',
+    value: data?.revenue.label ?? '0',
+    icon: DollarSign,
+    change: data?.revenue.change ?? 0,
+    color: 'text-emerald-600',
+    bgColor: 'bg-emerald-50 dark:bg-emerald-950/30',
+  },
+  {
+    title: 'Đơn hàng',
+    value: data?.orders.label ?? '0',
+    icon: ShoppingCart,
+    change: data?.orders.change ?? 0,
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-50 dark:bg-blue-950/30',
+  },
+  {
+    title: 'Sản phẩm',
+    value: data?.products.label ?? '0',
+    icon: Package,
+    change: data?.products.change ?? 0,
+    color: 'text-violet-600',
+    bgColor: 'bg-violet-50 dark:bg-violet-950/30',
+  },
+  {
+    title: 'Người dùng',
+    value: data?.users.label ?? '0',
+    icon: Users,
+    change: data?.users.change ?? 0,
+    color: 'text-sky-600',
+    bgColor: 'bg-sky-50 dark:bg-sky-950/30',
+  },
+  {
+    title: 'Cửa hàng',
+    value: data?.stores.label ?? '0',
+    icon: Store,
+    change: data?.stores.change ?? 0,
+    color: 'text-fuchsia-600',
+    bgColor: 'bg-fuchsia-50 dark:bg-fuchsia-950/30',
+  },
+  {
+    title: 'Tỷ lệ chuyển đổi',
+    value: data?.conversionRate.label ?? '0%',
+    icon: MousePointerClick,
+    change: data?.conversionRate.change ?? 0,
+    color: 'text-amber-600',
+    bgColor: 'bg-amber-50 dark:bg-amber-950/30',
+  },
+  {
+    title: 'Giá trị TB đơn hàng',
+    value: data?.averageOrderValue.label ?? '0',
+    icon: ShoppingBag,
+    change: data?.averageOrderValue.change ?? 0,
+    color: 'text-rose-600',
+    bgColor: 'bg-rose-50 dark:bg-rose-950/30',
+  },
+  {
+    title: 'Chiến dịch',
+    value: data?.activeCampaigns.label ?? '0',
+    icon: Megaphone,
+    change: data?.activeCampaigns.change ?? 0,
+    color: 'text-teal-600',
+    bgColor: 'bg-teal-50 dark:bg-teal-950/30',
+  },
+]
 
 export default function DashboardPage() {
-  const { data: stats, isLoading } = useQuery({
-    queryKey: ['admin-stats'],
-    queryFn: () => adminService.getStats(),
-    staleTime: 30 * 1000,
+  const [lastRefresh, setLastRefresh] = useState<Date>(new Date())
+
+  const { data, isLoading, isFetching, refetch } = useQuery<DashboardAnalytics>({
+    queryKey: ['admin-analytics'],
+    queryFn: () => analyticsService.getDashboardAnalytics(),
+    staleTime: 60 * 1000,
   })
 
-  const statCards = [
-    { name: 'Tổng người dùng', value: stats?.totalUsers ?? 0, icon: Users, color: 'bg-blue-500', bgColor: 'bg-blue-50', link: '/admin/users' },
-    { name: 'Tổng sản phẩm', value: stats?.totalProducts ?? 0, icon: Package, color: 'bg-green-500', bgColor: 'bg-green-50', link: '/admin/products' },
-    { name: 'Tổng cửa hàng', value: stats?.totalStores ?? 0, icon: Store, color: 'bg-purple-500', bgColor: 'bg-purple-50', link: '/admin/stores' },
-    { name: 'Danh mục', value: stats?.totalCategories ?? 0, icon: Tag, color: 'bg-orange-500', bgColor: 'bg-orange-50', link: '/admin/categories' },
-  ]
+  const handleRefresh = useCallback(() => {
+    refetch()
+    setLastRefresh(new Date())
+  }, [refetch])
 
-  const quickLinks = [
-    { name: 'Quản lý người dùng', path: '/admin/users', icon: Users, color: 'text-blue-600 bg-blue-50' },
-    { name: 'Quản lý sản phẩm', path: '/admin/products', icon: Package, color: 'text-green-600 bg-green-50' },
-    { name: 'Quản lý cửa hàng', path: '/admin/stores', icon: Store, color: 'text-purple-600 bg-purple-50' },
-    { name: 'Quản lý danh mục', path: '/admin/categories', icon: Tag, color: 'text-orange-600 bg-orange-50' },
-    { name: 'Quản lý chiến dịch', path: '/admin/campaigns', icon: BarChart3, color: 'text-pink-600 bg-pink-50' },
-  ]
+  const today = new Date()
+  const formattedDate = today.toLocaleDateString('vi-VN', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+  })
+
+  const kpis = kpiConfig(data)
 
   return (
-    <div>
-      <PageHeader
-        title="Dashboard"
-        description="Tổng quan hệ thống PixelMart"
-        action={
-          <div className="flex items-center gap-2 text-sm text-text-muted">
-            <Activity size={16} className="text-green-500" />
-            <span>Hệ thống hoạt động tốt</span>
-          </div>
-        }
-      />
+    <div className="space-y-6 pb-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
+          <p className="text-sm text-muted-foreground mt-1">{formattedDate}</p>
+        </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {statCards.map((stat) => (
-          <Link key={stat.name} to={stat.link} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow group">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-text-muted">{stat.name}</p>
-                {isLoading ? (
-                  <div className="h-8 w-20 bg-gray-100 rounded animate-pulse mt-1" />
-                ) : (
-                  <p className="text-2xl font-bold text-text mt-1">{formatNumber(stat.value)}</p>
-                )}
-              </div>
-              <div className={`${stat.bgColor} p-3 rounded-lg group-hover:scale-110 transition-transform`}>
-                <stat.icon size={24} className={`${stat.color.replace('bg-', 'text-')}`} />
-              </div>
-            </div>
-          </Link>
+        <div className="flex items-center gap-3">
+          <TooltipProvider delayDuration={300}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" size="sm" className="h-9 gap-2">
+                  <Calendar size={15} />
+                  <span className="hidden sm:inline">30 ngày qua</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Thay đổi khoảng thời gian</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          <TooltipProvider delayDuration={300}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" size="sm" className="h-9 gap-2">
+                  <Download size={15} />
+                  <span className="hidden sm:inline">Xuất báo cáo</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Tải báo cáo CSV</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-9 gap-2"
+            onClick={handleRefresh}
+            disabled={isFetching}
+          >
+            <RefreshCw size={15} className={isFetching ? 'animate-spin' : ''} />
+          </Button>
+
+          <span className="text-xs text-muted-foreground hidden lg:block">
+            Cập nhật: {lastRefresh.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
+          </span>
+        </div>
+      </div>
+
+      {/* KPI Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+        {kpis.map((kpi) => (
+          <KPICard key={kpi.title} loading={isLoading} {...kpi} />
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <h2 className="text-lg font-semibold text-text mb-4">Truy cập nhanh</h2>
-          <div className="space-y-2">
-            {quickLinks.map((link) => (
-              <Link key={link.path} to={link.path} className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-50 transition-colors group">
-                <div className={`${link.color} p-2 rounded-lg`}><link.icon size={18} /></div>
-                <span className="text-sm font-medium text-text group-hover:text-text">{link.name}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
+      {/* Revenue Chart - Full width */}
+      <RevenueChart
+        data={data?.revenueTimeline ?? []}
+        loading={isLoading}
+      />
 
-        <div className="lg:col-span-2 bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-text">Người dùng gần đây</h2>
-            <Link to="/admin/users" className="text-sm text-primary hover:text-primary-hover font-medium">Xem tất cả</Link>
-          </div>
-          {isLoading ? (
-            <div className="space-y-3">
-              {[...Array(5)].map((_, i) => (
-                <div key={i} className="flex items-center gap-3 animate-pulse">
-                  <div className="w-10 h-10 bg-gray-100 rounded-full" />
-                  <div className="flex-1 space-y-2">
-                    <div className="h-4 bg-gray-100 rounded w-1/3" />
-                    <div className="h-3 bg-gray-100 rounded w-1/2" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : stats?.recentUsers && stats.recentUsers.length > 0 ? (
-            <div className="space-y-3">
-              {stats.recentUsers.map((user: any) => (
-                <div key={user._id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center overflow-hidden">
-                      {user.avatar ? (
-                        <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
-                      ) : (
-                        <span className="text-indigo-600 font-medium text-sm">{user.name.charAt(0).toUpperCase()}</span>
-                      )}
-                    </div>
-                    <div>
-                      <p className="font-medium text-text text-sm">{user.name}</p>
-                      <p className="text-xs text-text-muted">{user.email}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                      user.role === 'admin' ? 'bg-red-100 text-red-700' : user.role === 'vendor' ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-700'
-                    }`}>{user.role}</span>
-                    <p className="text-xs text-text-muted mt-0.5">{new Date(user.createdAt).toLocaleDateString('vi-VN')}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-sm text-text-muted text-center py-8">Chưa có dữ liệu</p>
-          )}
+      {/* Order Stats + Store Performance */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-1">
+          <OrderStats
+            data={data?.orderStatusBreakdown ?? []}
+            loading={isLoading}
+          />
+        </div>
+        <div className="lg:col-span-2">
+          <StorePerformance
+            data={data?.topStores ?? []}
+            loading={isLoading}
+          />
         </div>
       </div>
 
-      <div className="mt-6 bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-        <h2 className="text-lg font-semibold text-text mb-4">Thông tin hệ thống</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <ShoppingCart size={24} className="mx-auto text-text-muted mb-2" />
-            <p className="text-xs text-text-muted">Banner hoạt động</p>
-            <p className="text-lg font-bold text-text">{stats?.totalCampaigns ?? 0}</p>
-          </div>
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <Store size={24} className="mx-auto text-text-muted mb-2" />
-            <p className="text-xs text-text-muted">Cửa hàng hoạt động</p>
-            <p className="text-lg font-bold text-text">{stats?.activeStores ?? 0}</p>
-          </div>
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <Package size={24} className="mx-auto text-text-muted mb-2" />
-            <p className="text-xs text-text-muted">Sản phẩm đang bán</p>
-            <p className="text-lg font-bold text-text">{stats?.activeProducts ?? 0}</p>
-          </div>
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <TrendingUp size={24} className="mx-auto text-text-muted mb-2" />
-            <p className="text-xs text-text-muted">Người dùng hoạt động</p>
-            <p className="text-lg font-bold text-text">{stats?.activeUsers ?? 0}</p>
-          </div>
+      {/* Product Performance + User Analytics */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <ProductPerformance
+          bestSelling={data?.bestSelling ?? []}
+          lowStock={data?.lowStock ?? []}
+          loading={isLoading}
+        />
+        <UserAnalytics
+          data={data?.userTrend ?? []}
+          loading={isLoading}
+        />
+      </div>
+
+      {/* Recent Activity + System Health + Quick Actions */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <RecentActivity
+            data={data?.recentActivities ?? []}
+            loading={isLoading}
+          />
+        </div>
+        <div className="space-y-6">
+          <SystemHealth
+            data={data?.systemHealth ?? []}
+            loading={isLoading}
+          />
+          <QuickActions />
         </div>
       </div>
     </div>

@@ -32,6 +32,12 @@
   --cl-text: rgb(16, 24, 40);
   --cl-text-second: rgb(106, 117, 107);
   --cl-price: rgba(255, 116, 16, 1);
+
+  --chart-1: oklch(0.527 0.154 150);
+  --chart-2: oklch(0.6 0.2 240);
+  --chart-3: oklch(0.7 0.15 75);
+  --chart-4: oklch(0.6 0.15 300);
+  --chart-5: oklch(0.6 0.2 15);
 }
 
 .dark {

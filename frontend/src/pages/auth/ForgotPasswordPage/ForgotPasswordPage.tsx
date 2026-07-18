@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Swal from 'sweetalert2'
-import { useForgotPasswordMutation } from '@/hooks/auth'
+import { useForgotPasswordMutation } from '@/hooks/user/auth'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'

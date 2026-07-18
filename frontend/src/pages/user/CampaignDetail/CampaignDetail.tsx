@@ -1,6 +1,6 @@
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, Calendar, Sparkles, AlertCircle } from 'lucide-react'
-import { useCampaign } from '@/hooks/campaign/useCampaigns'
+import { useCampaign } from '@/hooks/user/campaign/useCampaigns'
 import dayjs from 'dayjs'
 import AppBreadcrumb from '@/components/common/AppBreadcrumb'
 

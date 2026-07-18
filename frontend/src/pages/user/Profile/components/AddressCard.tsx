@@ -1,5 +1,5 @@
 import { MapPin, Edit2, Trash2, Check } from 'lucide-react'
-import { type Address } from '@/services/auth.service'
+import { type Address } from '@/services/user/auth.service'
 
 interface AddressCardProps {
   address: Address

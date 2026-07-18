@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
-import { useAuth } from '@/hooks/auth'
+import { useAuth } from '@/hooks/user/auth'
 
 export default function BlockAdminRoute() {
   const { isLoading, isAdmin } = useAuth()

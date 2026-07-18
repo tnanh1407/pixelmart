@@ -1,4 +1,4 @@
-import { type User } from '@/services/auth.service'
+import { type User } from '@/services/user/auth.service'
 
 export function isAdminRole(role?: string | null) {
   return role?.trim().toLowerCase() === 'admin'

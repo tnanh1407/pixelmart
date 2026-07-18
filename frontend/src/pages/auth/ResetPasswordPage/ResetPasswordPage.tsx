@@ -6,7 +6,7 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Swal from 'sweetalert2'
-import { authService } from '@/services/auth.service'
+import { authService } from '@/services/user/auth.service'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'

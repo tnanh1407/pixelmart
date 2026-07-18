@@ -24,8 +24,8 @@ import { provinces } from '../../../data/products'
 import Lightbox from "yet-another-react-lightbox"
 import "yet-another-react-lightbox/styles.css"
 import { useQuery } from '@tanstack/react-query'
-import { useProduct } from '@/hooks/product/useProduct'
-import { productService } from '@/services/product.service'
+import { useProduct } from '@/hooks/user/product/useProduct'
+import { productService } from '@/services/user/product.service'
 import AppBreadcrumb from '@/components/common/AppBreadcrumb'
 
 const formatPrice = (price: number) => new Intl.NumberFormat('vi-VN').format(price) + 'đ'

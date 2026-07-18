@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, Pagination } from 'swiper/modules'
-import { useCampaigns } from '@/hooks/campaign/useCampaigns'
+import { useCampaigns } from '@/hooks/user/campaign/useCampaigns'
 
 import 'swiper/css'
 import 'swiper/css/pagination'

@@ -12,7 +12,7 @@ import {
   UserCheck,
 } from 'lucide-react'
 import type { IStore } from '@/types/store.types'
-import { useFollowStatus, useFollowStore, useUnfollowStore } from '@/hooks/store/useFollowStore'
+import { useFollowStatus, useFollowStore, useUnfollowStore } from '@/hooks/user/store/useFollowStore'
 import useUserStore from '@/stores/useUserStore'
 
 

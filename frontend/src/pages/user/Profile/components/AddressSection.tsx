@@ -1,6 +1,6 @@
 import { Plus, MapPin } from 'lucide-react'
 import useUserStore from '@/stores/useUserStore'
-import { type Address } from '@/services/auth.service'
+import { type Address } from '@/services/user/auth.service'
 import AddressCard from './AddressCard'
 
 interface AddressSectionProps {

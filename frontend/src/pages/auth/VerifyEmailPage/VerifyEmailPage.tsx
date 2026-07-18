@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import { Loader2, ShieldCheck } from 'lucide-react'
 import Swal from 'sweetalert2'
-import { authService } from '@/services/auth.service'
+import { authService } from '@/services/user/auth.service'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'

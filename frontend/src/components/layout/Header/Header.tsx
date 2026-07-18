@@ -1,8 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { Search, User, ShoppingCart, ChevronDown, Menu, X, LogOut } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
-import { useAuth } from '@/hooks/auth'
-import { useLogoutMutation } from '@/hooks/auth'
+import { useAuth } from '@/hooks/user/auth'
+import { useLogoutMutation } from '@/hooks/user/auth'
 
 const categories = [
   'Hạnh nhân Vinh Châu',
