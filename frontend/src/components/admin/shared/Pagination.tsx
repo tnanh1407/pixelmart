@@ -1,21 +1,27 @@
-import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from '@/components/ui/pagination'
+import { Pagination as ShadcnPagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from '@/components/ui/pagination'
 
-interface StorePaginationProps {
+interface PaginationProps {
   page: number
   totalPages: number
   onPageChange: (page: number) => void
+  total: number
 }
 
-export default function StorePagination({ page, totalPages, onPageChange }: StorePaginationProps) {
+export default function Pagination({
+  page,
+  totalPages,
+  onPageChange,
+  total,
+}: PaginationProps) {
   if (totalPages <= 1) return null
 
   return (
     <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100">
-      <p className="text-sm text-text-muted whitespace-nowrap shrink-0">
-        Trang {page} / {totalPages}
+      <p className="text-sm text-text-muted whitespace-nowrap">
+        Trang {page} / {totalPages} ({total} bản ghi)
       </p>
       <div className="shrink-0">
-        <Pagination>
+        <ShadcnPagination>
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious
@@ -30,7 +36,7 @@ export default function StorePagination({ page, totalPages, onPageChange }: Stor
               />
             </PaginationItem>
           </PaginationContent>
-        </Pagination>
+        </ShadcnPagination>
       </div>
     </div>
   )

@@ -5,7 +5,6 @@ import { adminService } from '@/services/admin/admin.service'
 import type { ICampaign } from '@/types/campaign.types'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 
-// ── Types ──────────────────────────────────────────────
 export interface CampaignForm {
   title: string
   shortDescription: string
@@ -27,54 +26,30 @@ export interface CampaignForm {
 }
 
 const initialForm: CampaignForm = {
-  title: '',
-  shortDescription: '',
-  image: '',
-  isActive: true,
-  startDate: '',
-  endDate: '',
-  order: 0,
-  content: '',
-  durationInDays: '',
-  author: '',
-  categoryName: '',
-  sapo: '',
-  highlightsTitle: '',
-  highlights: '',
-  quote: '',
-  quoteAuthor: '',
-  contentSections: [],
+  title: '', shortDescription: '', image: '', isActive: true, startDate: '', endDate: '',
+  order: 0, content: '', durationInDays: '', author: '', categoryName: '', sapo: '',
+  highlightsTitle: '', highlights: '', quote: '', quoteAuthor: '', contentSections: [],
 }
 
-// ── Hook ───────────────────────────────────────────────
 export function useCampaignForm() {
   const [form, setForm] = useState<CampaignForm>(initialForm)
   const [activeTab, setActiveTab] = useState<'basic' | 'cms' | 'sections'>('basic')
   const [isUploading, setIsUploading] = useState(false)
 
-  const resetForm = useCallback(() => {
-    setForm(initialForm)
-    setActiveTab('basic')
-  }, [])
+  const resetForm = useCallback(() => { setForm(initialForm); setActiveTab('basic') }, [])
 
   const populateForm = useCallback((campaign: ICampaign) => {
     setForm({
-      title: campaign.title || '',
-      shortDescription: campaign.shortDescription || '',
-      image: campaign.image || '',
-      isActive: campaign.isActive ?? true,
+      title: campaign.title || '', shortDescription: campaign.shortDescription || '',
+      image: campaign.image || '', isActive: campaign.isActive ?? true,
       startDate: campaign.startDate ? campaign.startDate.substring(0, 10) : '',
       endDate: campaign.endDate ? campaign.endDate.substring(0, 10) : '',
-      order: campaign.order || 0,
-      content: campaign.content || '',
-      durationInDays: campaign.durationInDays || '',
-      author: campaign.author || '',
-      categoryName: campaign.categoryName || '',
-      sapo: campaign.sapo || '',
+      order: campaign.order || 0, content: campaign.content || '',
+      durationInDays: campaign.durationInDays || '', author: campaign.author || '',
+      categoryName: campaign.categoryName || '', sapo: campaign.sapo || '',
       highlightsTitle: campaign.highlightsTitle || '',
       highlights: campaign.highlights ? campaign.highlights.join('\n') : '',
-      quote: campaign.quote || '',
-      quoteAuthor: campaign.quoteAuthor || '',
+      quote: campaign.quote || '', quoteAuthor: campaign.quoteAuthor || '',
       contentSections: campaign.contentSections || [],
     })
     setActiveTab('basic')
@@ -99,15 +74,12 @@ export function useCampaignForm() {
 
   const buildPayload = useCallback(() => ({
     ...form,
-    highlights: form.highlights
-      ? form.highlights.split('\n').map((h) => h.trim()).filter(Boolean)
-      : [],
+    highlights: form.highlights ? form.highlights.split('\n').map((h) => h.trim()).filter(Boolean) : [],
   }), [form])
 
   return { form, setForm, activeTab, setActiveTab, isUploading, resetForm, populateForm, handleFileChange, buildPayload }
 }
 
-// ── Tab: Basic ─────────────────────────────────────────
 function BasicTab({ form, setForm, isUploading, handleFileChange }: {
   form: CampaignForm
   setForm: React.Dispatch<React.SetStateAction<CampaignForm>>
@@ -135,8 +107,7 @@ function BasicTab({ form, setForm, isUploading, handleFileChange }: {
             <input type="text" value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })}
               className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               placeholder="Nhập URL ảnh hoặc tải ảnh lên" required />
-            <label className={`flex items-center gap-2 px-4 py-2 border border-dashed rounded-lg text-sm font-medium cursor-pointer transition-colors whitespace-nowrap ${isUploading ? 'border-gray-300 bg-gray-50 text-text-muted cursor-not-allowed' : 'border-primary/30 hover:border-primary hover:bg-primary/5 text-primary'
-              }`}>
+            <label className={`flex items-center gap-2 px-4 py-2 border border-dashed rounded-lg text-sm font-medium cursor-pointer transition-colors whitespace-nowrap ${isUploading ? 'border-gray-300 bg-gray-50 text-text-muted cursor-not-allowed' : 'border-primary/30 hover:border-primary hover:bg-primary/5 text-primary'}`}>
               {isUploading ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
               <span>Tải ảnh lên</span>
               <input type="file" accept="image/*" onChange={handleFileChange} disabled={isUploading} className="hidden" />
@@ -197,7 +168,6 @@ function BasicTab({ form, setForm, isUploading, handleFileChange }: {
   )
 }
 
-// ── Tab: CMS ───────────────────────────────────────────
 function CmsTab({ form, setForm }: { form: CampaignForm; setForm: React.Dispatch<React.SetStateAction<CampaignForm>> }) {
   return (
     <div className="space-y-4">
@@ -255,7 +225,6 @@ function CmsTab({ form, setForm }: { form: CampaignForm; setForm: React.Dispatch
   )
 }
 
-// ── Tab: Sections ──────────────────────────────────────
 function SectionsTab({ contentSections, setContentSections }: {
   contentSections: CampaignForm['contentSections']
   setContentSections: (sections: CampaignForm['contentSections']) => void
@@ -273,7 +242,7 @@ function SectionsTab({ contentSections, setContentSections }: {
       <div className="flex items-center justify-between">
         <p className="text-xs text-text-muted">Các phần nội dung hiển thị theo thứ tự từ trên xuống.</p>
         <button type="button" onClick={addSection}
-          className="flex items-center gap-1 text-xs font-semibold text-primary hover:text-primary-hover bg-primary/5 hover:bg-primary/10 px-2.5 py-1.5 rounded-lg transition-colors capitalize cursor-pointer">
+          className="flex items-center gap-1 text-xs font-semibold text-primary hover:text-primary-hover bg-primary/5 hover:bg-primary/10 px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer">
           <Plus size={14} /> Thêm phần
         </button>
       </div>
@@ -311,7 +280,6 @@ function SectionsTab({ contentSections, setContentSections }: {
   )
 }
 
-// ── Modal ──────────────────────────────────────────────
 interface CampaignFormModalProps {
   showModal: boolean
   editingId: string | null
@@ -344,24 +312,19 @@ export default function CampaignFormModal({
             {editingId ? 'Chỉnh sửa chiến dịch' : 'Thêm chiến dịch mới'}
           </DialogTitle>
         </DialogHeader>
-
         <div className="flex border-b border-gray-100 px-6 bg-gray-50/50">
           {tabs.map((tab) => (
             <button key={tab.key} type="button" onClick={() => setActiveTab(tab.key)}
-              className={`py-3 px-4 text-sm font-medium border-b-2 transition-colors -mb-px ${activeTab === tab.key ? 'border-primary text-primary' : 'border-transparent text-text-muted hover:text-text'
-                }`}>
+              className={`py-3 px-4 text-sm font-medium border-b-2 transition-colors -mb-px ${activeTab === tab.key ? 'border-primary text-primary' : 'border-transparent text-text-muted hover:text-text'}`}>
               {tab.label}
             </button>
           ))}
         </div>
-
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto flex flex-col">
           <div className="p-6 space-y-4 flex-1">
             {activeTab === 'basic' && <BasicTab form={form} setForm={setForm} isUploading={isUploading} handleFileChange={handleFileChange} />}
             {activeTab === 'cms' && <CmsTab form={form} setForm={setForm} />}
-            {activeTab === 'sections' && (
-              <SectionsTab contentSections={form.contentSections} setContentSections={(sections) => setForm({ ...form, contentSections: sections })} />
-            )}
+            {activeTab === 'sections' && <SectionsTab contentSections={form.contentSections} setContentSections={(sections) => setForm({ ...form, contentSections: sections })} />}
           </div>
           <DialogFooter className="px-6 py-4 border-t border-gray-100 bg-white mx-0 mb-0 rounded-none border-x-0 ">
             <button type="button" onClick={closeModal} className="px-4 py-2 text-sm font-medium text-text hover:bg-gray-100 rounded-lg transition-colors cursor-pointer">
