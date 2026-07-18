@@ -13,6 +13,8 @@ import categoryRoutes from "./routes/v1/category.routes.ts";
 import storeRoutes from "./routes/v1/store.routes.ts";
 import productRoutes from "./routes/v1/product.routes.ts";
 import campaignRoutes from "./routes/v1/campaign.routes.ts";
+import campaignItemRoutes, { campaignItemStandaloneRouter } from "./routes/v1/campaignItem.routes.ts";
+import paymentRoutes from "./routes/v1/payment.routes.ts";
 
 const app = express();
 
@@ -51,6 +53,9 @@ app.use("/api/v1/categories", categoryRoutes);
 app.use("/api/v1/stores", storeRoutes);
 app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/campaigns", campaignRoutes);
+app.use("/api/v1/campaigns/:campaignId/items", campaignItemRoutes);
+app.use("/api/v1/campaign-items", campaignItemStandaloneRouter);
+app.use("/api/v1/payment", paymentRoutes);
 
 app.use(errorHandler);
 

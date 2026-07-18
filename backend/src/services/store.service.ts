@@ -1,8 +1,22 @@
 import Store, { IStore } from "../models/store.model.js";
 import StoreFollow from "../models/storeFollow.model.js";
+import Vendor from "../models/vendor.model.js";
 import { AppError } from "../middlewares/error.middleware.js";
+import { uploadImage, deleteImage } from "../utils/uploadImage.js";
+import { getFolder } from "../config/cloudinary.js";
 
 class StoreService {
+  private async getVendorId(userId: string, userRole: string): Promise<string | null> {
+    if (userRole === "admin") return null;
+    const vendor = await Vendor.findOne({ userId });
+    if (!vendor) {
+      throw new AppError("Bạn chưa đăng ký trở thành người bán. Vui lòng đăng ký tài khoản Vendor.", 403);
+    }
+    if (vendor.status !== "approved") {
+      throw new AppError("Tài khoản người bán của bạn chưa được duyệt hoặc đã bị khóa", 403);
+    }
+    return String(vendor._id);
+  }
   async getStores(query: any = {}) {
     const { page = 1, limit = 10, search, isVerified, isActive, all } = query;
     const filter: any = {};
@@ -26,7 +40,7 @@ class StoreService {
       .sort(search ? { score: { $meta: "textScore" } } : { createdAt: -1 })
       .skip(skipIndex)
       .limit(Number(limit))
-      .populate("ownerId", "name email");
+      .populate("ownerId", "shopName email");
 
     const total = await Store.countDocuments(filter);
 
@@ -42,7 +56,7 @@ class StoreService {
   }
 
   async getStoreById(id: string) {
-    const store = await Store.findById(id).populate("ownerId", "name email");
+    const store = await Store.findById(id).populate("ownerId", "shopName email");
     if (!store) {
       throw new AppError("Cửa hàng không tồn tại", 404);
     }
@@ -60,9 +74,13 @@ class StoreService {
       throw new AppError("Tên cửa hàng là bắt buộc", 400);
     }
 
-    let targetOwnerId = userId;
+    let targetOwnerId = await this.getVendorId(userId, userRole);
     if (userRole === "admin" && data.ownerId) {
       targetOwnerId = data.ownerId;
+    }
+
+    if (!targetOwnerId) {
+      throw new AppError("Không xác định được chủ sở hữu cửa hàng", 400);
     }
 
     // Check if user already owns a store
@@ -91,9 +109,12 @@ class StoreService {
   async updateStore(userId: string, userRole: string, id: string, data: Partial<IStore>) {
     const store = await this.getStoreById(id);
 
-    // Verify permission: Only owner or admin
-    if (store.ownerId !== userId && userRole !== "admin") {
-      throw new AppError("Bạn không có quyền chỉnh sửa cửa hàng này", 403);
+    // Verify permission: Only owner vendor or admin
+    if (userRole !== "admin") {
+      const vendorId = await this.getVendorId(userId, userRole);
+      if (!vendorId || store.ownerId !== vendorId) {
+        throw new AppError("Bạn không có quyền chỉnh sửa cửa hàng này", 403);
+      }
     }
 
     const { name, slug } = data;
@@ -146,9 +167,12 @@ class StoreService {
   async deleteStore(userId: string, userRole: string, id: string) {
     const store = await this.getStoreById(id);
 
-    // Verify permission: Only owner or admin
-    if (store.ownerId !== userId && userRole !== "admin") {
-      throw new AppError("Bạn không có quyền xóa cửa hàng này", 403);
+    // Verify permission: Only owner vendor or admin
+    if (userRole !== "admin") {
+      const vendorId = await this.getVendorId(userId, userRole);
+      if (!vendorId || store.ownerId !== vendorId) {
+        throw new AppError("Bạn không có quyền xóa cửa hàng này", 403);
+      }
     }
 
     await store.deleteOne();
@@ -158,7 +182,9 @@ class StoreService {
   async followStore(userId: string, storeId: string) {
     const store = await this.getStoreById(storeId);
 
-    if (store.ownerId === userId) {
+    // Check if user is trying to follow their own store
+    const vendor = await Vendor.findOne({ userId });
+    if (vendor && store.ownerId === vendor._id.toString()) {
       throw new AppError("Bạn không thể theo dõi cửa hàng của mình", 400);
     }
 
@@ -168,7 +194,6 @@ class StoreService {
     }
 
     await StoreFollow.create({ userId, storeId });
-    await Store.findByIdAndUpdate(storeId, { $inc: { followersCount: 1 } });
 
     return { message: "Theo dõi cửa hàng thành công", isFollowing: true };
   }
@@ -178,8 +203,6 @@ class StoreService {
     if (!existing) {
       throw new AppError("Bạn chưa theo dõi cửa hàng này", 400);
     }
-
-    await Store.findByIdAndUpdate(storeId, { $inc: { followersCount: -1 } });
 
     return { message: "Bỏ theo dõi cửa hàng thành công", isFollowing: false };
   }
@@ -243,6 +266,46 @@ class StoreService {
       .replace(/đ/g, "d")
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)+/g, "");
+  }
+
+  async uploadStoreLogo(file: Express.Multer.File, storeId: string, userId: string, userRole: string): Promise<string> {
+    const store = await this.getStoreById(storeId);
+
+    if (userRole !== "admin") {
+      const vendor = await Vendor.findOne({ userId });
+      if (!vendor || store.ownerId !== vendor._id.toString()) {
+        throw new AppError("Bạn không có quyền cập nhật cửa hàng này", 403);
+      }
+    }
+
+    // Delete old logo
+    if (store.logo) {
+      await deleteImage(store.logo);
+    }
+
+    const { secure_url } = await uploadImage(file, getFolder.store(storeId).logo);
+    store.logo = secure_url;
+    await store.save();
+    return secure_url;
+  }
+
+  async deleteStoreLogo(storeId: string, userId: string, userRole: string) {
+    const store = await this.getStoreById(storeId);
+
+    if (userRole !== "admin") {
+      const vendor = await Vendor.findOne({ userId });
+      if (!vendor || store.ownerId !== vendor._id.toString()) {
+        throw new AppError("Bạn không có quyền cập nhật cửa hàng này", 403);
+      }
+    }
+
+    if (store.logo) {
+      await deleteImage(store.logo);
+      store.logo = undefined as any;
+      await store.save();
+    }
+
+    return { message: "Đã xóa logo cửa hàng" };
   }
 }
 

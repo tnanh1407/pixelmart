@@ -1,9 +1,24 @@
 import Product, { IProduct } from "../models/product.model.js";
+import FlashSaleItem from "../models/flashSaleItem.model.js";
 import Store from "../models/store.model.js";
+import Vendor from "../models/vendor.model.js";
 import Category from "../models/category.model.js";
 import { AppError } from "../middlewares/error.middleware.js";
+import { uploadImage, deleteImage, deleteImages } from "../utils/uploadImage.js";
+import { getFolder } from "../config/cloudinary.js";
 
 class ProductService {
+  private async getVendorId(userId: string, userRole: string): Promise<string | null> {
+    if (userRole === "admin") return null;
+    const vendor = await Vendor.findOne({ userId });
+    if (!vendor) {
+      throw new AppError("Bạn chưa đăng ký trở thành người bán", 403);
+    }
+    if (vendor.status !== "approved") {
+      throw new AppError("Tài khoản người bán của bạn chưa được duyệt hoặc đã bị khóa", 403);
+    }
+    return String(vendor._id);
+  }
   async getProducts(query: any = {}) {
     const {
       page = 1,
@@ -18,13 +33,12 @@ class ProductService {
       sort
     } = query;
 
-    const filter: any = { isActive: true };
+    const filter: any = { isDeleted: false, status: "published" };
 
     if (search) {
       const regex = { $regex: search, $options: "i" };
       filter.$or = [
         { name: regex },
-        { brand: regex },
         { description: regex },
       ];
     }
@@ -49,9 +63,13 @@ class ProductService {
 
     if (flashSaleActive === "true" || flashSaleActive === true) {
       const now = new Date();
-      filter["flashSale.startDate"] = { $lte: now };
-      filter["flashSale.endDate"] = { $gte: now };
-      filter["flashSale.stock"] = { $gt: 0 };
+      const flashProductIds = await FlashSaleItem.distinct("productId", {
+        flashSaleId: {
+          $in: await getActiveFlashSaleIds(now),
+        },
+        flashStock: { $gt: 0 },
+      });
+      filter._id = { $in: flashProductIds };
     }
 
     const skipIndex = (Number(page) - 1) * Number(limit);
@@ -61,7 +79,7 @@ class ProductService {
       if (sort === "priceAsc") sorting = { price: 1 };
       else if (sort === "priceDesc") sorting = { price: -1 };
       else if (sort === "rating") sorting = { ratingsAverage: -1 };
-      else if (sort === "sold") sorting = { ratingsQuantity: -1 };
+      else if (sort === "sold") sorting = { soldCount: -1 };
       else if (sort === "createdAt") sorting = { createdAt: -1 };
     }
 
@@ -102,20 +120,22 @@ class ProductService {
       throw new AppError("Vui lòng cung cấp đầy đủ: Tên, Cửa hàng, Danh mục và Giá sản phẩm", 400);
     }
 
-    // Verify category exists
     const categoryExists = await Category.findById(categoryId);
     if (!categoryExists) {
       throw new AppError("Danh mục sản phẩm không tồn tại", 400);
     }
 
-    // Verify store exists and belongs to the user
     const store = await Store.findById(storeId);
     if (!store) {
       throw new AppError("Cửa hàng không tồn tại", 400);
     }
 
-    if (store.ownerId !== userId && userRole !== "admin") {
-      throw new AppError("Bạn không phải là chủ sở hữu của cửa hàng này", 403);
+    // Check vendor ownership
+    if (userRole !== "admin") {
+      const vendorId = await this.getVendorId(userId, userRole);
+      if (!vendorId || store.ownerId !== vendorId) {
+        throw new AppError("Bạn không phải là chủ sở hữu của cửa hàng này", 403);
+      }
     }
 
     const slug = `${this.generateSlug(name)}-${Math.floor(1000 + Math.random() * 9000)}`;
@@ -129,14 +149,17 @@ class ProductService {
   async updateProduct(userId: string, userRole: string, id: string, data: Partial<IProduct>) {
     const product = await this.getProductById(id);
 
-    // Verify store ownership of the product
     const store = await Store.findById(product.storeId);
     if (!store) {
       throw new AppError("Cửa hàng của sản phẩm này không khả dụng", 400);
     }
 
-    if (store.ownerId !== userId && userRole !== "admin") {
-      throw new AppError("Bạn không có quyền chỉnh sửa sản phẩm này", 403);
+    // Check vendor ownership for this product's store
+    if (userRole !== "admin") {
+      const vendorId = await this.getVendorId(userId, userRole);
+      if (!vendorId || store.ownerId !== vendorId) {
+        throw new AppError("Bạn không có quyền chỉnh sửa sản phẩm này", 403);
+      }
     }
 
     const { name } = data;
@@ -159,10 +182,14 @@ class ProductService {
     if (data.shortDescription !== undefined) product.shortDescription = data.shortDescription;
     if (data.stock !== undefined) product.stock = data.stock;
     if (data.images !== undefined) product.images = data.images;
+    if (data.gallery !== undefined) product.gallery = data.gallery;
+    if (data.tags !== undefined) product.tags = data.tags;
     if (data.specifications !== undefined) product.specifications = data.specifications;
+    if (data.weight !== undefined) product.weight = data.weight;
+    if (data.dimensions !== undefined) product.dimensions = data.dimensions;
     if (data.isFeatured !== undefined && userRole === "admin") product.isFeatured = data.isFeatured;
-    if (data.isActive !== undefined) product.isActive = data.isActive;
-    if (data.flashSale !== undefined) product.flashSale = data.flashSale;
+    if (data.status !== undefined) product.status = data.status;
+    if (data.isDeleted !== undefined) product.isDeleted = data.isDeleted;
 
     return await product.save();
   }
@@ -170,18 +197,85 @@ class ProductService {
   async deleteProduct(userId: string, userRole: string, id: string) {
     const product = await this.getProductById(id);
 
-    // Verify store ownership
     const store = await Store.findById(product.storeId);
     if (!store) {
       throw new AppError("Cửa hàng của sản phẩm này không khả dụng", 400);
     }
 
-    if (store.ownerId !== userId && userRole !== "admin") {
-      throw new AppError("Bạn không có quyền xóa sản phẩm này", 403);
+    if (userRole !== "admin") {
+      const vendorId = await this.getVendorId(userId, userRole);
+      if (!vendorId || store.ownerId !== vendorId) {
+        throw new AppError("Bạn không có quyền xóa sản phẩm này", 403);
+      }
     }
 
-    await product.deleteOne();
+    // Soft delete: giữ lại ảnh trên Cloudinary
+    product.isDeleted = true;
+    product.deletedAt = new Date();
+    await product.save();
     return { message: "Xóa sản phẩm thành công" };
+  }
+
+  async hardDeleteProduct(id: string) {
+    const product = await Product.findById(id);
+    if (!product) {
+      throw new AppError("Sản phẩm không tồn tại", 404);
+    }
+
+    // Xóa tất cả ảnh trên Cloudinary
+    await deleteImages([...product.images, ...(product.gallery || [])]);
+
+    await product.deleteOne();
+    return { message: "Đã xóa sản phẩm vĩnh viễn" };
+  }
+
+  async uploadProductImage(file: Express.Multer.File, productId: string, userId: string, userRole: string): Promise<string> {
+    const product = await this.getProductById(productId);
+    const store = await Store.findById(product.storeId);
+    if (!store || (store.ownerId !== userId && userRole !== "admin")) {
+      throw new AppError("Bạn không có quyền cập nhật sản phẩm này", 403);
+    }
+
+    const { secure_url } = await uploadImage(file, getFolder.product(productId).images);
+    product.images.push(secure_url);
+    await product.save();
+    return secure_url;
+  }
+
+  async uploadProductImages(files: Express.Multer.File[], productId: string, userId: string, userRole: string): Promise<string[]> {
+    const product = await this.getProductById(productId);
+    const store = await Store.findById(product.storeId);
+    if (!store || (store.ownerId !== userId && userRole !== "admin")) {
+      throw new AppError("Bạn không có quyền cập nhật sản phẩm này", 403);
+    }
+
+    const urls: string[] = [];
+    for (const file of files) {
+      const { secure_url } = await uploadImage(file, getFolder.product(productId).gallery);
+      urls.push(secure_url);
+    }
+
+    product.gallery = [...(product.gallery || []), ...urls];
+    await product.save();
+    return urls;
+  }
+
+  async removeProductImage(productId: string, imageUrl: string, userId: string, userRole: string) {
+    const product = await this.getProductById(productId);
+    const store = await Store.findById(product.storeId);
+    if (!store || (store.ownerId !== userId && userRole !== "admin")) {
+      throw new AppError("Bạn không có quyền cập nhật sản phẩm này", 403);
+    }
+
+    await deleteImage(imageUrl);
+
+    // Remove from images array
+    product.images = product.images.filter((img) => img !== imageUrl);
+    // Remove from gallery if exists
+    product.gallery = (product.gallery || []).filter((img) => img !== imageUrl);
+    await product.save();
+
+    return { message: "Đã xóa ảnh sản phẩm" };
   }
 
   private generateSlug(name: string): string {
@@ -193,6 +287,16 @@ class ProductService {
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)+/g, "");
   }
+}
+
+async function getActiveFlashSaleIds(now: Date): Promise<string[]> {
+  const FlashSale = (await import("../models/flashSale.model.js")).default;
+  const sales = await FlashSale.find({
+    status: "active",
+    startDate: { $lte: now },
+    endDate: { $gte: now },
+  }).select("_id");
+  return sales.map((s: any) => s._id);
 }
 
 export default new ProductService();

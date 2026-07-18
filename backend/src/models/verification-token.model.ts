@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { v4 as uuidv4 } from "uuid";
-import { TOKEN_TYPES } from "~/constants/roles.ts"
+import { TOKEN_TYPES } from "../constants/roles.js"
 
 
 export type TokenType = (typeof TOKEN_TYPES)[keyof typeof TOKEN_TYPES];

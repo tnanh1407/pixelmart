@@ -6,7 +6,7 @@ export interface IStore {
   slug: string;
   logo?: string;
   description?: string;
-  ownerId: string; // The User who owns this Store
+  ownerId: string; // The Vendor who owns this Store
   phone?: string;
   email?: string;
   address?: {
@@ -60,9 +60,9 @@ const storeSchema = new mongoose.Schema<IStoreDocument>(
     },
     ownerId: {
       type: String,
-      ref: "User",
+      ref: "Vendor",
       required: [true, "Chủ sở hữu cửa hàng là bắt buộc"],
-      unique: true, // Mỗi User chỉ sở hữu tối đa 1 Store (mô hình Shopee)
+      unique: true, // Mỗi Vendor chỉ sở hữu tối đa 1 Store
       index: true,
     },
     phone: {

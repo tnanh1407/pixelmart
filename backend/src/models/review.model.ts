@@ -2,13 +2,14 @@ import mongoose from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 
 export interface IReview {
-  userId: string;       // Người đánh giá
-  productId: string;    // Sản phẩm được đánh giá
-  storeId: string;      // Cửa hàng sở hữu sản phẩm (để thống kê điểm cửa hàng)
-  rating: number;       // Số sao (1 đến 5)
-  comment?: string;     // Bình luận của khách hàng
-  images: string[];     // Danh sách ảnh đánh giá
-  isActive: boolean;    // Admin có thể ẩn đánh giá vi phạm
+  userId: string;
+  productId: string;
+  orderId?: string;
+  rating: number;
+  title?: string;
+  comment?: string;
+  images: string[];
+  isActive: boolean;
 }
 
 export interface IReviewDocument extends IReview, mongoose.Document {
@@ -34,11 +35,10 @@ const reviewSchema = new mongoose.Schema<IReviewDocument>(
       required: [true, "Sản phẩm được đánh giá là bắt buộc"],
       index: true,
     },
-    storeId: {
+    orderId: {
       type: String,
-      ref: "Store",
-      required: [true, "Cửa hàng của sản phẩm là bắt buộc"],
-      index: true,
+      ref: "Order",
+      default: null,
     },
     rating: {
       type: Number,
@@ -46,6 +46,12 @@ const reviewSchema = new mongoose.Schema<IReviewDocument>(
       min: [1, "Đánh giá tối thiểu là 1 sao"],
       max: [5, "Đánh giá tối đa là 5 sao"],
       index: true,
+    },
+    title: {
+      type: String,
+      trim: true,
+      default: "",
+      maxlength: [200, "Tiêu đề tối đa 200 ký tự"],
     },
     comment: {
       type: String,
@@ -73,25 +79,45 @@ reviewSchema.index({ userId: 1, productId: 1 }, { unique: true });
 // Hàm static tính toán điểm đánh giá trung bình cho Product
 reviewSchema.statics.calcAverageRatings = async function (productId: string) {
   const stats = await this.aggregate([
-    {
-      $match: { productId, isActive: true },
-    },
-    {
-      $group: {
-        _id: "$productId",
-        nRating: { $sum: 1 },
-        avgRating: { $avg: "$rating" },
-      },
-    },
+    { $match: { productId, isActive: true } },
+    { $group: { _id: "$productId", nRating: { $sum: 1 }, avgRating: { $avg: "$rating" } } },
   ]);
 
+  const Product = mongoose.model("Product");
+
   if (stats.length > 0) {
-    await mongoose.model("Product").findByIdAndUpdate(productId, {
+    await Product.findByIdAndUpdate(productId, {
       ratingsQuantity: stats[0].nRating,
       ratingsAverage: Math.round(stats[0].avgRating * 10) / 10,
     });
   } else {
-    await mongoose.model("Product").findByIdAndUpdate(productId, {
+    await Product.findByIdAndUpdate(productId, {
+      ratingsQuantity: 0,
+      ratingsAverage: 0,
+    });
+  }
+};
+
+reviewSchema.statics.calcStoreAverageRatings = async function (storeId: string) {
+  const Product = mongoose.model("Product");
+  const Store = mongoose.model("Store");
+
+  // Get all product IDs for this store
+  const productIds = await Product.find({ storeId, isDeleted: false }).select("_id");
+  const productIdList = productIds.map((p: any) => p._id);
+
+  const stats = await this.aggregate([
+    { $match: { productId: { $in: productIdList }, isActive: true } },
+    { $group: { _id: null, nRating: { $sum: 1 }, avgRating: { $avg: "$rating" } } },
+  ]);
+
+  if (stats.length > 0) {
+    await Store.findByIdAndUpdate(storeId, {
+      ratingsQuantity: stats[0].nRating,
+      ratingsAverage: Math.round(stats[0].avgRating * 10) / 10,
+    });
+  } else {
+    await Store.findByIdAndUpdate(storeId, {
       ratingsQuantity: 0,
       ratingsAverage: 0,
     });
@@ -99,13 +125,30 @@ reviewSchema.statics.calcAverageRatings = async function (productId: string) {
 };
 
 // Gọi calcAverageRatings sau khi tạo mới / cập nhật đánh giá
-reviewSchema.post("save", function () {
-  (this.constructor as any).calcAverageRatings(this.productId);
+reviewSchema.post("save", async function () {
+  const Product = mongoose.model("Product");
+  const constructor = this.constructor as any;
+
+  constructor.calcAverageRatings(this.productId);
+
+  // Also update store ratings
+  const product = await Product.findById(this.productId);
+  if (product) {
+    constructor.calcStoreAverageRatings(product.storeId);
+  }
 });
 
 // Gọi calcAverageRatings sau khi xóa đánh giá
-reviewSchema.post("deleteOne", { document: true, query: false }, function () {
-  (this.constructor as any).calcAverageRatings(this.productId);
+reviewSchema.post("deleteOne", { document: true, query: false }, async function () {
+  const Product = mongoose.model("Product");
+  const constructor = this.constructor as any;
+
+  constructor.calcAverageRatings(this.productId);
+
+  const product = await Product.findById(this.productId);
+  if (product) {
+    constructor.calcStoreAverageRatings(product.storeId);
+  }
 });
 
 const Review = mongoose.model<IReviewDocument>("Review", reviewSchema);

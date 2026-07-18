@@ -65,7 +65,7 @@ class CampaignService {
   }
 
   async createCampaign(data: Partial<ICampaign>) {
-    if (!data.title || !data.image) {
+    if (!data.title || !data.sourceUrl) {
       throw new AppError("Tên và ảnh chiến dịch là bắt buộc", 400);
     }
 
@@ -78,8 +78,8 @@ class CampaignService {
     if (data.title !== undefined) campaign.title = data.title;
     if (data.shortDescription !== undefined) campaign.shortDescription = data.shortDescription;
     if (data.content !== undefined) campaign.content = data.content;
-    if (data.image && data.image !== campaign.image) {
-      await this.deleteImageFromCloudinary(campaign.image);
+    if (data.sourceUrl && data.sourceUrl !== campaign.sourceUrl) {
+      await this.deleteImageFromCloudinary(campaign.sourceUrl);
     }
 
     if (data.isActive !== undefined) campaign.isActive = data.isActive;
@@ -105,7 +105,7 @@ class CampaignService {
   async deleteCampaign(id: string) {
     const campaign = await this.getCampaignById(id);
     await campaign.deleteOne();
-    await this.deleteImageFromCloudinary(campaign.image);
+    await this.deleteImageFromCloudinary(campaign.sourceUrl);
     return { message: "Xóa chiến dịch thành công" };
   }
 

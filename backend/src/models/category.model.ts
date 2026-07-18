@@ -6,6 +6,8 @@ export interface ICategory {
   slug: string;
   description?: string;
   image?: string;
+  parentId?: string;
+  order: number;
   isActive: boolean;
 }
 
@@ -43,6 +45,16 @@ const categorySchema = new mongoose.Schema<ICategoryDocument>(
     image: {
       type: String,
       default: null,
+    },
+    parentId: {
+      type: String,
+      ref: "Category",
+      default: null,
+      index: true,
+    },
+    order: {
+      type: Number,
+      default: 0,
     },
     isActive: {
       type: Boolean,

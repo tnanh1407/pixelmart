@@ -148,6 +148,8 @@ userSchema.pre("save", async function () {
   this.password = await hashPassword(this.password as string);
 });
 
+userSchema.index({ role: 1, isActive: 1 });
+
 userSchema.set("toJSON", {
   transform(doc, ret) {
     const { password, __v, ...rest } = ret;

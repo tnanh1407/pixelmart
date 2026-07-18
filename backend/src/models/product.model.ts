@@ -6,33 +6,41 @@ export interface ISpecification {
   value: string;
 }
 
-export interface IFlashSale {
-  price: number;
-  stock: number;
-  sold: number;
-  startDate: Date;
-  endDate: Date;
+export interface IDimensions {
+  length: number;
+  width: number;
+  height: number;
 }
+
+export type ProductStatus = "draft" | "published" | "archived";
 
 export interface IProduct {
   name: string;
   slug: string;
   sku?: string;
-  brand?: string;
   description: string;
   shortDescription?: string;
   price: number;
   discountPrice?: number | null;
   stock: number;
   images: string[];
+  gallery?: string[];
   categoryId: string;
   storeId: string;
+  tags?: string[];
   specifications?: ISpecification[];
+  weight?: number;
+  dimensions?: IDimensions;
   ratingsAverage: number;
   ratingsQuantity: number;
+  viewCount: number;
+  soldCount: number;
+  wishlistCount: number;
   isFeatured: boolean;
-  isActive: boolean;
-  flashSale?: IFlashSale | null;
+  status: ProductStatus;
+  isDeleted: boolean;
+  deletedAt?: Date | null;
+  publishedAt?: Date | null;
 }
 
 export interface IProductDocument extends IProduct, mongoose.Document {
@@ -48,31 +56,11 @@ const specificationSchema = new mongoose.Schema<ISpecification>(
   { _id: false }
 );
 
-const flashSaleSchema = new mongoose.Schema<IFlashSale>(
+const dimensionsSchema = new mongoose.Schema<IDimensions>(
   {
-    price: {
-      type: Number,
-      required: [true, "Giá Flash Sale là bắt buộc"],
-      min: [0, "Giá Flash Sale không được âm"],
-    },
-    stock: {
-      type: Number,
-      required: [true, "Số lượng hàng Flash Sale là bắt buộc"],
-      min: [0, "Số lượng hàng không được âm"],
-    },
-    sold: {
-      type: Number,
-      default: 0,
-      min: [0, "Số lượng đã bán không được âm"],
-    },
-    startDate: {
-      type: Date,
-      required: [true, "Thời gian bắt đầu Flash Sale là bắt buộc"],
-    },
-    endDate: {
-      type: Date,
-      required: [true, "Thời gian kết thúc Flash Sale là bắt buộc"],
-    },
+    length: { type: Number, required: true, min: 0 },
+    width: { type: Number, required: true, min: 0 },
+    height: { type: Number, required: true, min: 0 },
   },
   { _id: false }
 );
@@ -122,13 +110,13 @@ const productSchema = new mongoose.Schema<IProductDocument>(
       type: Number,
       default: null,
       validate: {
-        validator: function(this: IProductDocument, value: number) {
+        validator: function (this: any, value: number) {
           if (value === null || value === undefined) return true;
           return value < this.price;
         },
-        message: "Giá khuyến mãi ({VALUE}) phải nhỏ hơn giá gốc"
-      }
-    } as any,
+        message: "Giá khuyến mãi ({VALUE}) phải nhỏ hơn giá gốc",
+      },
+    },
     stock: {
       type: Number,
       required: [true, "Số lượng kho là bắt buộc"],
@@ -145,6 +133,10 @@ const productSchema = new mongoose.Schema<IProductDocument>(
         message: "Sản phẩm phải có ít nhất một ảnh"
       }
     },
+    gallery: {
+      type: [String],
+      default: [],
+    },
     categoryId: {
       type: String,
       ref: "Category",
@@ -157,9 +149,22 @@ const productSchema = new mongoose.Schema<IProductDocument>(
       required: [true, "Cửa hàng bán sản phẩm là bắt buộc"],
       index: true,
     },
+    tags: {
+      type: [String],
+      default: [],
+      index: true,
+    },
     specifications: {
       type: [specificationSchema],
       default: [],
+    },
+    weight: {
+      type: Number,
+      default: null,
+    },
+    dimensions: {
+      type: dimensionsSchema,
+      default: null,
     },
     ratingsAverage: {
       type: Number,
@@ -172,37 +177,63 @@ const productSchema = new mongoose.Schema<IProductDocument>(
       type: Number,
       default: 0,
     },
+    viewCount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    soldCount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    wishlistCount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
     isFeatured: {
       type: Boolean,
       default: false,
       index: true,
     },
-    isActive: {
-      type: Boolean,
-      default: true,
+    status: {
+      type: String,
+      enum: ["draft", "published", "archived"],
+      default: "published",
       index: true,
     },
-    flashSale: {
-      type: flashSaleSchema,
+    isDeleted: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+    deletedAt: {
+      type: Date,
       default: null,
-      validate: {
-        validator: function(this: IProductDocument, value: any) {
-          if (!value) return true;
-          if (value.price >= this.price) return false;
-          if (new Date(value.startDate) >= new Date(value.endDate)) return false;
-          return true;
-        },
-        message: "Dữ liệu cấu hình Flash Sale không hợp lệ (Giá Flash Sale phải nhỏ hơn giá gốc và thời gian bắt đầu phải trước kết thúc)"
-      }
-    } as any,
+    },
+    publishedAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-// Tự động tạo text index cho tìm kiếm sản phẩm theo tên, thương hiệu và mô tả
-productSchema.index({ name: "text", brand: "text", description: "text" });
+productSchema.index({ name: "text", description: "text" });
+productSchema.index({ categoryId: 1, status: 1, isDeleted: 1 });
+productSchema.index({ storeId: 1, status: 1, isDeleted: 1 });
+productSchema.index({ price: 1, status: 1 });
+productSchema.index({ soldCount: -1 });
+
+// Auto-set publishedAt when status changes to published
+productSchema.pre("save", function () {
+  if (this.isModified("status") && this.status === "published" && !this.publishedAt) {
+    this.publishedAt = new Date();
+  }
+});
 
 const Product = mongoose.model<IProductDocument>("Product", productSchema);
 
