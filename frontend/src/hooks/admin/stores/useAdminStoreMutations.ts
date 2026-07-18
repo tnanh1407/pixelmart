@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import Swal from 'sweetalert2'
 
 import { adminService, type StoreListResponse } from '@/services/admin/admin.service'
 
@@ -28,11 +27,6 @@ interface UseAdminStoreMutationsOptions {
   onSaved?: () => void
 }
 
-const swalClass = {
-  popup: '!rounded-xl',
-  confirmButton: '!rounded-lg !px-6',
-}
-
 export function useAdminStoreMutations({
   stores = [],
   onSaved,
@@ -50,9 +44,9 @@ export function useAdminStoreMutations({
     },
     onSuccess: () => {
       invalidateStores()
-      toast.success('Cập nhật trạng thái xác minh thành công')
+      toast.success('Cập nhật trạng thái xác minh thành công', { closeButton: true })
     },
-    onError: () => toast.error('Có lỗi xảy ra'),
+    onError: () => toast.error('Có lỗi xảy ra', { closeButton: true }),
   })
 
   const toggleActiveMutation = useMutation({
@@ -62,32 +56,20 @@ export function useAdminStoreMutations({
     },
     onSuccess: () => {
       invalidateStores()
-      toast.success('Cập nhật trạng thái hoạt động thành công')
+      toast.success('Cập nhật trạng thái hoạt động thành công', { closeButton: true })
     },
-    onError: () => toast.error('Có lỗi xảy ra'),
+    onError: () => toast.error('Có lỗi xảy ra', { closeButton: true }),
   })
 
   const createStoreMutation = useMutation({
     mutationFn: (payload: AdminStoreForm) => adminService.createStore(payload),
     onSuccess: () => {
       invalidateStores()
-      Swal.fire({
-        title: 'Thành công!',
-        text: 'Thêm mới cửa hàng thành công.',
-        icon: 'success',
-        confirmButtonColor: '#4f46e5',
-        customClass: swalClass,
-      })
+      toast.success('Thêm mới cửa hàng thành công', { closeButton: true })
       onSaved?.()
     },
     onError: (err: { response?: { data?: { message?: string } } }) => {
-      Swal.fire({
-        title: 'Thất bại!',
-        text: err?.response?.data?.message || 'Có lỗi xảy ra khi tạo cửa hàng.',
-        icon: 'error',
-        confirmButtonColor: '#4f46e5',
-        customClass: swalClass,
-      })
+      toast.error(err?.response?.data?.message || 'Có lỗi xảy ra khi tạo cửa hàng', { closeButton: true })
     },
   })
 
@@ -96,23 +78,11 @@ export function useAdminStoreMutations({
       adminService.updateStore(id, payload),
     onSuccess: () => {
       invalidateStores()
-      Swal.fire({
-        title: 'Thành công!',
-        text: 'Cập nhật cửa hàng thành công.',
-        icon: 'success',
-        confirmButtonColor: '#4f46e5',
-        customClass: swalClass,
-      })
+      toast.success('Cập nhật cửa hàng thành công', { closeButton: true })
       onSaved?.()
     },
     onError: (err: { response?: { data?: { message?: string } } }) => {
-      Swal.fire({
-        title: 'Thất bại!',
-        text: err?.response?.data?.message || 'Có lỗi xảy ra khi cập nhật cửa hàng.',
-        icon: 'error',
-        confirmButtonColor: '#4f46e5',
-        customClass: swalClass,
-      })
+      toast.error(err?.response?.data?.message || 'Có lỗi xảy ra khi cập nhật cửa hàng', { closeButton: true })
     },
   })
 
@@ -120,9 +90,9 @@ export function useAdminStoreMutations({
     mutationFn: (id: string) => adminService.deleteStore(id),
     onSuccess: () => {
       invalidateStores()
-      toast.success('Xóa cửa hàng thành công')
+      toast.success('Xóa cửa hàng thành công', { closeButton: true })
     },
-    onError: () => toast.error('Không thể xóa cửa hàng'),
+    onError: () => toast.error('Không thể xóa cửa hàng', { closeButton: true }),
   })
 
   return {

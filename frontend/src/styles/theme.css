@@ -1,0 +1,61 @@
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.129 0.042 150);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.129 0.042 150);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.129 0.042 150);
+  --primary: oklch(0.527 0.154 150);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: rgba(246, 158, 0, 1);
+  --secondary-foreground: oklch(0.266 0.076 150);
+  --muted: oklch(0.962 0.018 150);
+  --muted-foreground: oklch(0.552 0.016 150);
+  --accent: oklch(0.962 0.018 150);
+  --accent-foreground: oklch(0.266 0.076 150);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.527 0.154 150);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.527 0.154 150);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.962 0.018 150);
+  --sidebar-accent-foreground: oklch(0.266 0.076 150);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.527 0.154 150);
+
+  /* định nghĩa */
+  --cl-text: rgb(16, 24, 40);
+  --cl-text-second: rgb(106, 117, 107);
+  --cl-price: rgba(255, 116, 16, 1);
+}
+
+.dark {
+  --background: oklch(0.129 0.042 150);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.129 0.042 150);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.129 0.042 150);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.723 0.219 142.18);
+  --primary-foreground: oklch(0.129 0.042 150);
+  --secondary: oklch(0.205 0.05 150);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.205 0.05 150);
+  --muted-foreground: oklch(0.708 0.015 150);
+  --accent: oklch(0.205 0.05 150);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.395 0.109 25.723);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.269 0.005 150);
+  --input: oklch(0.269 0.005 150);
+  --ring: oklch(0.723 0.219 142.18);
+  /* định nghĩa */
+  --cl-text: rgb(16, 24, 40);
+  --cl-text-second: rgb(106, 117, 107);
+  --cl-price: rgba(255, 116, 16, 1);
+}

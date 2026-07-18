@@ -28,10 +28,10 @@ export function useAdminCampaignMutations({
     mutationFn: (payload: AdminCampaignPayload & { title: string }) => adminService.createCampaign(payload),
     onSuccess: () => {
       invalidateCampaigns()
-      toast.success("Tạo chiến dịch mới thành công")
+      toast.success("Tạo chiến dịch mới thành công", { closeButton: true })
       onSaved?.()
     },
-    onError: () => toast.error("Tạo chiến dịch không thành công"),
+    onError: () => toast.error("Tạo chiến dịch không thành công", { closeButton: true }),
   })
 
   const updateMutation = useMutation({
@@ -39,18 +39,19 @@ export function useAdminCampaignMutations({
       adminService.updateCampaign(id, payload),
     onSuccess: () => {
       invalidateCampaigns()
+      toast.success("Cập nhật chiến dịch thành công", { closeButton: true })
       onSaved?.()
     },
-    onError: () => toast.error("Cập nhật chiến dịch không thành công"),
+    onError: () => toast.error("Cập nhật chiến dịch không thành công", { closeButton: true }),
   })
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => adminService.deleteCampaign(id),
     onSuccess: () => {
       invalidateCampaigns()
-      toast.success("Xóa chiến dịch thành công")
+      toast.success("Xóa chiến dịch thành công", { closeButton: true })
     },
-    onError: () => toast.error("Xóa chiến dịch không thành công"),
+    onError: () => toast.error("Xóa chiến dịch không thành công", { closeButton: true }),
   })
 
   const toggleActiveMutation = useMutation({
@@ -58,9 +59,9 @@ export function useAdminCampaignMutations({
       adminService.updateCampaign(id, { isActive: !isActive }),
     onSuccess: () => {
       invalidateCampaigns()
-      toast.success('Cập nhật thành công')
+      toast.success('Cập nhật thành công', { closeButton: true })
     },
-    onError: () => toast.error('Có lỗi xảy ra'),
+    onError: () => toast.error('Có lỗi xảy ra', { closeButton: true }),
   })
 
   return {

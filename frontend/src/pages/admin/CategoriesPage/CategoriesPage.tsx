@@ -1,23 +1,31 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Search, Plus, X } from 'lucide-react'
 import { adminService } from '@/services/admin/admin.service'
 import { toast } from 'sonner'
-import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
+import { useAdminCategoryMutations } from '@/hooks/admin/categories/useAdminCategoryMutations'
+import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from '@/components/ui/pagination'
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel,
+  AlertDialogContent, AlertDialogDescription,
+  AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import CategoryTable from './CategoryTable'
 import CategoryFormModal from './CategoryFormModal'
 
 export default function CategoriesPage() {
-  const queryClient = useQueryClient()
+  const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
   const [searchInput, setSearchInput] = useState('')
   const [showModal, setShowModal] = useState(false)
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [form, setForm] = useState({ name: '', description: '', image: '' })
   const [isUploading, setIsUploading] = useState(false)
-  const navigate = useNavigate()
+
+  const { createMutation, updateMutation, deleteMutation, toggleActiveMutation } = useAdminCategoryMutations()
 
   const handleViewDetail = (cat: any) => {
     navigate(`/admin/categories/${cat._id}`)
@@ -32,10 +40,10 @@ export default function CategoriesPage() {
     try {
       const imageUrl = await adminService.uploadCategoryImage(file)
       setForm((prev) => ({ ...prev, image: imageUrl }))
-      toast.success('Tải ảnh lên thành công', { id: toastId })
+      toast.success('Tải ảnh lên thành công', { id: toastId, closeButton: true })
     } catch (err: any) {
       console.error(err)
-      toast.error(err?.response?.data?.message || 'Tải ảnh lên thất bại', { id: toastId })
+      toast.error(err?.response?.data?.message || 'Tải ảnh lên thất bại', { id: toastId, closeButton: true })
     } finally {
       setIsUploading(false)
     }
@@ -45,90 +53,6 @@ export default function CategoriesPage() {
     queryKey: ['admin-categories', page, search],
     queryFn: () => adminService.getCategories({ page, limit: 10, search: search || undefined }),
     staleTime: 30 * 1000,
-  })
-
-  const createMutation = useMutation({
-    mutationFn: (payload: { name: string; description?: string; image?: string }) => adminService.createCategory(payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-categories'] })
-      Swal.fire({
-        title: 'Thành công!',
-        text: 'Thêm mới danh mục thành công.',
-        icon: 'success',
-        confirmButtonColor: '#4f46e5',
-        customClass: {
-          popup: '!rounded-xl',
-          confirmButton: '!rounded-lg !px-6',
-        }
-      })
-      closeModal()
-    },
-    onError: () => Swal.fire({
-      title: 'Thất bại!',
-      text: 'Có lỗi xảy ra khi tạo danh mục.',
-      icon: 'error',
-      confirmButtonColor: '#4f46e5',
-      customClass: {
-        popup: '!rounded-xl',
-        confirmButton: '!rounded-lg !px-6',
-      }
-    }),
-  })
-
-  const updateMutation = useMutation({
-    mutationFn: ({ id, payload }: { id: string; payload: { name?: string; description?: string; image?: string } }) =>
-      adminService.updateCategory(id, payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-categories'] })
-      Swal.fire({
-        title: 'Thành công!',
-        text: 'Cập nhật danh mục thành công.',
-        icon: 'success',
-        confirmButtonColor: '#4f46e5',
-        customClass: {
-          popup: '!rounded-xl',
-          confirmButton: '!rounded-lg !px-6',
-        }
-      })
-      closeModal()
-    },
-    onError: () => Swal.fire({
-      title: 'Thất bại!',
-      text: 'Có lỗi xảy ra khi cập nhật danh mục.',
-      icon: 'error',
-      confirmButtonColor: '#4f46e5',
-      customClass: {
-        popup: '!rounded-xl',
-        confirmButton: '!rounded-lg !px-6',
-      }
-    }),
-  })
-
-  const deleteMutation = useMutation({
-    mutationFn: (id: string) => adminService.deleteCategory(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-categories'] })
-      Swal.fire({
-        title: 'Đã xóa!',
-        text: 'Xóa danh mục thành công.',
-        icon: 'success',
-        confirmButtonColor: '#4f46e5',
-        customClass: {
-          popup: '!rounded-xl',
-          confirmButton: '!rounded-lg !px-6',
-        }
-      })
-    },
-    onError: () => Swal.fire({
-      title: 'Thất bại!',
-      text: 'Không thể xóa danh mục.',
-      icon: 'error',
-      confirmButtonColor: '#4f46e5',
-      customClass: {
-        popup: '!rounded-xl',
-        confirmButton: '!rounded-lg !px-6',
-      }
-    }),
   })
 
   const handleSearch = (e: React.FormEvent) => {
@@ -158,29 +82,24 @@ export default function CategoriesPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!form.name.trim()) return
+
     if (editingId) {
-      Swal.fire({
-        title: 'Xác nhận cập nhật?',
-        text: 'Bạn có chắc chắn muốn lưu các thay đổi cho danh mục này?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#4f46e5',
-        cancelButtonColor: '#6b7280',
-        confirmButtonText: 'Xác nhận',
-        cancelButtonText: 'Hủy',
-        customClass: {
-          popup: '!rounded-xl',
-          confirmButton: '!rounded-lg !px-6 !ml-2',
-          cancelButton: '!rounded-lg !px-6',
-          actions: '!gap-2',
-        }
-      }).then((result) => {
-        if (result.isConfirmed) {
-          updateMutation.mutate({ id: editingId, payload: form })
-        }
-      })
+      setShowConfirmDialog(true)
     } else {
-      createMutation.mutate(form)
+      createMutation.mutate(form, {
+        onSuccess: () => closeModal(),
+      })
+    }
+  }
+
+  const handleConfirmUpdate = () => {
+    if (editingId) {
+      updateMutation.mutate({ id: editingId, payload: form }, {
+        onSuccess: () => {
+          closeModal()
+          setShowConfirmDialog(false)
+        },
+      })
     }
   }
 
@@ -191,12 +110,12 @@ export default function CategoriesPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Quản lý danh mục</h1>
-          <p className="text-sm text-gray-500 mt-1">{pagination.total} danh mục</p>
+          <h1 className="text-2xl font-bold text-text capitalize">Quản lý danh mục</h1>
+          <p className="text-sm text-text-muted mt-1"><span className='font-bold capitalize text-base'>Tổng: </span>{pagination.total} danh mục</p>
         </div>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+          className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-hover transition-colors capitalize cursor-pointer"
         >
           <Plus size={18} />
           Thêm danh mục
@@ -205,7 +124,7 @@ export default function CategoriesPage() {
 
       <form onSubmit={handleSearch} className="mb-6 flex gap-2 max-w-md">
         <div className="relative flex-1">
-          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
           <input
             type="text"
             placeholder="Tìm kiếm danh mục..."
@@ -213,7 +132,7 @@ export default function CategoriesPage() {
             onChange={(e) => setSearchInput(e.target.value)}
             className={`w-full pl-10 ${
               searchInput ? 'pr-10' : 'pr-4'
-            } py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent`}
+            } py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent`}
           />
           {searchInput && (
             <button
@@ -223,7 +142,7 @@ export default function CategoriesPage() {
                 setSearch('')
                 setPage(1)
               }}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text transition-colors"
             >
               <X size={16} />
             </button>
@@ -231,7 +150,7 @@ export default function CategoriesPage() {
         </div>
         <button
           type="submit"
-          className="px-4 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors whitespace-nowrap flex items-center gap-1.5"
+          className="px-4 py-2.5 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-hover transition-colors whitespace-nowrap flex items-center gap-1.5 cursor-pointer capitalize"
         >
           <Search size={16} />
           Tìm kiếm
@@ -243,12 +162,33 @@ export default function CategoriesPage() {
           categories={categories}
           isLoading={isLoading}
           onDelete={(id) => deleteMutation.mutate(id)}
+          onToggleActive={(id, isActive) => toggleActiveMutation.mutate({ id, isActive })}
           isDeleting={deleteMutation.isPending}
-          pagination={pagination}
-          page={page}
-          setPage={setPage}
           onViewDetail={handleViewDetail}
         />
+        {pagination.totalPages > 1 && (
+          <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100">
+            <p className="text-sm text-text-muted whitespace-nowrap shrink-0">Trang {pagination.page} / {pagination.totalPages}</p>
+            <div className="shrink-0">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      onClick={() => setPage((p) => Math.max(1, p - 1))}
+                      className={page === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                    />
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationNext
+                      onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
+                      className={page === pagination.totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          </div>
+        )}
       </div>
 
       <CategoryFormModal
@@ -262,6 +202,26 @@ export default function CategoriesPage() {
         closeModal={closeModal}
         isPending={createMutation.isPending || updateMutation.isPending}
       />
+
+      {/* Confirm Dialog */}
+      <AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Xác nhận cập nhật?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Bạn có chắc chắn muốn lưu các thay đổi cho danh mục này?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setShowConfirmDialog(false)}>
+              Hủy
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmUpdate}>
+              Xác nhận
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

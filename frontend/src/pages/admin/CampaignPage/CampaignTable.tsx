@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { Trash2, Image, Loader2, Copy } from 'lucide-react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel,
   AlertDialogContent, AlertDialogDescription,
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+
+import ImagePreviewDialog from '@/components/ui/image-preview-dialog'
 import { toast } from 'sonner'
 
 interface Campaign {
@@ -15,20 +16,20 @@ interface Campaign {
   title: string
   image?: string
   isActive: boolean
-  author: string
+  author?: string
 }
 
 interface CampaignTableProps {
-  banners: Campaign[]
+  campaigns: Campaign[]
   isLoading: boolean
   onDelete: (id: string) => void
   onToggleActive: (id: string, isActive: boolean) => void
   isDeleting: boolean
-  onViewDetail: (banner: Campaign) => void
+  onViewDetail: (campaign: Campaign) => void
 }
 
 export default function CampaignTable({
-  banners,
+  campaigns,
   isLoading,
   onDelete,
   onToggleActive,
@@ -36,20 +37,21 @@ export default function CampaignTable({
   onViewDetail,
 }: CampaignTableProps) {
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null)
+  const [previewCampaign, setPreviewCampaign] = useState<Campaign | null>(null)
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 size={32} className="animate-spin text-indigo-500" />
+        <Loader2 size={32} className="animate-spin text-primary" />
       </div>
     )
   }
 
-  if (banners.length === 0) {
+  if (campaigns.length === 0) {
     return (
       <div className="text-center py-20">
-        <Image size={48} className="mx-auto text-gray-300 mb-3" />
-        <p className="text-gray-500">Chưa có chiến dịch nào</p>
+        <Image size={48} className="mx-auto text-text-muted mb-3" />
+        <p className="text-text-muted">Chưa có chiến dịch nào</p>
       </div>
     )
   }
@@ -60,7 +62,7 @@ export default function CampaignTable({
         <TableHeader>
           <TableRow>
             <TableHead className="w-25 px-6">Mã định danh</TableHead>
-            <TableHead className="w-25 px-6">ảnh</TableHead>
+            <TableHead className="w-25 px-6">Hình ảnh</TableHead>
             <TableHead className="px-6">Tiêu đề</TableHead>
             <TableHead className="px-6">Tác giả</TableHead>
             <TableHead className="px-6">Trạng thái</TableHead>
@@ -68,14 +70,14 @@ export default function CampaignTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {banners.map((banner) => (
-            <TableRow key={banner._id}>
-              <TableCell className="px-6 py-4 text-xs text-gray-500">
+          {campaigns.map((campaign) => (
+            <TableRow key={campaign._id}>
+              <TableCell className="px-6 py-4 text-xs text-text-muted">
                 <div className="flex items-center gap-1.5">
-                  <span>{banner._id}</span>
+                  <span>{campaign._id}</span>
                   <button
                     onClick={() => {
-                      navigator.clipboard.writeText(banner._id)
+                      navigator.clipboard.writeText(campaign._id)
                       toast.success('Đã copy ID')
                     }}
                     className="shrink-0 p-1 hover:bg-gray-100 rounded transition-colors"
@@ -88,14 +90,14 @@ export default function CampaignTable({
               </TableCell>
               <TableCell className="px-6 py-4">
                 <div
-                  onClick={() => onViewDetail(banner)}
+                  onClick={() => setPreviewCampaign(campaign)}
                   className="w-20 h-12 bg-gray-100 rounded-lg overflow-hidden border border-gray-100 cursor-pointer hover:opacity-85 transition-opacity"
                 >
-                  {banner.image ? (
-                    <img src={banner.image} alt={banner.title} className="w-full h-full object-cover" />
+                  {campaign.image ? (
+                    <img src={campaign.image} alt={campaign.title} className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <Image size={16} className="text-gray-300" />
+                      <Image size={16} className="text-text-muted" />
                     </div>
                   )}
                 </div>
@@ -103,28 +105,29 @@ export default function CampaignTable({
               <TableCell className="px-6 py-4">
                 <div className="max-w-75">
                   <p
-                    onClick={() => onViewDetail(banner)}
-                    className="font-medium text-gray-900 text-sm truncate cursor-pointer hover:text-indigo-600 transition-colors"
+                    onClick={() => onViewDetail(campaign)}
+                    className="font-medium text-text text-sm truncate cursor-pointer hover:text-primary transition-colors"
                   >
-                    {banner.title}
+                    {campaign.title}
                   </p>
                 </div>
               </TableCell>
-              <TableCell className="px-6 py-4 text-xs text-gray-500">
-                {banner.author}
+              <TableCell className="px-6 py-4 text-xs text-text-muted">
+                {campaign.author || '—'}
               </TableCell>
               <TableCell className="px-6 py-4 text-center">
                 <button
                   type="button"
-                  onClick={() => onToggleActive(banner._id, banner.isActive)}
-                  className="cursor-pointer"
+                  onClick={() => onToggleActive(campaign._id, campaign.isActive)}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ease-in-out cursor-pointer ${
+                    campaign.isActive ? 'bg-primary' : 'bg-gray-300'
+                  }`}
                 >
-                  <Badge
-                    variant={banner.isActive ? 'default' : 'destructive'}
-                    className={banner.isActive ? 'bg-green-500/10 hover:bg-green-500/20 text-green-700 shadow-none border-none' : 'shadow-none border-none'}
-                  >
-                    {banner.isActive ? 'Hiện' : 'Ẩn'}
-                  </Badge>
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200 ease-in-out ${
+                      campaign.isActive ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
                 </button>
               </TableCell>
               <TableCell className="px-6 py-4 text-right">
@@ -132,9 +135,9 @@ export default function CampaignTable({
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => setDeleteTargetId(banner._id)}
+                    onClick={() => setDeleteTargetId(campaign._id)}
                     disabled={isDeleting}
-                    className="h-8 w-8 text-red-500 hover:bg-red-50 hover:text-red-600"
+                    className="h-8 w-8 text-destructive hover:bg-red-50 hover:text-red-600 cursor-pointer"
                     title="Xóa"
                   >
                     <Trash2 size={16} />
@@ -165,6 +168,13 @@ export default function CampaignTable({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <ImagePreviewDialog
+        open={!!previewCampaign}
+        onOpenChange={(open) => !open && setPreviewCampaign(null)}
+        src={previewCampaign?.image}
+        alt={previewCampaign?.title}
+      />
     </div>
   )
 }

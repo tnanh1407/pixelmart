@@ -58,12 +58,12 @@ export default function StoreCard({ store }: StoreCardProps) {
               <BadgeCheck size={20} className="text-primary fill-emerald-100 shrink-0" />
             )}
           </div>
-          <p className="text-xs text-text-second mt-0.5 font-medium">{store.slug}</p>
-          <div className="flex items-center gap-1 text-xs text-text-second mt-1 justify-center sm:justify-start">
+          <p className="text-xs text-text-muted mt-0.5 font-medium">{store.slug}</p>
+          <div className="flex items-center gap-1 text-xs text-text-muted mt-1 justify-center sm:justify-start">
             <span className="text-primary font-semibold">{store.followersCount ?? 0}</span>
             <span>Followers</span>
           </div>
-          <p className="text-xs text-text-second mt-0.5">Tham gia: {new Date(store.createdAt).toLocaleDateString('vi-VN')}</p>
+          <p className="text-xs text-text-muted mt-0.5">Tham gia: {new Date(store.createdAt).toLocaleDateString('vi-VN')}</p>
 
         </div>
 

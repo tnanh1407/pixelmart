@@ -9,8 +9,10 @@ export default function HomeLayout() {
     <div className="min-h-screen flex flex-col bg-[#f5f5f5]">
       <DefaultHelmet />
       <Header />
-      <main className="flex-1">
-        <Outlet />
+      <main className="flex-1 w-full">
+        <div className='max-w-285 mx-auto'>
+          <Outlet />
+        </div>
       </main>
       <Footer />
       <FloatingActionButton />

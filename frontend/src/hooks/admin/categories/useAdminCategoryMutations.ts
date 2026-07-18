@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import Swal from 'sweetalert2'
+import { toast } from 'sonner'
 
 import { adminService } from '@/services/admin/admin.service'
 
@@ -12,11 +12,6 @@ export interface AdminCategoryForm {
 interface UseAdminCategoryMutationsOptions {
   detailId?: string
   onSaved?: () => void
-}
-
-const swalClass = {
-  popup: '!rounded-xl',
-  confirmButton: '!rounded-lg !px-6',
 }
 
 export function useAdminCategoryMutations({
@@ -36,22 +31,10 @@ export function useAdminCategoryMutations({
     mutationFn: (payload: AdminCategoryForm) => adminService.createCategory(payload),
     onSuccess: () => {
       invalidateCategories()
-      Swal.fire({
-        title: 'Thành công!',
-        text: 'Thêm mới danh mục thành công.',
-        icon: 'success',
-        confirmButtonColor: '#4f46e5',
-        customClass: swalClass,
-      })
+      toast.success('Thêm mới danh mục thành công', { closeButton: true })
       onSaved?.()
     },
-    onError: () => Swal.fire({
-      title: 'Thất bại!',
-      text: 'Có lỗi xảy ra khi tạo danh mục.',
-      icon: 'error',
-      confirmButtonColor: '#4f46e5',
-      customClass: swalClass,
-    }),
+    onError: () => toast.error('Có lỗi xảy ra khi tạo danh mục', { closeButton: true }),
   })
 
   const updateMutation = useMutation({
@@ -59,48 +42,35 @@ export function useAdminCategoryMutations({
       adminService.updateCategory(id, payload),
     onSuccess: () => {
       invalidateCategories()
-      Swal.fire({
-        title: 'Thành công!',
-        text: 'Cập nhật danh mục thành công.',
-        icon: 'success',
-        confirmButtonColor: '#4f46e5',
-        customClass: swalClass,
-      })
+      toast.success('Cập nhật danh mục thành công', { closeButton: true })
       onSaved?.()
     },
-    onError: () => Swal.fire({
-      title: 'Thất bại!',
-      text: 'Có lỗi xảy ra khi cập nhật danh mục.',
-      icon: 'error',
-      confirmButtonColor: '#4f46e5',
-      customClass: swalClass,
-    }),
+    onError: () => toast.error('Có lỗi xảy ra khi cập nhật danh mục', { closeButton: true }),
   })
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => adminService.deleteCategory(id),
     onSuccess: () => {
       invalidateCategories()
-      Swal.fire({
-        title: 'Đã xóa!',
-        text: 'Xóa danh mục thành công.',
-        icon: 'success',
-        confirmButtonColor: '#4f46e5',
-        customClass: swalClass,
-      })
+      toast.success('Xóa danh mục thành công', { closeButton: true })
     },
-    onError: () => Swal.fire({
-      title: 'Thất bại!',
-      text: 'Không thể xóa danh mục.',
-      icon: 'error',
-      confirmButtonColor: '#4f46e5',
-      customClass: swalClass,
-    }),
+    onError: () => toast.error('Không thể xóa danh mục', { closeButton: true }),
+  })
+
+  const toggleActiveMutation = useMutation({
+    mutationFn: ({ id, isActive }: { id: string; isActive: boolean }) =>
+      adminService.updateCategory(id, { isActive: !isActive }),
+    onSuccess: () => {
+      invalidateCategories()
+      toast.success('Cập nhật trạng thái thành công', { closeButton: true })
+    },
+    onError: () => toast.error('Có lỗi xảy ra', { closeButton: true }),
   })
 
   return {
     createMutation,
     updateMutation,
     deleteMutation,
+    toggleActiveMutation,
   }
 }

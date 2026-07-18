@@ -1,5 +1,5 @@
 import { Search, X } from 'lucide-react'
-import React from 'react'
+import type { FormEvent } from 'react'
 
 interface StoreSearchBarProps {
   value: string
@@ -8,25 +8,20 @@ interface StoreSearchBarProps {
 }
 
 export default function StoreSearchBar({ value, onChange, onSearch }: StoreSearchBarProps) {
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     onSearch()
   }
 
   const handleClear = () => {
     onChange('')
-    // Execute onSearch immediately to clear backend filters.
-    // Wrap in a tiny timeout to let React finish state synchronization if needed
-    // or just call onSearch. Actually, let's call it directly.
-    setTimeout(() => {
-      onSearch()
-    }, 0)
+    setTimeout(() => { onSearch() }, 0)
   }
 
   return (
     <form onSubmit={handleSubmit} className="mb-6 flex gap-2 max-w-md">
       <div className="relative flex-1">
-        <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
         <input
           type="text"
           placeholder="Tìm kiếm cửa hàng..."
@@ -34,13 +29,13 @@ export default function StoreSearchBar({ value, onChange, onSearch }: StoreSearc
           onChange={(e) => onChange(e.target.value)}
           className={`w-full pl-10 ${
             value ? 'pr-10' : 'pr-4'
-          } py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent`}
+          } py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent`}
         />
         {value && (
           <button
             type="button"
             onClick={handleClear}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text transition-colors cursor-pointer"
           >
             <X size={16} />
           </button>
@@ -48,7 +43,7 @@ export default function StoreSearchBar({ value, onChange, onSearch }: StoreSearc
       </div>
       <button
         type="submit"
-        className="px-4 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors whitespace-nowrap flex items-center gap-1.5"
+        className="px-4 py-2.5 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-hover transition-colors whitespace-nowrap flex items-center gap-1.5 cursor-pointer capitalize"
       >
         <Search size={16} />
         Tìm kiếm

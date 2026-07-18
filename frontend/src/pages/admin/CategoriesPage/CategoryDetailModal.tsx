@@ -30,11 +30,11 @@ export default function CategoryDetailModal({ show, category, onClose }: Categor
 
         <div className="p-6 space-y-5">
           {category.image ? (
-            <div className="aspect-[16/9] w-full rounded-lg overflow-hidden border border-gray-100 bg-gray-50">
+            <div className="aspect-video w-full rounded-lg overflow-hidden border border-gray-100 bg-gray-50">
               <img src={category.image} alt={category.name} className="w-full h-full object-cover" />
             </div>
           ) : (
-            <div className="aspect-[16/9] w-full rounded-lg bg-gray-50 border border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400">
+            <div className="aspect-video w-full rounded-lg bg-gray-50 border border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400">
               <Tag size={32} className="mb-2" />
               <span className="text-xs">Không có hình ảnh</span>
             </div>

@@ -8,7 +8,7 @@ import { Analytics } from '@vercel/analytics/react'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { Toaster } from 'sonner'
 import router from './routes'
-import './index.css'
+import './styles/globals.css'
 import { HelmetProvider } from 'react-helmet-async'
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || ''
@@ -29,7 +29,7 @@ createRoot(document.getElementById('root')!).render(
         <TooltipProvider>
           <HelmetProvider>
             <RouterProvider router={router} />
-            <Toaster richColors position="bottom-right" />
+            <Toaster richColors position="bottom-right" closeButton />
           </HelmetProvider>
         </TooltipProvider>
       </GoogleOAuthProvider>

@@ -37,8 +37,6 @@ export default function Header() {
   const navigate = useNavigate()
 
   const { user, isAuthenticated } = useAuth()
-  const logoutMutation = useLogoutMutation()
-
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -53,8 +51,8 @@ export default function Header() {
   return (
     <header className="w-full sticky top-0 z-50 font-sans">
       {/* Top bar - Green */}
-      <div className="bg-primary text-white text-base py-2">
-        <div className="max-w-350 mx-auto flex items-center justify-between h-9">
+      <div className="bg-primary text-white text-sm py-2">
+        <div className="max-w-285  mx-auto flex items-center justify-between h-9">
           <Link to="/" className="transition-colors duration-300 hover:text-secondary font-medium capitalize">
             Kênh bán hàng
           </Link>
@@ -70,7 +68,7 @@ export default function Header() {
 
       {/* Main header - White */}
       <div className="bg-white border-b border-gray-100">
-        <div className="max-w-350 mx-auto py-3">
+        <div className="max-w-285 mx-auto py-3">
           {/* Row 1: Logo + Search + Actions */}
           <div className="flex items-center justify-between">
 

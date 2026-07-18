@@ -1,8 +1,13 @@
-import { Tag, Edit, Trash2, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react'
-import Swal from 'sweetalert2'
+import { Tag, Trash2, Loader2, Copy } from 'lucide-react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { toast } from 'sonner'
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel,
+  AlertDialogContent, AlertDialogDescription,
+  AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
+import { useState } from 'react'
 
 interface Category {
   _id: string
@@ -16,15 +21,8 @@ interface CategoryTableProps {
   categories: Category[]
   isLoading: boolean
   onDelete: (id: string) => void
+  onToggleActive: (id: string, isActive: boolean) => void
   isDeleting: boolean
-  pagination: {
-    page: number
-    limit: number
-    total: number
-    totalPages: number
-  }
-  page: number
-  setPage: React.Dispatch<React.SetStateAction<number>>
   onViewDetail: (category: Category) => void
 }
 
@@ -32,16 +30,16 @@ export default function CategoryTable({
   categories,
   isLoading,
   onDelete,
+  onToggleActive,
   isDeleting,
-  pagination,
-  page,
-  setPage,
   onViewDetail,
 }: CategoryTableProps) {
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null)
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 size={32} className="animate-spin text-indigo-500" />
+        <Loader2 size={32} className="animate-spin text-primary" />
       </div>
     )
   }
@@ -49,8 +47,8 @@ export default function CategoryTable({
   if (categories.length === 0) {
     return (
       <div className="text-center py-20">
-        <Tag size={48} className="mx-auto text-gray-300 mb-3" />
-        <p className="text-gray-500">Không tìm thấy danh mục nào</p>
+        <Tag size={48} className="mx-auto text-text-muted mb-3" />
+        <p className="text-text-muted">Không tìm thấy danh mục nào</p>
       </div>
     )
   }
@@ -61,16 +59,32 @@ export default function CategoryTable({
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-25 px-6">Mã định danh</TableHead>
               <TableHead className="w-25 px-6">Hình ảnh</TableHead>
               <TableHead className="px-6">Tên danh mục</TableHead>
               <TableHead className="px-6">Mô tả</TableHead>
-              <TableHead className="px-6">Trạng thái</TableHead>
+              <TableHead className="px-6 text-center">Trạng thái</TableHead>
               <TableHead className="text-right px-6">Thao tác</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {categories.map((cat) => (
               <TableRow key={cat._id}>
+                <TableCell className="px-6 py-4 text-xs text-text-muted">
+                  <div className="flex items-center gap-1.5">
+                    <span>{cat._id}</span>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(cat._id)
+                        toast.success('Đã copy ID', { closeButton: true })
+                      }}
+                      className="shrink-0 p-1 hover:bg-gray-100 rounded transition-colors"
+                      title="Copy ID"
+                    >
+                      <Copy size={12} className='cursor-pointer' />
+                    </button>
+                  </div>
+                </TableCell>
                 <TableCell className="px-6 py-4">
                   <div
                     onClick={() => onViewDetail(cat)}
@@ -80,55 +94,41 @@ export default function CategoryTable({
                       <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <Tag size={16} className="text-gray-300" />
+                        <Tag size={16} className="text-text-muted" />
                       </div>
                     )}
                   </div>
                 </TableCell>
                 <TableCell
                   onClick={() => onViewDetail(cat)}
-                  className="px-6 py-4 font-medium text-gray-900 text-sm cursor-pointer hover:text-indigo-600 transition-colors"
+                  className="px-6 py-4 font-medium text-text text-sm cursor-pointer hover:text-primary transition-colors"
                 >
                   {cat.name}
                 </TableCell>
-                <TableCell className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{cat.description || '—'}</TableCell>
-                <TableCell className="px-6 py-4">
-                  <Badge
-                    variant={cat.isActive ? 'default' : 'destructive'}
-                    className={cat.isActive ? 'bg-green-500/10 hover:bg-green-500/20 text-green-700 shadow-none border-none' : 'shadow-none border-none'}
+                <TableCell className="px-6 py-4 text-sm text-text-muted max-w-xs truncate">{cat.description || '—'}</TableCell>
+                <TableCell className="px-6 py-4 text-center">
+                  <button
+                    type="button"
+                    onClick={() => onToggleActive(cat._id, cat.isActive)}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ease-in-out cursor-pointer ${
+                      cat.isActive ? 'bg-primary' : 'bg-gray-300'
+                    }`}
                   >
-                    {cat.isActive ? 'Hoạt động' : 'Ẩn'}
-                  </Badge>
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200 ease-in-out ${
+                        cat.isActive ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                    />
+                  </button>
                 </TableCell>
                 <TableCell className="px-6 py-4 text-right">
                   <div className="flex items-center justify-end gap-1">
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => {
-                        Swal.fire({
-                          title: 'Xác nhận xóa?',
-                          text: 'Bạn có chắc chắn muốn xóa danh mục này? Thao tác này không thể hoàn tác.',
-                          icon: 'warning',
-                          showCancelButton: true,
-                          confirmButtonColor: '#ef4444',
-                          cancelButtonColor: '#6b7280',
-                          confirmButtonText: 'Đồng ý xóa',
-                          cancelButtonText: 'Hủy',
-                          customClass: {
-                            popup: '!rounded-xl',
-                            confirmButton: '!rounded-lg !px-6 !ml-2',
-                            cancelButton: '!rounded-lg !px-6',
-                            actions: '!gap-2',
-                          }
-                        }).then((result) => {
-                          if (result.isConfirmed) {
-                            onDelete(cat._id)
-                          }
-                        })
-                      }}
+                      onClick={() => setDeleteTargetId(cat._id)}
                       disabled={isDeleting}
-                      className="h-8 w-8 text-red-500 hover:bg-red-50 hover:text-red-600"
+                      className="h-8 w-8 text-destructive hover:bg-red-50 hover:text-red-600 cursor-pointer"
                       title="Xóa"
                     >
                       <Trash2 size={16} />
@@ -141,33 +141,26 @@ export default function CategoryTable({
         </Table>
       </div>
 
-      {/* Pagination */}
-      {pagination.totalPages > 1 && (
-        <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100 bg-white">
-          <p className="text-sm text-gray-500">
-            Trang {pagination.page} / {pagination.totalPages}
-          </p>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page === 1}
-              className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <button
-              onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
-              disabled={page === pagination.totalPages}
-              className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
-        </div>
-      )}
-      
+      {/* Delete Dialog */}
+      <AlertDialog open={!!deleteTargetId} onOpenChange={(open) => !open && setDeleteTargetId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Xác nhận xóa?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Bạn có chắc chắn muốn xóa danh mục này? Thao tác này không thể hoàn tác.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setDeleteTargetId(null)}>Hủy</AlertDialogCancel>
+            <AlertDialogAction onClick={() => {
+              if (deleteTargetId) onDelete(deleteTargetId)
+              setDeleteTargetId(null)
+            }}>
+              Đồng ý xóa
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
-    
   )
-  
 }
