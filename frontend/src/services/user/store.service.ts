@@ -1,4 +1,4 @@
-import api from '../api'
+import api from "../client"
 import type { IStore, StoreListResponse, GetStoresParams } from '@/types/store.types'
 
 export const storeService = {

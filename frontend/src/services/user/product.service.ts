@@ -1,4 +1,4 @@
-import api from '../api'
+import api from "../client"
 import type { IProduct, ProductListResponse, GetProductsParams } from '@/types/product.types'
 
 export const productService = {

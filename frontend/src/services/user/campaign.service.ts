@@ -1,5 +1,5 @@
 import type { ICampaign } from '@/types/campaign.types';
-import api from '../api'
+import api from "../client"
 
 export const campaignService = {
   async getActiveCampaigns(): Promise<ICampaign[]> {

@@ -1,4 +1,4 @@
-import api from '../api'
+import api from "../client"
 import type { IChatRoom, IChatMessage, SendMessagePayload } from '@/types/chat.types'
 
 export const chatService = {

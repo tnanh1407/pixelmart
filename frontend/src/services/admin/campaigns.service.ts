@@ -1,4 +1,4 @@
-import api from '../api'
+import api from "../client"
 import type { ICampaign } from '@/types/campaign.types'
 
 export interface CampaignListResponse {

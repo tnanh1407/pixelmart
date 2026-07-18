@@ -1,7 +1,7 @@
 import Swal from 'sweetalert2'
 import useUserStore from '@/stores/useUserStore'
 import { authService, type Address } from '@/services/user/auth.service'
-import api from '@/services/api'
+import api from "@/services/client"
 import {
   ADDRESS_SWAL_CONFIG,
   LOADING_ALERT,

@@ -1,4 +1,4 @@
-import api from '../api'
+import api from "../client"
 import type { IOrder, OrderListResponse, CheckoutPayload } from '@/types/order.types'
 
 export const orderService = {

@@ -1,4 +1,4 @@
-import api from '../../api'
+import api from "../client"
 import type { IVoucher, VoucherListResponse } from '@/types/voucher.types'
 
 export const adminVoucherService = {

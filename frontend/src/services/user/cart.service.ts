@@ -1,4 +1,4 @@
-import api from '../api'
+import api from "../client"
 import type { ICartGroup, ICartCount, AddToCartPayload, UpdateCartItemPayload } from '@/types/cart.types'
 
 export const cartService = {

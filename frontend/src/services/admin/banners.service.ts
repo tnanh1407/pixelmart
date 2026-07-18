@@ -1,4 +1,4 @@
-import api from '../../api'
+import api from "../client"
 import type { IBanner, BannerListResponse } from '@/types/banner.types'
 
 export const adminBannerService = {

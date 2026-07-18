@@ -1,5 +1,5 @@
-import api from '../../api'
-import type { IReview, ReviewListResponse } from '@/types/review.types'
+import api from "../client"
+import type { ReviewListResponse } from '@/types/review.types'
 
 export const adminReviewService = {
   async getReviews(params?: Record<string, unknown>): Promise<ReviewListResponse> {

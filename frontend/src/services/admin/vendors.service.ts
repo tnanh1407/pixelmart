@@ -1,4 +1,4 @@
-import api from '../../api'
+import api from "../client"
 import type { IVendor, VendorListResponse, VendorStats } from '@/types/vendor.types'
 
 export const adminVendorService = {

@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2'
-import api from '@/services/api'
+import api from "@/services/client"
 
 // ── Swal Config Constants ──────────────────────────────────────────
 
