@@ -3,7 +3,7 @@ import campaignItemService from "../services/campaignItem.service.js";
 
 class CampaignItemController {
   async getItemsByCampaign(req: Request, res: Response) {
-    const items = await campaignItemService.getItemsByCampaign(req.params.campaignId);
+    const items = await campaignItemService.getItemsByCampaign(String(req.params.campaignId));
     res.json({
       success: true,
       data: items,
@@ -11,7 +11,7 @@ class CampaignItemController {
   }
 
   async getCampaignItemById(req: Request, res: Response) {
-    const item = await campaignItemService.getCampaignItemById(req.params.id);
+    const item = await campaignItemService.getCampaignItemById(String(req.params.id));
     res.json({
       success: true,
       data: item,
@@ -21,7 +21,7 @@ class CampaignItemController {
   async addItemToCampaign(req: Request, res: Response) {
     const item = await campaignItemService.addItemToCampaign({
       ...req.body,
-      campaignId: req.params.campaignId,
+      campaignId: String(req.params.campaignId),
     });
     res.status(201).json({
       success: true,
@@ -30,7 +30,7 @@ class CampaignItemController {
   }
 
   async updateCampaignItem(req: Request, res: Response) {
-    const item = await campaignItemService.updateCampaignItem(req.params.id, req.body);
+    const item = await campaignItemService.updateCampaignItem(String(req.params.id), req.body);
     res.json({
       success: true,
       data: item,
@@ -38,7 +38,7 @@ class CampaignItemController {
   }
 
   async removeItemFromCampaign(req: Request, res: Response) {
-    const result = await campaignItemService.removeItemFromCampaign(req.params.id);
+    const result = await campaignItemService.removeItemFromCampaign(String(req.params.id));
     res.json({
       success: true,
       ...result,
@@ -46,7 +46,7 @@ class CampaignItemController {
   }
 
   async removeAllItemsFromCampaign(req: Request, res: Response) {
-    const result = await campaignItemService.removeAllItemsFromCampaign(req.params.campaignId);
+    const result = await campaignItemService.removeAllItemsFromCampaign(String(req.params.campaignId));
     res.json({
       success: true,
       ...result,

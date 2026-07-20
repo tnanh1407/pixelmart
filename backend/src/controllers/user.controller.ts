@@ -67,7 +67,6 @@ class UserController {
     const id = String(req.user?.userId);
     const file = req.file as Express.Multer.File | undefined;
 
-    // Parse body data - handle both JSON and form-data
     let data: any = {};
     if (req.body.data) {
       try {
@@ -79,18 +78,15 @@ class UserController {
       data = req.body;
     }
 
-    // Update text fields if provided
     let user;
     if (Object.keys(data).length > 0) {
       user = await userService.updateUser(id, data);
     }
 
-    // Upload avatar if file provided
     if (file) {
       user = await userService.uploadAvatar(id, file);
     }
 
-    // Fetch latest user data
     if (!user) {
       user = await userService.getUserById(id);
     }
@@ -99,72 +95,6 @@ class UserController {
       success: true,
       message: "Profile updated successfully",
       data: user,
-    });
-  }
-
-  async addAddress(req: Request, res: Response) {
-    const userId = String(req.user?.userId);
-    const addressData = req.body;
-
-    const requiredFields = [
-      "receiverName", "receiverPhone", 
-      "provinceCode", "provinceName", 
-      "districtCode", "districtName", 
-      "wardCode", "wardName", 
-      "streetAddress"
-    ];
-    for (const field of requiredFields) {
-      if (!addressData[field]) {
-        res.status(400).json({
-          success: false,
-          message: `${field} is required`
-        });
-        return;
-      }
-    }
-
-    const user = await userService.addAddress(userId, addressData);
-    res.json({
-      success: true,
-      message: "Address added successfully",
-      data: user.addresses,
-    });
-  }
-
-  async updateAddress(req: Request, res: Response) {
-    const userId = String(req.user?.userId);
-    const addressId = String(req.params.addressId);
-    const addressData = req.body;
-
-    const user = await userService.updateAddress(userId, addressId, addressData);
-    res.json({
-      success: true,
-      message: "Address updated successfully",
-      data: user.addresses,
-    });
-  }
-
-  async deleteAddress(req: Request, res: Response) {
-    const userId = String(req.user?.userId);
-    const addressId = String(req.params.addressId);
-
-    const user = await userService.deleteAddress(userId, addressId);
-    res.json({
-      success: true,
-      message: "Address deleted successfully",
-      data: user.addresses,
-    });
-  }
-
-  async setDefaultAddress(req: Request, res: Response) {
-    const userId = String(req.user?.userId);
-    const addressId = String(req.params.addressId);
-
-    const user = await userService.setDefaultAddress(userId, addressId);
-    res.json({
-      success: true,
-      message: "Default address set successfully",
-      data: user.addresses,
     });
   }
 }

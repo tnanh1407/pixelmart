@@ -7,12 +7,12 @@ class CampaignItemService {
   async getItemsByCampaign(campaignId: string) {
     const campaign = await Campaign.findById(campaignId);
     if (!campaign) {
-      throw new AppError("Chiến dịch không tồn tại", 404);
+      throw new AppError("Chien dich khong ton tai", 404);
     }
 
     const items = await CampaignItem.find({ campaignId })
       .populate("productId")
-      .sort({ order: 1, createdAt: 1 });
+      .sort({ createdAt: 1 });
 
     return items;
   }
@@ -20,7 +20,7 @@ class CampaignItemService {
   async getCampaignItemById(id: string) {
     const item = await CampaignItem.findById(id).populate("productId");
     if (!item) {
-      throw new AppError("Sản phẩm trong chiến dịch không tồn tại", 404);
+      throw new AppError("San pham trong chien dich khong ton tai", 404);
     }
     return item;
   }
@@ -29,7 +29,7 @@ class CampaignItemService {
     const { campaignId, productId } = data;
 
     if (!campaignId || !productId) {
-      throw new AppError("campaignId và productId là bắt buộc", 400);
+      throw new AppError("campaignId va productId la bat buoc", 400);
     }
 
     const [campaign, product] = await Promise.all([
@@ -37,12 +37,12 @@ class CampaignItemService {
       Product.findById(productId),
     ]);
 
-    if (!campaign) throw new AppError("Chiến dịch không tồn tại", 404);
-    if (!product) throw new AppError("Sản phẩm không tồn tại", 404);
+    if (!campaign) throw new AppError("Chien dich khong ton tai", 404);
+    if (!product) throw new AppError("San pham khong ton tai", 404);
 
     const existing = await CampaignItem.findOne({ campaignId, productId });
     if (existing) {
-      throw new AppError("Sản phẩm đã tồn tại trong chiến dịch này", 409);
+      throw new AppError("San pham da ton tai trong chien dich nay", 409);
     }
 
     const item = await CampaignItem.create(data);
@@ -51,27 +51,23 @@ class CampaignItemService {
 
   async updateCampaignItem(id: string, data: Partial<ICampaignItem>) {
     const item = await this.getCampaignItemById(id);
-
-    if (data.order !== undefined) item.order = data.order;
-    if (data.isFeatured !== undefined) item.isFeatured = data.isFeatured;
-
     return await item.save();
   }
 
   async removeItemFromCampaign(id: string) {
     const item = await this.getCampaignItemById(id);
     await item.deleteOne();
-    return { message: "Đã xóa sản phẩm khỏi chiến dịch thành công" };
+    return { message: "Da xoa san pham khoi chien dich thanh cong" };
   }
 
   async removeAllItemsFromCampaign(campaignId: string) {
     const campaign = await Campaign.findById(campaignId);
     if (!campaign) {
-      throw new AppError("Chiến dịch không tồn tại", 404);
+      throw new AppError("Chien dich khong ton tai", 404);
     }
 
     const result = await CampaignItem.deleteMany({ campaignId });
-    return { message: `Đã xóa ${result.deletedCount} sản phẩm khỏi chiến dịch` };
+    return { message: `Da xoa ${result.deletedCount} san pham khoi chien dich` };
   }
 }
 

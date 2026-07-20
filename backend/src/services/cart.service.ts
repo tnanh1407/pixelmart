@@ -13,10 +13,8 @@ class CartService {
       })
       .sort({ createdAt: -1 });
 
-    // Filter out null populated products (deleted/archived)
     const validItems = items.filter((item) => item.productId);
 
-    // Group by store
     const grouped: Record<string, { store: any; items: any[] }> = {};
     for (const item of validItems) {
       const product = item.productId as any;
@@ -40,24 +38,6 @@ class CartService {
   }
 
   async getCartItemCount(userId: string) {
-    const result = await Cart.aggregate([
-      { $match: { userId } },
-      {
-        $lookup: {
-          from: "products",
-          let: { productId: { $toObjectId: "$productId" } },
-          pipeline: [
-            { $match: { $expr: { $eq: ["$_id", "$$productId"] }, isDeleted: false, status: "published" } },
-            { $limit: 1 },
-          ],
-          as: "product",
-        },
-      },
-      { $match: { "product.0": { $exists: true } } },
-      { $count: "count" },
-    ]);
-
-    // Fallback for string _id (not ObjectId)
     const count = await Cart.countDocuments({ userId });
     return { count };
   }
@@ -67,41 +47,41 @@ class CartService {
 
     const product = await Product.findById(productId);
     if (!product || product.isDeleted || product.status !== "published") {
-      throw new AppError("Sản phẩm không tồn tại hoặc đã bị gỡ xuống", 404);
+      throw new AppError("San pham khong ton tai hoac da bi go xuong", 404);
     }
 
     if (product.stock < quantity) {
-      throw new AppError("Số lượng sản phẩm trong kho không đủ", 400);
+      throw new AppError("So luong san pham trong kho khong du", 400);
     }
 
     const existing = await Cart.findOne({ userId, productId });
     if (existing) {
       const newQuantity = existing.quantity + quantity;
       if (newQuantity > product.stock) {
-        throw new AppError(`Số lượng trong giỏ hàng (${existing.quantity}) + thêm (${quantity}) vượt quá tồn kho (${product.stock})`, 400);
+        throw new AppError(`So luong trong gio hang (${existing.quantity}) + them (${quantity}) vuot qua ton kho (${product.stock})`, 400);
       }
       existing.quantity = newQuantity;
       existing.selected = true;
       return await existing.save();
     }
 
-    return await Cart.create({ userId, productId, storeId: product.storeId, quantity });
+    return await Cart.create({ userId, productId, quantity });
   }
 
   async updateCartItem(userId: string, cartItemId: string, data: { quantity?: number; selected?: boolean }) {
     const item = await Cart.findOne({ _id: cartItemId, userId });
     if (!item) {
-      throw new AppError("Sản phẩm không có trong giỏ hàng", 404);
+      throw new AppError("San pham khong co trong gio hang", 404);
     }
 
     if (data.quantity !== undefined) {
       if (data.quantity < 1) {
-        throw new AppError("Số lượng tối thiểu là 1", 400);
+        throw new AppError("So luong toi thieu la 1", 400);
       }
 
       const product = await Product.findById(item.productId);
       if (product && data.quantity > product.stock) {
-        throw new AppError(`Số lượng vượt quá tồn kho (${product.stock})`, 400);
+        throw new AppError(`So luong vuot qua ton kho (${product.stock})`, 400);
       }
       item.quantity = data.quantity;
     }
@@ -116,19 +96,19 @@ class CartService {
   async removeFromCart(userId: string, cartItemId: string) {
     const item = await Cart.findOneAndDelete({ _id: cartItemId, userId });
     if (!item) {
-      throw new AppError("Sản phẩm không có trong giỏ hàng", 404);
+      throw new AppError("San pham khong co trong gio hang", 404);
     }
-    return { message: "Đã xóa sản phẩm khỏi giỏ hàng" };
+    return { message: "Da xoa san pham khoi gio hang" };
   }
 
   async clearCart(userId: string) {
     await Cart.deleteMany({ userId });
-    return { message: "Đã xóa toàn bộ giỏ hàng" };
+    return { message: "Da xoa toan bo gio hang" };
   }
 
   async selectAllItems(userId: string, selected: boolean) {
     await Cart.updateMany({ userId }, { selected });
-    return { message: selected ? "Đã chọn tất cả" : "Đã bỏ chọn tất cả" };
+    return { message: selected ? "Da chon tat ca" : "Da bo chon tat ca" };
   }
 
   async getSelectedItems(userId: string) {

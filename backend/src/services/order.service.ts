@@ -40,7 +40,7 @@ class OrderService {
       .populate("userId", "name email phone")
       .populate("storeId", "name slug logo phone");
     if (!order) {
-      throw new AppError("Đơn hàng không tồn tại", 404);
+      throw new AppError("Don hang khong ton tai", 404);
     }
     return order;
   }
@@ -50,7 +50,7 @@ class OrderService {
       .populate("userId", "name email phone")
       .populate("storeId", "name slug logo phone");
     if (!order) {
-      throw new AppError("Đơn hàng không tồn tại", 404);
+      throw new AppError("Don hang khong ton tai", 404);
     }
     return order;
   }
@@ -71,21 +71,18 @@ class OrderService {
   }
 
   async checkout(userId: string, data: {
-    shippingAddress: {
-      receiverName: string;
-      receiverPhone: string;
-      provinceName: string;
-      districtName: string;
-      wardName: string;
-      streetAddress: string;
-    };
+    receiverName?: string;
+    receiverPhone?: string;
+    provinceName?: string;
+    districtName?: string;
+    wardName?: string;
+    streetAddress?: string;
     voucherCode?: string;
     paymentMethod: string;
-    note?: string;
+    noteOrder?: string;
   }) {
-    const { shippingAddress, voucherCode, paymentMethod, note } = data;
+    const { receiverName, receiverPhone, provinceName, districtName, wardName, streetAddress, voucherCode, paymentMethod, noteOrder } = data;
 
-    // Get selected cart items
     const cartItems = await Cart.find({ userId, selected: true })
       .populate({
         path: "productId",
@@ -96,17 +93,16 @@ class OrderService {
 
     const validItems = cartItems.filter((item) => item.productId);
     if (validItems.length === 0) {
-      throw new AppError("Không có sản phẩm nào được chọn để thanh toán", 400);
+      throw new AppError("Khong co san pham nao duoc chon de thanh toan", 400);
     }
 
-    // Group items by store
     const storeGroups: Record<string, { store: any; items: any[]; subtotal: number }> = {};
     for (const cartItem of validItems) {
       const product = cartItem.productId as any;
-      const storeId = product.storeId._id || product.storeId;
+      const sid = product.storeId._id || product.storeId;
 
-      if (!storeGroups[storeId]) {
-        storeGroups[storeId] = {
+      if (!storeGroups[sid]) {
+        storeGroups[sid] = {
           store: product.storeId,
           items: [],
           subtotal: 0,
@@ -116,12 +112,12 @@ class OrderService {
       const effectivePrice = product.discountPrice || product.price;
       const itemSubtotal = effectivePrice * cartItem.quantity;
 
-      storeGroups[storeId].items.push({
+      storeGroups[sid].items.push({
         productId: product._id,
         productName: product.name,
-        productImage: product.images?.[0] || "",
+        productImage: Array.isArray(product.images) ? product.images[0] || "" : "",
         productSlug: product.slug,
-        storeId,
+        storeId: sid,
         storeName: product.storeId?.name || "",
         price: product.price,
         discountPrice: product.discountPrice || null,
@@ -129,18 +125,16 @@ class OrderService {
         subtotal: itemSubtotal,
       });
 
-      storeGroups[storeId].subtotal += itemSubtotal;
+      storeGroups[sid].subtotal += itemSubtotal;
     }
 
-    // Create one order per store
     const createdOrders: any[] = [];
 
-    for (const [storeId, group] of Object.entries(storeGroups)) {
+    for (const [sid, group] of Object.entries(storeGroups)) {
       const shippingFee = this.calculateShippingFee(group.subtotal);
       let discountAmount = 0;
       let appliedVoucher: any = null;
 
-      // Validate and apply voucher
       if (voucherCode) {
         try {
           const voucher = await Voucher.findOne({
@@ -153,8 +147,7 @@ class OrderService {
           });
 
           if (voucher) {
-            // Check if voucher applies to this store
-            if (voucher.scope === "platform" || (voucher.scope === "store" && voucher.storeId === storeId)) {
+            if (voucher.scope === "platform" || (voucher.scope === "store" && voucher.storeId === sid)) {
               if (group.subtotal >= voucher.minOrderValue) {
                 if (voucher.type === "percentage") {
                   discountAmount = Math.round((group.subtotal * voucher.value) / 100);
@@ -175,7 +168,6 @@ class OrderService {
             }
           }
         } catch (err) {
-          // If voucher validation fails, just skip the voucher
         }
       }
 
@@ -183,11 +175,16 @@ class OrderService {
 
       const order = await Order.create({
         userId,
-        storeId,
+        storeId: sid,
         orderCode: this.generateOrderCode(),
         status: "pending",
         items: group.items,
-        shippingAddress,
+        receiverName: receiverName || undefined,
+        receiverPhone: receiverPhone || undefined,
+        provinceName: provinceName || undefined,
+        districtName: districtName || undefined,
+        wardName: wardName || undefined,
+        streetAddress: streetAddress || undefined,
         shippingFee,
         subtotal: group.subtotal,
         discountAmount,
@@ -196,13 +193,12 @@ class OrderService {
         voucherCode: appliedVoucher?.code || null,
         paymentMethod: paymentMethod as any,
         paymentStatus: "pending",
-        note: note || "",
+        noteOrder: noteOrder || "",
       });
 
       createdOrders.push(order);
     }
 
-    // Clear selected cart items
     const cartItemIds = validItems.map((item) => item._id);
     await Cart.deleteMany({ _id: { $in: cartItemIds } });
 
@@ -226,20 +222,18 @@ class OrderService {
     const allowed = validTransitions[order.status] || [];
     if (!allowed.includes(status)) {
       throw new AppError(
-        `Không thể chuyển trạng thái từ "${order.status}" sang "${status}"`,
+        `Khong the chuyen trang thai tu "${order.status}" sang "${status}"`,
         400
       );
     }
 
     if (status === "cancelled") {
-      order.cancelReason = cancelReason || "Không có lý do";
-      // Restore product stock
+      order.cancelReason = cancelReason || "Khong co ly do";
       for (const item of order.items) {
         await Product.findByIdAndUpdate(item.productId, {
           $inc: { stock: item.quantity },
         });
       }
-      // Refund payment if paid
       if (order.paymentStatus === "paid") {
         order.paymentStatus = "refunded";
       }
@@ -267,11 +261,11 @@ class OrderService {
   async cancelOrder(userId: string, id: string, reason: string) {
     const order = await Order.findOne({ _id: id, userId });
     if (!order) {
-      throw new AppError("Đơn hàng không tồn tại hoặc không thuộc về bạn", 404);
+      throw new AppError("Don hang khong ton tai hoac khong thuoc ve ban", 404);
     }
 
     if (!["pending", "confirmed"].includes(order.status)) {
-      throw new AppError("Chỉ có thể hủy đơn hàng ở trạng thái chờ xác nhận hoặc đã xác nhận", 400);
+      throw new AppError("Chi co the huy don hang o trang thai cho xac nhan hoac da xac nhan", 400);
     }
 
     return this.updateOrderStatus(id, { status: "cancelled", cancelReason: reason });

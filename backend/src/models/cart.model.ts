@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from "uuid";
 export interface ICart {
   userId: string;
   productId: string;
-  storeId: string;
   quantity: number;
   selected: boolean;
 }
@@ -24,28 +23,21 @@ const cartSchema = new mongoose.Schema<ICartDocument>(
     userId: {
       type: String,
       ref: "User",
-      required: [true, "Người dùng là bắt buộc"],
+      required: [true, "Nguoi dung la bat buoc"],
       index: true,
     },
 
     productId: {
       type: String,
       ref: "Product",
-      required: [true, "Sản phẩm là bắt buộc"],
-      index: true,
-    },
-
-    storeId: {
-      type: String,
-      ref: "Store",
-      required: [true, "Cửa hàng là bắt buộc"],
+      required: [true, "San pham la bat buoc"],
       index: true,
     },
 
     quantity: {
       type: Number,
-      required: [true, "Số lượng là bắt buộc"],
-      min: [1, "Số lượng tối thiểu là 1"],
+      required: [true, "So luong la bat buoc"],
+      min: [1, "So luong toi thieu la 1"],
       default: 1,
     },
 
@@ -59,7 +51,6 @@ const cartSchema = new mongoose.Schema<ICartDocument>(
   }
 );
 
-// Mỗi user chỉ có 1 cart item cho mỗi product
 cartSchema.index({ userId: 1, productId: 1 }, { unique: true });
 
 const Cart = mongoose.model<ICartDocument>("Cart", cartSchema);

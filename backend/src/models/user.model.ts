@@ -3,56 +3,24 @@ import { v4 as uuidv4 } from "uuid";
 import { ROLES, GENDERS } from "../constants/roles.js";
 import { hashPassword } from "../utils/bcrypt.js";
 
-export interface IAddress {
-  _id?: string;
-  receiverName: string;
-  receiverPhone: string;
-  provinceCode: string;
-  provinceName: string;
-  districtCode: string;
-  districtName: string;
-  wardCode: string;
-  wardName: string;
-  streetAddress: string;
-  isDefault: boolean;
-}
-
 export interface IUser {
   name: string;
   email: string;
   password?: string;
   gender: (typeof GENDERS)[keyof typeof GENDERS];
-  dob?: Date;
   role: (typeof ROLES)[keyof typeof ROLES];
   phone?: string;
   provider: "local" | "google";
   googleId?: string;
   avatar?: string;
   isEmailVerified: boolean;
-  isPhoneVerified: boolean;
   isActive: boolean;
-  addresses?: IAddress[];
 }
-
 
 export interface IUserDocument extends IUser, mongoose.Document {
   createdAt: Date;
   updatedAt: Date;
 }
-
-const addressSchema = new mongoose.Schema<IAddress>({
-  _id: { type: String, default: uuidv4 },
-  receiverName: { type: String, required: true, trim: true },
-  receiverPhone: { type: String, required: true, trim: true },
-  provinceCode: { type: String, required: true },
-  provinceName: { type: String, required: true },
-  districtCode: { type: String, required: true },
-  districtName: { type: String, required: true },
-  wardCode: { type: String, required: true },
-  wardName: { type: String, required: true },
-  streetAddress: { type: String, required: true, trim: true },
-  isDefault: { type: Boolean, default: false }
-});
 
 const userSchema = new mongoose.Schema<IUserDocument>(
   {
@@ -84,10 +52,6 @@ const userSchema = new mongoose.Schema<IUserDocument>(
       enum: Object.values(GENDERS),
       default: GENDERS.OTHER,
     },
-    dob: {
-      type: Date,
-      default: null,
-    },
     role: {
       type: String,
       enum: Object.values(ROLES),
@@ -96,9 +60,6 @@ const userSchema = new mongoose.Schema<IUserDocument>(
     phone: {
       type: String,
       trim: true,
-      unique: true,
-      sparse: true,
-      match: [/^(0|\+84)[0-9]{9,10}$/, "Invalid phone number"],
     },
     provider: {
       type: String,
@@ -107,7 +68,6 @@ const userSchema = new mongoose.Schema<IUserDocument>(
     },
     googleId: {
       type: String,
-      unique: true,
       sparse: true,
     },
     avatar: {
@@ -118,17 +78,9 @@ const userSchema = new mongoose.Schema<IUserDocument>(
       type: Boolean,
       default: false,
     },
-    isPhoneVerified: {
-      type: Boolean,
-      default: false,
-    },
     isActive: {
       type: Boolean,
       default: true,
-    },
-    addresses: {
-      type: [addressSchema],
-      default: [],
     },
   },
   {

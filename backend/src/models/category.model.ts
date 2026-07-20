@@ -6,8 +6,6 @@ export interface ICategory {
   slug: string;
   description?: string;
   image?: string;
-  parentId?: string;
-  order: number;
   isActive: boolean;
 }
 
@@ -24,15 +22,15 @@ const categorySchema = new mongoose.Schema<ICategoryDocument>(
     } as any,
     name: {
       type: String,
-      required: [true, "Tên danh mục là bắt buộc"],
+      required: [true, "Ten danh muc la bat buoc"],
       unique: true,
       trim: true,
-      minlength: [2, "Tên danh mục phải có ít nhất 2 ký tự"],
-      maxlength: [100, "Tên danh mục tối đa 100 ký tự"],
+      minlength: [2, "Ten danh muc phai co it nhat 2 ky tu"],
+      maxlength: [100, "Ten danh muc toi da 100 ky tu"],
     },
     slug: {
       type: String,
-      required: [true, "Slug danh mục là bắt buộc"],
+      required: [true, "Slug danh muc la bat buoc"],
       unique: true,
       trim: true,
       lowercase: true,
@@ -46,16 +44,6 @@ const categorySchema = new mongoose.Schema<ICategoryDocument>(
       type: String,
       default: null,
     },
-    parentId: {
-      type: String,
-      ref: "Category",
-      default: null,
-      index: true,
-    },
-    order: {
-      type: Number,
-      default: 0,
-    },
     isActive: {
       type: Boolean,
       default: true,
@@ -67,7 +55,6 @@ const categorySchema = new mongoose.Schema<ICategoryDocument>(
   }
 );
 
-// Tự động tạo index cho search text tên danh mục
 categorySchema.index({ name: "text" });
 
 const Category = mongoose.model<ICategoryDocument>("Category", categorySchema);

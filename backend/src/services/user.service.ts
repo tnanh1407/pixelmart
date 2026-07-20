@@ -1,9 +1,8 @@
 import userRepository from "../repositories/user.repository.js";
-import { type IUser, type IAddress } from "../models/user.model.js";
+import { type IUser } from "../models/user.model.js";
 import { AppError } from "../middlewares/error.middleware.js";
 import cloudinary, { CLOUDINARY_FOLDERS, getUserFolder } from "../config/cloudinary.js";
 import { extractPublicId } from "../utils/cloudinary/cloudinaryHelps.js";
-
 
 class UserService {
   async createUser(data: Partial<IUser>) {
@@ -55,7 +54,6 @@ class UserService {
       if (existingPhone) {
         throw new AppError("Phone already exists", 409);
       }
-      data.isPhoneVerified = false;
     }
 
     const updatedUser = await userRepository.update(id, data);
@@ -70,7 +68,6 @@ class UserService {
 
     const userFolders = getUserFolder(userId);
 
-    // Delete old avatar if exists
     if (user.avatar && user.avatar.includes("cloudinary")) {
       const publicId = extractPublicId(user.avatar);
       if (publicId) {
@@ -100,7 +97,6 @@ class UserService {
       throw new AppError("User not found", 404);
     }
 
-    // Delete avatar from Cloudinary if exists
     if (user.avatar && user.avatar.includes("cloudinary")) {
       const publicId = extractPublicId(user.avatar);
       if (publicId) {
@@ -108,13 +104,11 @@ class UserService {
       }
     }
 
-    // Delete user's Cloudinary folder (avatars + reviews)
     const userFolders = getUserFolder(id);
     try {
       await cloudinary.api.delete_folder(userFolders.avatars);
       await cloudinary.api.delete_folder(userFolders.reviews);
     } catch {
-      // Folder may not exist, ignore error
     }
 
     return await userRepository.delete(id);
@@ -128,119 +122,6 @@ class UserService {
 
     const updatedUser = await userRepository.update(id, { isActive: !user.isActive });
     return updatedUser;
-  }
-
-  async addAddress(userId: string, addressData: Partial<IAddress>) {
-    const user = await userRepository.findById(userId);
-    if (!user) {
-      throw new AppError("User not found", 404);
-    }
-
-    if (!user.addresses) {
-      user.addresses = [];
-    }
-
-    const isDefault = addressData.isDefault || user.addresses.length === 0;
-
-    if (isDefault) {
-      user.addresses.forEach((addr) => {
-        addr.isDefault = false;
-      });
-    }
-
-    const newAddress = {
-      ...addressData,
-      isDefault,
-    } as IAddress;
-
-    user.addresses.push(newAddress);
-    await user.save();
-    return user;
-  }
-
-  async updateAddress(userId: string, addressId: string, addressData: Partial<IAddress>) {
-    const user = await userRepository.findById(userId);
-    if (!user) {
-      throw new AppError("User not found", 404);
-    }
-
-    if (!user.addresses) {
-      user.addresses = [];
-    }
-
-    const address = user.addresses!.find((addr) => String(addr._id) === addressId);
-    if (!address) {
-      throw new AppError("Address not found", 404);
-    }
-
-    // Update fields
-    Object.assign(address, addressData);
-
-    // Handle isDefault logic
-    if (addressData.isDefault) {
-      user.addresses!.forEach((addr) => {
-        if (String(addr._id) !== addressId) {
-          addr.isDefault = false;
-        }
-      });
-    } else {
-      const defaults = user.addresses!.filter(addr => addr.isDefault);
-      if (defaults.length === 0 && user.addresses!.length > 0) {
-        user.addresses![0].isDefault = true;
-      }
-    }
-
-    await user.save();
-    return user;
-  }
-
-  async deleteAddress(userId: string, addressId: string) {
-    const user = await userRepository.findById(userId);
-    if (!user) {
-      throw new AppError("User not found", 404);
-    }
-
-    if (!user.addresses) {
-      user.addresses = [];
-    }
-
-    const initialLength = user.addresses!.length;
-    user.addresses = user.addresses!.filter((addr) => String(addr._id) !== addressId) as any;
-
-    if (user.addresses!.length === initialLength) {
-      throw new AppError("Address not found", 404);
-    }
-
-    const hasDefault = user.addresses!.some(addr => addr.isDefault);
-    if (!hasDefault && user.addresses!.length > 0) {
-      user.addresses![0].isDefault = true;
-    }
-
-    await user.save();
-    return user;
-  }
-
-  async setDefaultAddress(userId: string, addressId: string) {
-    const user = await userRepository.findById(userId);
-    if (!user) {
-      throw new AppError("User not found", 404);
-    }
-
-    if (!user.addresses) {
-      user.addresses = [];
-    }
-
-    const address = user.addresses!.find((addr) => String(addr._id) === addressId);
-    if (!address) {
-      throw new AppError("Address not found", 404);
-    }
-
-    user.addresses!.forEach((addr) => {
-      addr.isDefault = String(addr._id) === addressId;
-    });
-
-    await user.save();
-    return user;
   }
 }
 

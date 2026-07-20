@@ -41,22 +41,18 @@ export interface IOrderItem {
   subtotal: number;
 }
 
-export interface IShippingAddress {
-  receiverName: string;
-  receiverPhone: string;
-  provinceName: string;
-  districtName: string;
-  wardName: string;
-  streetAddress: string;
-}
-
 export interface IOrder {
   userId: string;
   storeId: string;
   orderCode: string;
   status: OrderStatus;
   items: IOrderItem[];
-  shippingAddress: IShippingAddress;
+  receiverName?: string;
+  receiverPhone?: string;
+  provinceName?: string;
+  districtName?: string;
+  wardName?: string;
+  streetAddress?: string;
   shippingFee: number;
   subtotal: number;
   discountAmount: number;
@@ -66,9 +62,7 @@ export interface IOrder {
   paymentMethod: PaymentMethod;
   paymentStatus: PaymentStatus;
   transactionId?: string;
-  shippingTrackingNumber?: string;
-  shippingCarrier?: string;
-  note?: string;
+  noteOrder?: string;
   cancelReason?: string;
   confirmedAt?: Date;
   shippedAt?: Date;
@@ -132,18 +126,6 @@ const orderItemSchema = new mongoose.Schema<IOrderItem>(
   { _id: false }
 );
 
-const shippingAddressSchema = new mongoose.Schema<IShippingAddress>(
-  {
-    receiverName: { type: String, required: true, trim: true },
-    receiverPhone: { type: String, required: true, trim: true },
-    provinceName: { type: String, required: true },
-    districtName: { type: String, required: true },
-    wardName: { type: String, required: true },
-    streetAddress: { type: String, required: true, trim: true },
-  },
-  { _id: false }
-);
-
 const orderSchema = new mongoose.Schema<IOrderDocument>(
   {
     _id: {
@@ -154,20 +136,20 @@ const orderSchema = new mongoose.Schema<IOrderDocument>(
     userId: {
       type: String,
       ref: "User",
-      required: [true, "Người dùng là bắt buộc"],
+      required: [true, "Nguoi dung la bat buoc"],
       index: true,
     },
 
     storeId: {
       type: String,
       ref: "Store",
-      required: [true, "Cửa hàng là bắt buộc"],
+      required: [true, "Cua hang la bat buoc"],
       index: true,
     },
 
     orderCode: {
       type: String,
-      required: [true, "Mã đơn hàng là bắt buộc"],
+      required: [true, "Ma don hang la bat buoc"],
       unique: true,
       trim: true,
     },
@@ -181,20 +163,33 @@ const orderSchema = new mongoose.Schema<IOrderDocument>(
 
     items: {
       type: [orderItemSchema],
-      required: [true, "Danh sách sản phẩm là bắt buộc"],
-      validate: {
-        validator: function (value: IOrderItem[]) {
-          return value.length > 0;
-        },
-        message: "Đơn hàng phải có ít nhất 1 sản phẩm",
-      },
+      required: [true, "Danh sach san pham la bat buoc"],
     },
 
-    shippingAddress: {
-      type: shippingAddressSchema,
-      required: [true, "Địa chỉ giao hàng là bắt buộc"],
+    receiverName: {
+      type: String,
+      default: null,
     },
-
+    receiverPhone: {
+      type: String,
+      default: null,
+    },
+    provinceName: {
+      type: String,
+      default: null,
+    },
+    districtName: {
+      type: String,
+      default: null,
+    },
+    wardName: {
+      type: String,
+      default: null,
+    },
+    streetAddress: {
+      type: String,
+      default: null,
+    },
     shippingFee: {
       type: Number,
       required: true,
@@ -234,7 +229,6 @@ const orderSchema = new mongoose.Schema<IOrderDocument>(
     paymentMethod: {
       type: String,
       enum: Object.values(PAYMENT_METHOD),
-      required: [true, "Phương thức thanh toán là bắt buộc"],
       default: PAYMENT_METHOD.COD,
     },
 
@@ -251,17 +245,7 @@ const orderSchema = new mongoose.Schema<IOrderDocument>(
       index: true,
     },
 
-    shippingTrackingNumber: {
-      type: String,
-      default: null,
-    },
-
-    shippingCarrier: {
-      type: String,
-      default: null,
-    },
-
-    note: {
+    noteOrder: {
       type: String,
       trim: true,
       default: "",
@@ -302,7 +286,6 @@ orderSchema.index({ userId: 1, status: 1, createdAt: -1 });
 orderSchema.index({ storeId: 1, status: 1, createdAt: -1 });
 orderSchema.index({ paymentStatus: 1, createdAt: -1 });
 
-// Auto-set timestamps on status changes
 orderSchema.pre("save", function () {
   if (this.isModified("status")) {
     if (this.status === "confirmed" && !this.confirmedAt) {

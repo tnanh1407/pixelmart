@@ -50,7 +50,7 @@ class NotificationService {
       { new: true }
     );
     if (!notification) {
-      throw new AppError("Thông báo không tồn tại", 404);
+      throw new AppError("Thong bao khong ton tai", 404);
     }
     return notification;
   }
@@ -60,7 +60,7 @@ class NotificationService {
       { userId, isRead: false },
       { isRead: true }
     );
-    return { message: "Đã đánh dấu tất cả là đã đọc" };
+    return { message: "Da danh dau tat ca la da doc" };
   }
 
   async deleteNotification(userId: string, notificationId: string) {
@@ -70,9 +70,9 @@ class NotificationService {
       { new: true }
     );
     if (!notification) {
-      throw new AppError("Thông báo không tồn tại", 404);
+      throw new AppError("Thong bao khong ton tai", 404);
     }
-    return { message: "Đã xóa thông báo" };
+    return { message: "Da xoa thong bao" };
   }
 
   async deleteAllNotifications(userId: string) {
@@ -80,7 +80,7 @@ class NotificationService {
       { userId, isDeleted: false },
       { isDeleted: true }
     );
-    return { message: "Đã xóa tất cả thông báo" };
+    return { message: "Da xoa tat ca thong bao" };
   }
 
   async createNotification(data: {
@@ -88,8 +88,7 @@ class NotificationService {
     senderId?: string;
     type: string;
     title: string;
-    message: string;
-    link?: string;
+    message?: string;
     metadata?: Record<string, any>;
   }) {
     return await Notification.create(data as any);
@@ -101,8 +100,7 @@ class NotificationService {
       senderId?: string;
       type: string;
       title: string;
-      message: string;
-      link?: string;
+      message?: string;
       metadata?: Record<string, any>;
     }
   ) {

@@ -1,42 +1,42 @@
 export const categorySeedData = [
   {
-    _id: "00000000-0000-4000-a000-00000000ea61",
-    name: "Sản phẩm OCOP",
+    _id: "c0000000-0000-4000-a000-00000000ca01",
+    name: "San pham OCOP",
     slug: "san-pham-ocop",
-    description: "Các sản phẩm OCOP đạt tiêu chuẩn chất lượng quốc gia từ 3 đến 5 sao.",
+    description: "Cac san pham OCOP dat tieu chuan chat luong quoc gia tu 3 den 5 sao.",
     image: "https://nongsan.buudien.vn/static/buudien/images/category%20(ocop).png",
-    isActive: true
+    isActive: true,
   },
   {
-    _id: "00000000-0000-4000-a000-00000000ea62",
-    name: "Thực phẩm bổ dưỡng",
+    _id: "c0000000-0000-4000-a000-00000000ca02",
+    name: "Thuc pham bo duong",
     slug: "thuc-pham-bo-duong",
-    description: "Sâm ngọc linh, yến sào, đông trùng hạ thảo bổ dưỡng và tăng cường sức khỏe.",
+    description: "Sam ngoc linh, yen sao, dong trung ha thao bo duong va tang cuong suc khoe.",
     image: "https://gateway.vnpost.vn/prod/minio/nsbd/nongsan/home/common/s3_2024102816160476256.png",
-    isActive: true
+    isActive: true,
   },
   {
-    _id: "00000000-0000-4000-a000-00000000ea63",
-    name: "Sức khỏe và làm đẹp",
+    _id: "c0000000-0000-4000-a000-00000000ca03",
+    name: "Suc khoe va lam dep",
     slug: "suc-khoe-va-lam-dep",
-    description: "Mỹ phẩm thiên nhiên, trà thảo mộc thanh nhiệt và sản phẩm chăm sóc cơ thể lành mạnh.",
+    description: "My pham thien nhien, tra thao moc thanh nhiet va san pham cham soc co the lanh manh.",
     image: "https://gateway.vnpost.vn/prod/minio/nsbd/nongsan/home/common/s3_2024102816175780973.png",
-    isActive: true
+    isActive: true,
   },
   {
-    _id: "00000000-0000-4000-a000-00000000ea64",
-    name: "Thực phẩm và Đặc sản",
+    _id: "c0000000-0000-4000-a000-00000000ca04",
+    name: "Thuc pham va Dac san",
     slug: "thuc-pham-va-dac-san",
-    description: "Nguồn đặc sản vùng miền Việt Nam, thịt gác bếp, thực phẩm đóng gói truyền thống sạch.",
+    description: "Nguon dac san vung mien Viet Nam, thit gac bep, thuc pham dong goi truyen thong sach.",
     image: "https://gateway.vnpost.vn/prod/minio/nsbd/nongsan/home/common/s3_2024102409274627225.png",
-    isActive: true
+    isActive: true,
   },
   {
-    _id: "00000000-0000-4000-a000-00000000ea65",
-    name: "Đồ uống",
+    _id: "c0000000-0000-4000-a000-00000000ca05",
+    name: "Do uong",
     slug: "do-uong",
-    description: "Rượu truyền thống chất lượng, nước ép trái cây hữu cơ, trà và cà phê nguyên chất.",
+    description: "Ruou truyen thong chat luong, nuoc ep trai cay huu co, tra va ca phe nguyen chat.",
     image: "https://gateway.vnpost.vn/prod/minio/nsbd/nongsan/home/common/s3_2024102816170139012.png",
-    isActive: true
-  }
+    isActive: true,
+  },
 ];

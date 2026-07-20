@@ -19,7 +19,7 @@ export interface IPaymentTransaction {
   amount: number;
   method: string;
   type: (typeof TRANSACTION_TYPE)[keyof typeof TRANSACTION_TYPE];
-  gateway: string;
+  gateway?: string;
   gatewayTransactionId?: string;
   status: (typeof TRANSACTION_STATUS)[keyof typeof TRANSACTION_STATUS];
   gatewayResponse?: Record<string, any>;
@@ -70,7 +70,7 @@ const paymentTransactionSchema = new mongoose.Schema<IPaymentTransactionDocument
 
     gateway: {
       type: String,
-      required: true,
+      default: null,
     },
 
     gatewayTransactionId: {

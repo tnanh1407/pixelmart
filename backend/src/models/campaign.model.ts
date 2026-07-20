@@ -1,11 +1,6 @@
 import mongoose from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 
-export interface ICampaignSubsection {
-  title?: string;
-  content?: string;
-}
-
 export const CAMPAIGN_TYPE = {
   PROMOTION: "promotion",
   BLOG: "blog",
@@ -17,18 +12,15 @@ export interface ICampaign {
   type: (typeof CAMPAIGN_TYPE)[keyof typeof CAMPAIGN_TYPE];
   shortDescription?: string;
   content?: string;
-  sourceUrl: string;
   isActive: boolean;
   startDate?: Date;
   endDate?: Date;
   durationInDays?: number;
-  order: number;
-  author?: string;
-  categoryName?: string;
+  authorId?: string;
   sapo?: string;
-  contentSections?: ICampaignSubsection[];
+  contentSections?: any;
   highlightsTitle?: string;
-  highlights?: string[];
+  highlights?: any;
   quote?: string;
   quoteAuthor?: string;
 }
@@ -46,13 +38,13 @@ const campaignSchema = new mongoose.Schema<ICampaignDocument>(
     } as any,
     title: {
       type: String,
-      required: [true, "Tên chiến dịch là bắt buộc"],
+      required: [true, "Ten chien dich la bat buoc"],
       trim: true,
-      maxlength: [200, "Tên chiến dịch tối đa 200 ký tự"],
+      maxlength: [500, "Ten chien dich toi da 500 ky tu"],
     },
     slug: {
       type: String,
-      required: [true, "Slug là bắt buộc"],
+      required: [true, "Slug la bat buoc"],
       unique: true,
       trim: true,
       lowercase: true,
@@ -66,17 +58,13 @@ const campaignSchema = new mongoose.Schema<ICampaignDocument>(
     shortDescription: {
       type: String,
       trim: true,
-      maxlength: [500, "Mô tả ngắn tối đa 500 ký tự"],
+      maxlength: [500, "Mo ta ngan toi da 500 ky tu"],
       default: "",
     },
     content: {
       type: String,
       trim: true,
       default: "",
-    },
-    sourceUrl: {
-      type: String,
-      required: [true, "Ảnh chiến dịch là bắt buộc"],
     },
     isActive: {
       type: Boolean,
@@ -95,41 +83,28 @@ const campaignSchema = new mongoose.Schema<ICampaignDocument>(
       type: Number,
       default: null,
     },
-    order: {
-      type: Number,
-      default: 0,
-      index: true,
-    },
-    // Structured Article CMS fields
-    author: {
+    authorId: {
       type: String,
-      default: "",
-      trim: true,
-    },
-    categoryName: {
-      type: String,
-      default: "",
-      trim: true,
+      ref: "User",
+      default: null,
     },
     sapo: {
       type: String,
       default: "",
       trim: true,
     },
-    contentSections: [
-      {
-        title: { type: String, default: "", trim: true },
-        content: { type: String, default: "", trim: true },
-      },
-    ],
+    contentSections: {
+      type: mongoose.Schema.Types.Mixed,
+      default: null,
+    },
     highlightsTitle: {
       type: String,
       default: "",
       trim: true,
     },
     highlights: {
-      type: [String],
-      default: [],
+      type: mongoose.Schema.Types.Mixed,
+      default: null,
     },
     quote: {
       type: String,

@@ -6,13 +6,11 @@ import { ROLES } from "../../constants/roles.js";
 
 const router = Router();
 
-// Public
 router.get("/", asyncHandler(productController.getProducts.bind(productController)));
 router.get("/:id", asyncHandler(productController.getProductById.bind(productController)));
 
-// Vendor & Admin only
-router.post("/", auth, checkRole(ROLES.VENDOR, ROLES.ADMIN), asyncHandler(productController.createProduct.bind(productController)));
-router.patch("/:id", auth, checkRole(ROLES.VENDOR, ROLES.ADMIN), asyncHandler(productController.updateProduct.bind(productController)));
-router.delete("/:id", auth, checkRole(ROLES.VENDOR, ROLES.ADMIN), asyncHandler(productController.deleteProduct.bind(productController)));
+router.post("/", auth, checkRole(ROLES.ADMIN), asyncHandler(productController.createProduct.bind(productController)));
+router.patch("/:id", auth, checkRole(ROLES.ADMIN), asyncHandler(productController.updateProduct.bind(productController)));
+router.delete("/:id", auth, checkRole(ROLES.ADMIN), asyncHandler(productController.deleteProduct.bind(productController)));
 
 export default router;

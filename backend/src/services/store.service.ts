@@ -1,22 +1,10 @@
 import Store, { IStore } from "../models/store.model.js";
 import StoreFollow from "../models/storeFollow.model.js";
-import Vendor from "../models/vendor.model.js";
 import { AppError } from "../middlewares/error.middleware.js";
 import { uploadImage, deleteImage } from "../utils/uploadImage.js";
 import { getFolder } from "../config/cloudinary.js";
 
 class StoreService {
-  private async getVendorId(userId: string, userRole: string): Promise<string | null> {
-    if (userRole === "admin") return null;
-    const vendor = await Vendor.findOne({ userId });
-    if (!vendor) {
-      throw new AppError("Bạn chưa đăng ký trở thành người bán. Vui lòng đăng ký tài khoản Vendor.", 403);
-    }
-    if (vendor.status !== "approved") {
-      throw new AppError("Tài khoản người bán của bạn chưa được duyệt hoặc đã bị khóa", 403);
-    }
-    return String(vendor._id);
-  }
   async getStores(query: any = {}) {
     const { page = 1, limit = 10, search, isVerified, isActive, all } = query;
     const filter: any = {};
@@ -40,7 +28,7 @@ class StoreService {
       .sort(search ? { score: { $meta: "textScore" } } : { createdAt: -1 })
       .skip(skipIndex)
       .limit(Number(limit))
-      .populate("ownerId", "shopName email");
+      .populate("ownerId", "name email");
 
     const total = await Store.countDocuments(filter);
 
@@ -56,9 +44,9 @@ class StoreService {
   }
 
   async getStoreById(id: string) {
-    const store = await Store.findById(id).populate("ownerId", "shopName email");
+    const store = await Store.findById(id).populate("ownerId", "name email");
     if (!store) {
-      throw new AppError("Cửa hàng không tồn tại", 404);
+      throw new AppError("Cua hang khong ton tai", 404);
     }
     return store;
   }
@@ -71,32 +59,30 @@ class StoreService {
     const { name, slug } = data;
 
     if (!name) {
-      throw new AppError("Tên cửa hàng là bắt buộc", 400);
+      throw new AppError("Ten cua hang la bat buoc", 400);
     }
 
-    let targetOwnerId = await this.getVendorId(userId, userRole);
+    let targetOwnerId = userId;
     if (userRole === "admin" && data.ownerId) {
       targetOwnerId = data.ownerId;
     }
 
     if (!targetOwnerId) {
-      throw new AppError("Không xác định được chủ sở hữu cửa hàng", 400);
+      throw new AppError("Khong xac dinh duoc chu so huu cua hang", 400);
     }
 
-    // Check if user already owns a store
     const existingOwns = await Store.findOne({ ownerId: targetOwnerId });
     if (existingOwns) {
-      throw new AppError("Mỗi tài khoản chỉ có thể sở hữu 1 cửa hàng", 400);
+      throw new AppError("Moi tai khoan chi co the so huu 1 cua hang", 400);
     }
 
     const storeSlug = slug || this.generateSlug(name);
 
-    // Check unique name/slug
     const existingName = await Store.findOne({
       $or: [{ name }, { slug: storeSlug }]
     });
     if (existingName) {
-      throw new AppError("Tên hoặc Slug cửa hàng đã tồn tại", 400);
+      throw new AppError("Ten hoac Slug cua hang da ton tai", 400);
     }
 
     return await Store.create({
@@ -109,12 +95,8 @@ class StoreService {
   async updateStore(userId: string, userRole: string, id: string, data: Partial<IStore>) {
     const store = await this.getStoreById(id);
 
-    // Verify permission: Only owner vendor or admin
-    if (userRole !== "admin") {
-      const vendorId = await this.getVendorId(userId, userRole);
-      if (!vendorId || store.ownerId !== vendorId) {
-        throw new AppError("Bạn không có quyền chỉnh sửa cửa hàng này", 403);
-      }
+    if (userRole !== "admin" && store.ownerId !== userId) {
+      throw new AppError("Ban khong co quyen chinh sua cua hang nay", 403);
     }
 
     const { name, slug } = data;
@@ -122,7 +104,7 @@ class StoreService {
     if (name && name !== store.name) {
       const existing = await Store.findOne({ name });
       if (existing) {
-        throw new AppError("Tên cửa hàng đã tồn tại", 400);
+        throw new AppError("Ten cua hang da ton tai", 400);
       }
       store.name = name;
     }
@@ -130,7 +112,7 @@ class StoreService {
     if (slug && slug !== store.slug) {
       const existing = await Store.findOne({ slug });
       if (existing) {
-        throw new AppError("Slug cửa hàng đã tồn tại", 400);
+        throw new AppError("Slug cua hang da ton tai", 400);
       }
       store.slug = slug;
     } else if (name && name !== store.name && !slug) {
@@ -141,10 +123,12 @@ class StoreService {
     if (data.description !== undefined) store.description = data.description;
     if (data.phone !== undefined) store.phone = data.phone;
     if (data.email !== undefined) store.email = data.email;
-    if (data.address !== undefined) store.address = data.address;
+    if (data.street !== undefined) store.street = data.street;
+    if (data.provinceCode !== undefined) store.provinceCode = data.provinceCode;
+    if (data.districtCode !== undefined) store.districtCode = data.districtCode;
+    if (data.wardCode !== undefined) store.wardCode = data.wardCode;
     if (data.policies !== undefined) store.policies = data.policies;
-    
-    // Only admin can verify / activate store and change owner
+
     if (userRole === "admin") {
       if (data.isVerified !== undefined) {
         store.isVerified = data.isVerified;
@@ -155,7 +139,7 @@ class StoreService {
       if (data.ownerId !== undefined && data.ownerId !== store.ownerId) {
         const existingOwns = await Store.findOne({ ownerId: data.ownerId });
         if (existingOwns && existingOwns._id.toString() !== id) {
-          throw new AppError("Mỗi tài khoản chỉ có thể sở hữu 1 cửa hàng", 400);
+          throw new AppError("Moi tai khoan chi co the so huu 1 cua hang", 400);
         }
         store.ownerId = data.ownerId;
       }
@@ -167,44 +151,38 @@ class StoreService {
   async deleteStore(userId: string, userRole: string, id: string) {
     const store = await this.getStoreById(id);
 
-    // Verify permission: Only owner vendor or admin
-    if (userRole !== "admin") {
-      const vendorId = await this.getVendorId(userId, userRole);
-      if (!vendorId || store.ownerId !== vendorId) {
-        throw new AppError("Bạn không có quyền xóa cửa hàng này", 403);
-      }
+    if (userRole !== "admin" && store.ownerId !== userId) {
+      throw new AppError("Ban khong co quyen xoa cua hang nay", 403);
     }
 
     await store.deleteOne();
-    return { message: "Xóa cửa hàng thành công" };
+    return { message: "Xoa cua hang thanh cong" };
   }
 
   async followStore(userId: string, storeId: string) {
     const store = await this.getStoreById(storeId);
 
-    // Check if user is trying to follow their own store
-    const vendor = await Vendor.findOne({ userId });
-    if (vendor && store.ownerId === vendor._id.toString()) {
-      throw new AppError("Bạn không thể theo dõi cửa hàng của mình", 400);
+    if (store.ownerId === userId) {
+      throw new AppError("Ban khong the theo doi cua hang cua minh", 400);
     }
 
     const existing = await StoreFollow.findOne({ userId, storeId });
     if (existing) {
-      throw new AppError("Bạn đã theo dõi cửa hàng này rồi", 400);
+      throw new AppError("Ban da theo doi cua hang nay roi", 400);
     }
 
     await StoreFollow.create({ userId, storeId });
 
-    return { message: "Theo dõi cửa hàng thành công", isFollowing: true };
+    return { message: "Theo doi cua hang thanh cong", isFollowing: true };
   }
 
   async unfollowStore(userId: string, storeId: string) {
     const existing = await StoreFollow.findOneAndDelete({ userId, storeId });
     if (!existing) {
-      throw new AppError("Bạn chưa theo dõi cửa hàng này", 400);
+      throw new AppError("Ban chua theo doi cua hang nay", 400);
     }
 
-    return { message: "Bỏ theo dõi cửa hàng thành công", isFollowing: false };
+    return { message: "Bo theo doi cua hang thanh cong", isFollowing: false };
   }
 
   async checkFollowStatus(userId: string, storeId: string) {
@@ -263,7 +241,7 @@ class StoreService {
       .toLowerCase()
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
-      .replace(/đ/g, "d")
+      .replace(/d/g, "d")
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)+/g, "");
   }
@@ -271,14 +249,10 @@ class StoreService {
   async uploadStoreLogo(file: Express.Multer.File, storeId: string, userId: string, userRole: string): Promise<string> {
     const store = await this.getStoreById(storeId);
 
-    if (userRole !== "admin") {
-      const vendor = await Vendor.findOne({ userId });
-      if (!vendor || store.ownerId !== vendor._id.toString()) {
-        throw new AppError("Bạn không có quyền cập nhật cửa hàng này", 403);
-      }
+    if (userRole !== "admin" && store.ownerId !== userId) {
+      throw new AppError("Ban khong co quyen cap nhat cua hang nay", 403);
     }
 
-    // Delete old logo
     if (store.logo) {
       await deleteImage(store.logo);
     }
@@ -292,11 +266,8 @@ class StoreService {
   async deleteStoreLogo(storeId: string, userId: string, userRole: string) {
     const store = await this.getStoreById(storeId);
 
-    if (userRole !== "admin") {
-      const vendor = await Vendor.findOne({ userId });
-      if (!vendor || store.ownerId !== vendor._id.toString()) {
-        throw new AppError("Bạn không có quyền cập nhật cửa hàng này", 403);
-      }
+    if (userRole !== "admin" && store.ownerId !== userId) {
+      throw new AppError("Ban khong co quyen cap nhat cua hang nay", 403);
     }
 
     if (store.logo) {
@@ -305,7 +276,7 @@ class StoreService {
       await store.save();
     }
 
-    return { message: "Đã xóa logo cửa hàng" };
+    return { message: "Da xoa logo cua hang" };
   }
 }
 

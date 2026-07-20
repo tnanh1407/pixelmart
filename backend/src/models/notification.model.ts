@@ -8,6 +8,10 @@ export const NOTIFICATION_TYPE = {
   CHAT: "chat",
   REVIEW: "review",
   VENDOR: "vendor",
+  REPORT_SYSTEM: "report_system",
+  REPORT_SHOP: "report_shop",
+  REPORT_REVIEW: "report_review",
+  AUTH: "auth",
 } as const;
 
 export type NotificationType = (typeof NOTIFICATION_TYPE)[keyof typeof NOTIFICATION_TYPE];
@@ -17,9 +21,8 @@ export interface INotification {
   senderId?: string;
   type: NotificationType;
   title: string;
-  message: string;
+  message?: string;
   isRead: boolean;
-  link?: string;
   metadata?: Record<string, any>;
   isDeleted: boolean;
 }
@@ -39,7 +42,7 @@ const notificationSchema = new mongoose.Schema<INotificationDocument>(
     userId: {
       type: String,
       ref: "User",
-      required: [true, "Người nhận thông báo là bắt buộc"],
+      required: [true, "Nguoi nhan thong bao la bat buoc"],
       index: true,
     },
 
@@ -52,33 +55,27 @@ const notificationSchema = new mongoose.Schema<INotificationDocument>(
     type: {
       type: String,
       enum: Object.values(NOTIFICATION_TYPE),
-      required: [true, "Loại thông báo là bắt buộc"],
+      required: [true, "Loai thong bao la bat buoc"],
       index: true,
     },
 
     title: {
       type: String,
-      required: [true, "Tiêu đề thông báo là bắt buộc"],
+      required: [true, "Tieu de thong bao la bat buoc"],
       trim: true,
-      maxlength: [200, "Tiêu đề tối đa 200 ký tự"],
+      maxlength: [200, "Tieu de toi da 200 ky tu"],
     },
 
     message: {
       type: String,
-      required: [true, "Nội dung thông báo là bắt buộc"],
       trim: true,
-      maxlength: [1000, "Nội dung tối đa 1000 ký tự"],
+      default: "",
     },
 
     isRead: {
       type: Boolean,
       default: false,
       index: true,
-    },
-
-    link: {
-      type: String,
-      default: null,
     },
 
     metadata: {
@@ -96,11 +93,9 @@ const notificationSchema = new mongoose.Schema<INotificationDocument>(
   }
 );
 
-// Index for querying unread notifications per user, sorted by time
 notificationSchema.index({ userId: 1, isRead: 1, createdAt: -1 });
 notificationSchema.index({ userId: 1, type: 1, createdAt: -1 });
 notificationSchema.index({ userId: 1, isDeleted: 1 });
-notificationSchema.index({ createdAt: 1 }, { expireAfterSeconds: 90 * 24 * 60 * 60 });
 
 const Notification = mongoose.model<INotificationDocument>("Notification", notificationSchema);
 
