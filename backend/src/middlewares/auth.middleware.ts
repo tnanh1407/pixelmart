@@ -1,7 +1,7 @@
 import { type Request, type Response, type NextFunction } from "express";
 import { verifyAccessToken, type JwtPayload } from "../utils/jwt.ts";
 import { AppError } from "./error.middleware.ts";
-import userRepository from "../repositories/user.repository.js";
+import User from "../models/user.model.js";
 
 declare global {
   namespace Express {
@@ -31,7 +31,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
 
   const decoded = verifyAccessToken(token);
 
-  const user = await userRepository.findById(decoded.userId);
+  const user = await User.findById(decoded.userId);
   if (!user || !user.isActive) {
     throw new AppError("Tài khoản không khả dụng. Vui lòng liên hệ quản trị viên.", 401);
   }

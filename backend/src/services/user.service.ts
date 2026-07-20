@@ -1,67 +1,97 @@
-import userRepository from "../repositories/user.repository.js";
-import { type IUser } from "../models/user.model.js";
+import User, { type IUser } from "../models/user.model.js";
 import { AppError } from "../middlewares/error.middleware.js";
+import { hashPassword } from "../utils/bcrypt.js";
 import cloudinary, { CLOUDINARY_FOLDERS, getUserFolder } from "../config/cloudinary.js";
 import { extractPublicId } from "../utils/cloudinary/cloudinaryHelps.js";
 
 class UserService {
   async createUser(data: Partial<IUser>) {
-    const existingEmail = await userRepository.exists({ email: data.email });
-    if (existingEmail) {
+    const existing = await User.exists({ email: data.email });
+    if (existing) {
       throw new AppError("Email already exists", 409);
     }
 
     if (data.phone) {
-      const existingPhone = await userRepository.exists({ phone: data.phone });
+      const existingPhone = await User.exists({ phone: data.phone });
       if (existingPhone) {
         throw new AppError("Phone already exists", 409);
       }
     }
 
-    return await userRepository.create(data);
+    return await User.create(data);
   }
 
   async getUserById(id: string) {
-    const user = await userRepository.findById(id);
+    const user = await User.findById(id);
     if (!user) {
       throw new AppError("User not found", 404);
     }
     return user;
   }
 
+  async getUserByEmail(email: string) {
+    return await User.findOne({ email });
+  }
+
+  async getUserByEmailWithPassword(email: string) {
+    return await User.findOne({ email }).select("+password");
+  }
+
+  async getUserByIdWithPassword(id: string) {
+    return await User.findById(id).select("+password");
+  }
+
+  async getUserByGoogleId(googleId: string) {
+    return await User.findOne({ googleId });
+  }
+
   async getAllUsers(
     filter: Partial<IUser> = {},
     options: { page?: number; limit?: number; sort?: string } = {}
   ) {
-    return await userRepository.findAll(filter, options);
+    const { page = 1, limit = 10, sort = "-createdAt" } = options;
+    const skip = (page - 1) * limit;
+    const [data, total] = await Promise.all([
+      User.find(filter).sort(sort).skip(skip).limit(limit),
+      User.countDocuments(filter),
+    ]);
+    return { data, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } };
   }
 
   async updateUser(id: string, data: Partial<IUser>) {
-    const user = await userRepository.findById(id);
+    const user = await User.findById(id);
     if (!user) {
       throw new AppError("User not found", 404);
     }
 
     if (data.email && data.email !== user.email) {
-      const existingEmail = await userRepository.exists({ email: data.email });
-      if (existingEmail) {
+      const existing = await User.exists({ email: data.email });
+      if (existing) {
         throw new AppError("Email already exists", 409);
       }
     }
 
     if (data.phone && data.phone !== user.phone) {
-      const existingPhone = await userRepository.exists({ phone: data.phone });
-      if (existingPhone) {
+      const existing = await User.exists({ phone: data.phone });
+      if (existing) {
         throw new AppError("Phone already exists", 409);
       }
     }
 
-    const updatedUser = await userRepository.update(id, data);
-    return updatedUser;
+    return await User.findByIdAndUpdate(id, data, { returnDocument: "after" });
+  }
+
+  async updatePassword(id: string, password: string) {
+    const hashed = await hashPassword(password);
+    return await User.findByIdAndUpdate(id, { password: hashed }, { returnDocument: "after" });
+  }
+
+  async updateEmailVerified(id: string, isEmailVerified: boolean) {
+    return await User.findByIdAndUpdate(id, { isEmailVerified }, { returnDocument: "after" });
   }
 
   async uploadAvatar(userId: string, file: Express.Multer.File) {
-    const user = await userRepository.findById(userId);
+    const user = await User.findById(userId);
     if (!user) {
       throw new AppError("User not found", 404);
     }
@@ -87,12 +117,11 @@ class UserService {
       ],
     });
 
-    const updatedUser = await userRepository.update(userId, { avatar: result.secure_url });
-    return updatedUser;
+    return await User.findByIdAndUpdate(userId, { avatar: result.secure_url }, { returnDocument: "after" });
   }
 
   async deleteUser(id: string) {
-    const user = await userRepository.findById(id);
+    const user = await User.findById(id);
     if (!user) {
       throw new AppError("User not found", 404);
     }
@@ -111,17 +140,16 @@ class UserService {
     } catch {
     }
 
-    return await userRepository.delete(id);
+    return await User.findByIdAndDelete(id);
   }
 
   async toggleActive(id: string) {
-    const user = await userRepository.findById(id);
+    const user = await User.findById(id);
     if (!user) {
       throw new AppError("User not found", 404);
     }
 
-    const updatedUser = await userRepository.update(id, { isActive: !user.isActive });
-    return updatedUser;
+    return await User.findByIdAndUpdate(id, { isActive: !user.isActive }, { returnDocument: "after" });
   }
 }
 

@@ -1,19 +1,22 @@
 import { render } from "@react-email/render";
-import userRepository from "../repositories/user.repository.js";
-import verificationTokenRepository from "../repositories/verification-token.repository.js";
+import User from "../models/user.model.js";
 import { AppError } from "../middlewares/error.middleware.js";
 import { comparePassword } from "../utils/bcrypt.js";
+import { hashPassword } from "../utils/bcrypt.js";
 import { generateTokenPair, verifyRefreshToken, type JwtPayload } from "../utils/jwt.js";
 import { sendMail } from "../utils/mail.js";
 import ForgotPasswordEmail from "../utils/emails/forgot-password-email.tsx";
+import VerificationToken from "../models/verification-token.model.js";
 import { TOKEN_TYPES as tokenType } from "~/constants/roles.ts";
 import env from "../config/env.js";
+
 interface IRegister {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
 }
+
 interface IGoogleLogin {
   googleId: string;
   email: string;
@@ -25,17 +28,18 @@ interface ILogin {
   email: string;
   password: string;
 }
+
 class AuthService {
   async register(data: IRegister) {
-    const existingEmail = await userRepository.exists({ email: data.email });
-    if (existingEmail) {
+    const existing = await User.exists({ email: data.email });
+    if (existing) {
       throw new AppError("Email already exists", 409);
     }
 
     const { firstName, lastName, ...userData } = data;
     const name = `${firstName} ${lastName}`.trim();
 
-    const user = await userRepository.create({ ...userData, name });
+    const user = await User.create({ ...userData, name });
 
     const tokenPayload: JwtPayload = {
       userId: String(user._id),
@@ -48,7 +52,7 @@ class AuthService {
   }
 
   async login(data: ILogin) {
-    const user = await userRepository.findByEmailWithPassword(data.email);
+    const user = await User.findOne({ email: data.email }).select("+password");
     if (!user) {
       throw new AppError("Invalid email or password", 401);
     }
@@ -77,23 +81,19 @@ class AuthService {
     };
     const tokens = generateTokenPair(tokenPayload);
 
-    return {
-      user,
-      ...tokens,
-    };
+    return { user, ...tokens };
   }
 
-
   async googleLogin(data: IGoogleLogin) {
-    let user = await userRepository.findByGoogleId(data.googleId);
+    let user = await User.findOne({ googleId: data.googleId });
 
     if (!user) {
-      user = await userRepository.findByEmail(data.email);
+      user = await User.findOne({ email: data.email });
 
       if (user) {
-        user = await userRepository.update(String(user._id), { googleId: data.googleId });
+        user = await User.findByIdAndUpdate(String(user._id), { googleId: data.googleId }, { returnDocument: "after" });
       } else {
-        user = await userRepository.create({
+        user = await User.create({
           email: data.email,
           name: data.name,
           avatar: data.avatar ?? '',
@@ -119,17 +119,14 @@ class AuthService {
     };
     const tokens = generateTokenPair(tokenPayload);
 
-    return {
-      user,
-      ...tokens,
-    };
+    return { user, ...tokens };
   }
 
   async refreshToken(refreshToken: string) {
     try {
       const decoded = verifyRefreshToken(refreshToken);
 
-      const user = await userRepository.findById(decoded.userId);
+      const user = await User.findById(decoded.userId);
       if (!user) {
         throw new AppError("User not found", 404);
       }
@@ -149,7 +146,7 @@ class AuthService {
   }
 
   async getMe(userId: string) {
-    const user = await userRepository.findByIdWithPassword(userId);
+    const user = await User.findById(userId).select("+password");
     if (!user) {
       throw new AppError("User not found", 404);
     }
@@ -157,22 +154,19 @@ class AuthService {
   }
 
   async forgotPassword(email: string): Promise<void> {
-    const user = await userRepository.findByEmail(email);
+    const user = await User.findOne({ email });
     if (!user) {
       return;
     }
 
-    await verificationTokenRepository.deleteByUserIdAndType(
-      user._id.toString(),
-      tokenType.FORGOT_PASSWORD
-    );
+    await VerificationToken.deleteMany({ userId: user._id.toString(), type: tokenType.FORGOT_PASSWORD });
 
     const { v4: uuidv4 } = await import("uuid");
     const token = uuidv4();
     const expiresInMinutes = 15;
     const expiresAt = new Date(Date.now() + expiresInMinutes * 60 * 1000);
 
-    await verificationTokenRepository.create({
+    await VerificationToken.create({
       userId: user._id.toString(),
       code: token,
       type: tokenType.FORGOT_PASSWORD,
@@ -198,23 +192,29 @@ class AuthService {
   }
 
   async resetPassword(token: string, newPassword: string): Promise<void> {
-    const resetToken = await verificationTokenRepository.findValidToken(
-      token,
-      tokenType.FORGOT_PASSWORD
-    );
+    const resetToken = await VerificationToken.findOne({
+      code: token,
+      type: tokenType.FORGOT_PASSWORD,
+      used: false,
+      expiresAt: { $gt: new Date() },
+    });
 
     if (!resetToken) {
       throw new AppError("Invalid or expired reset token", 400);
     }
 
-    await userRepository.updatePassword(resetToken.userId, newPassword);
-    await verificationTokenRepository.markAsUsed(resetToken._id.toString());
+    const hashed = await hashPassword(newPassword);
+    await User.findByIdAndUpdate(resetToken.userId, { password: hashed });
+    await VerificationToken.findByIdAndUpdate(resetToken._id, { used: true });
   }
 
   async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<void> {
-    const user = await userRepository.findByEmailWithPassword(
-      (await userRepository.findById(userId))?.email || ""
-    );
+    const idUser = await User.findById(userId);
+    if (!idUser) {
+      throw new AppError("User not found", 404);
+    }
+
+    const user = await User.findOne({ email: idUser.email }).select("+password");
     if (!user) {
       throw new AppError("User not found", 404);
     }
@@ -228,7 +228,8 @@ class AuthService {
       throw new AppError("Mật khẩu hiện tại không đúng", 400);
     }
 
-    await userRepository.updatePassword(userId, newPassword);
+    const hashed = await hashPassword(newPassword);
+    await User.findByIdAndUpdate(userId, { password: hashed });
   }
 }
 

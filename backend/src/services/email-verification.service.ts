@@ -1,6 +1,6 @@
 import { render } from "@react-email/render";
-import userRepository from "../repositories/user.repository.js";
-import verificationTokenRepository from "../repositories/verification-token.repository.js";
+import User from "../models/user.model.js";
+import VerificationToken from "../models/verification-token.model.js";
 import { TOKEN_TYPES as tokenType } from "~/constants/roles.ts";
 import { generateOtp } from "../utils/otp.js";
 import { sendMail } from "../utils/mail.js";
@@ -12,7 +12,7 @@ const CODE_EXPIRY_MINUTES = 15;
 
 class EmailVerificationService {
   async sendVerificationCode(userId: string): Promise<void> {
-    const user = await userRepository.findById(userId);
+    const user = await User.findById(userId);
     if (!user) {
       throw new AppError("User not found", 404);
     }
@@ -21,23 +21,22 @@ class EmailVerificationService {
       throw new AppError("Email is already verified", 400);
     }
 
-    const count = await verificationTokenRepository.countByUserIdAndType(
+    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const count = await VerificationToken.countDocuments({
       userId,
-      tokenType.EMAIL_VERIFICATION
-    );
+      type: tokenType.EMAIL_VERIFICATION,
+      createdAt: { $gte: oneDayAgo },
+    });
     if (count >= MAX_RESEND_PER_DAY) {
       throw new AppError("Too many requests. Please try again tomorrow", 429);
     }
 
-    await verificationTokenRepository.deleteByUserIdAndType(
-      userId,
-      tokenType.EMAIL_VERIFICATION
-    );
+    await VerificationToken.deleteMany({ userId, type: tokenType.EMAIL_VERIFICATION });
 
     const code = generateOtp();
     const expiresAt = new Date(Date.now() + CODE_EXPIRY_MINUTES * 60 * 1000);
 
-    await verificationTokenRepository.create({
+    await VerificationToken.create({
       userId,
       code,
       type: tokenType.EMAIL_VERIFICATION,
@@ -61,7 +60,7 @@ class EmailVerificationService {
   }
 
   async verifyEmail(userId: string, code: string): Promise<void> {
-    const user = await userRepository.findById(userId);
+    const user = await User.findById(userId);
     if (!user) {
       throw new AppError("User not found", 404);
     }
@@ -70,18 +69,20 @@ class EmailVerificationService {
       throw new AppError("Email is already verified", 400);
     }
 
-    const token = await verificationTokenRepository.findValidCode(
+    const token = await VerificationToken.findOne({
       userId,
       code,
-      tokenType.EMAIL_VERIFICATION
-    );
+      type: tokenType.EMAIL_VERIFICATION,
+      used: false,
+      expiresAt: { $gt: new Date() },
+    });
 
     if (!token) {
       throw new AppError("Invalid or expired verification code", 400);
     }
 
-    await verificationTokenRepository.markAsUsed(token._id.toString());
-    await userRepository.updateEmailVerified(userId, true);
+    await VerificationToken.findByIdAndUpdate(token._id, { used: true });
+    await User.findByIdAndUpdate(userId, { isEmailVerified: true });
   }
 
   async resendVerificationCode(userId: string): Promise<void> {
