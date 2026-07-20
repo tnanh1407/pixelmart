@@ -9,39 +9,16 @@ import { useAdminVoucherMutations } from '@/hooks/admin/vouchers/useAdminVoucher
 import {
   PageHeader,
   SearchToolbar,
-  DataTable,
   Pagination,
   LoadingState,
   EmptyState,
   ErrorState,
   DeleteDialog,
-  StatusBadge,
 } from '@/components/admin/shared'
-import type { Column } from '@/components/admin/shared'
-import { Badge } from '@/components/ui/badge'
+import VoucherTable from './VoucherTable'
 import { Button } from '@/components/ui/button'
 
 const emptyPagination = { page: 1, limit: 10, total: 0, totalPages: 0 }
-
-const typeLabels: Record<string, string> = {
-  percentage: 'Phần trăm',
-  fixed: 'Cố định',
-}
-
-const scopeLabels: Record<string, string> = {
-  platform: 'Toàn hệ thống',
-  store: 'Theo cửa hàng',
-}
-
-const formatDate = (date?: string) => {
-  if (!date) return '\u2014'
-  return new Date(date).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })
-}
-
-const formatCurrency = (value?: number | null) => {
-  if (value == null) return '\u2014'
-  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(value)
-}
 
 export default function VoucherListPage() {
   const navigate = useNavigate()
@@ -109,7 +86,7 @@ export default function VoucherListPage() {
       headerClassName: 'px-6',
       cellClassName: 'px-6 py-4',
       render: (v) => (
-        <StatusBadge variant={v.isActive ? 'active' : 'inactive'} />
+        <Badge className={cn('border-none shadow-none text-xs font-semibold px-2.5 py-0.5', statusVariantClass(v.isActive ? 'active' : 'inactive'))} />
       ),
     },
     {
@@ -212,7 +189,7 @@ export default function VoucherListPage() {
             }
           />
         ) : (
-          <DataTable columns={columns} data={vouchers} keyExtractor={(v) => v._id} />
+          <VoucherTable vouchers={vouchers} isLoading={false} onDelete={setDeleteTargetId} />
         )}
         <Pagination
           page={page}

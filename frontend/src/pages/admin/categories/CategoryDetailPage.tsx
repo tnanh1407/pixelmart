@@ -1,12 +1,16 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-import { ArrowLeft, Tag, Loader2, Edit, Clock, Image as ImageIcon, Info } from 'lucide-react'
+import { ArrowLeft, Tag, Edit, Clock, Image as ImageIcon, Info } from 'lucide-react'
 import { categoryService } from '@/services/user/category.service'
 import { adminService } from '@/services/admin/admin.service'
 import { toast } from 'sonner'
 import { useAdminCategoryMutations } from '@/hooks/admin/categories/useAdminCategoryMutations'
-import { StatusBadge, StatusToggle, ConfirmDialog, LoadingState, DetailCard, DetailField, ImagePreview } from '@/components/admin/shared'
+import { ConfirmDialog, LoadingState, DetailCard, DetailField, ImagePreview } from '@/components/admin/shared'
+import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
+import { statusVariantClass } from '@/lib/status-styles'
+import { Switch } from '@/components/ui/switch'
 import CategoryFormModal from './CategoryFormModal'
 
 export default function CategoryDetailPage() {
@@ -62,7 +66,7 @@ export default function CategoryDetailPage() {
     })
   }
 
-  if (isLoading) return <LoadingState className="min-h-[400px]" />
+  if (isLoading) return <LoadingState className="min-h-100" />
 
   if (error || !category) {
     return (
@@ -88,13 +92,16 @@ export default function CategoryDetailPage() {
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-bold text-text">{category.name}</h1>
-              <StatusBadge active={category.isActive} />
+              <Badge className={cn('border-none shadow-none text-xs font-semibold px-2.5 py-0.5', statusVariantClass(category.isActive ? 'active' : 'inactive'))} />
             </div>
             <p className="text-sm text-text-muted mt-1">ID: {category._id}</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <StatusToggle active={category.isActive} onChange={(a) => toggleActiveMutation.mutate({ id: id || '', isActive: !a })} />
+          <Switch
+            checked={category.isActive}
+            onCheckedChange={(active) => toggleActiveMutation.mutate({ id: id || '', isActive: active })}
+          />
           <button onClick={openEdit}
             className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-hover transition-colors shadow-sm text-sm">
             <Edit size={16} />

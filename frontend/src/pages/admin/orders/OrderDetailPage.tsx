@@ -8,10 +8,11 @@ import {
   LoadingState,
   DetailCard,
   DetailField,
-  StatusBadge,
 } from '@/components/admin/shared'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+import { statusVariantClass } from '@/lib/status-styles'
 import {
   Table,
   TableBody,
@@ -156,7 +157,7 @@ export default function OrderDetailPage() {
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-bold text-foreground">{order.orderCode}</h1>
-              <StatusBadge variant={orderStatusVariant[order.status]} label={statusLabels[order.status]} />
+              <Badge className={cn('border-none shadow-none text-xs font-semibold px-2.5 py-0.5', statusVariantClass(orderStatusVariant[order.status]))}>{statusLabels[order.status]}</Badge>
             </div>
             <p className="mt-1 text-sm text-muted-foreground">
               Ngày tạo: {formatDate(order.createdAt)}
@@ -178,7 +179,7 @@ export default function OrderDetailPage() {
         <div className="space-y-6 lg:col-span-2">
           <DetailCard title="Thông tin đơn hàng" icon={Package}>
             <DetailField label="Mã đơn hàng" value={order.orderCode} mono />
-            <DetailField label="Trạng thái" value={<StatusBadge variant={orderStatusVariant[order.status]} label={statusLabels[order.status]} />} />
+            <DetailField label="Trạng thái" value={<Badge className={cn('border-none shadow-none text-xs font-semibold px-2.5 py-0.5', statusVariantClass(orderStatusVariant[order.status]))}>{statusLabels[order.status]}</Badge>} />
             <DetailField label="Ngày tạo" value={formatDate(order.createdAt)} />
             {order.confirmedAt && <DetailField label="Xác nhận lúc" value={formatDate(order.confirmedAt)} />}
             {order.shippedAt && <DetailField label="Giao hàng lúc" value={formatDate(order.shippedAt)} />}
@@ -272,7 +273,7 @@ export default function OrderDetailPage() {
             <DetailField
               label="Trạng thái"
               value={
-                <StatusBadge variant={paymentStatusVariant[order.paymentStatus]} label={paymentLabels[order.paymentStatus]} />
+                <Badge className={cn('border-none shadow-none text-xs font-semibold px-2.5 py-0.5', statusVariantClass(paymentStatusVariant[order.paymentStatus]))}>{paymentLabels[order.paymentStatus]}</Badge>
               }
             />
             {order.transactionId && (

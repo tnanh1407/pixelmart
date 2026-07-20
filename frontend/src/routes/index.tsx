@@ -6,7 +6,7 @@ import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import PublicRoute from '@/components/auth/PublicRoute'
 import BlockAdminRoute from '@/components/auth/BlockAdminRoute'
 import HomePage from '../pages/user/HomePage/HomePage'
-import CategoryPage from '../pages/category/CategoryPage'
+import CategoryPage from '../pages/user/CategoryPage'
 import Pointmallvoucher from '../pages/user/Pointmallvoucher/Pointmallvoucher'
 import Cart from '../pages/user/HomePage/Cart/Cart'
 import Storelist from '../pages/user/Storelist/Storelist'
@@ -22,19 +22,19 @@ import ResetPasswordPage from '../pages/auth/ResetPasswordPage/ResetPasswordPage
 import VerifyEmailPage from '../pages/auth/VerifyEmailPage/VerifyEmailPage'
 import UserLayout from '../layouts/UserLayout'
 import ProfilePage from '../pages/user/Profile/ProfilePage'
-import DashboardPage from '../pages/admin/DashboardPage'
-import UsersPage from '../pages/admin/UsersPage'
-import ProductsPage from '../pages/admin/ProductsPage'
-import StoresPage from '../pages/admin/StoresPage'
-import NotFoundPage from '../pages/notFound/NotFoundPage'
-import CampaignsPage from '@/pages/admin/CampaignsPage'
-import CampaignDetailPage from '@/pages/admin/CampaignDetailPage'
-import CategoriesPage from '@/pages/admin/CategoriesPage'
-import CategoryDetailPage from '@/pages/admin/CategoryDetailPage'
-import StoreDetailPage from '@/pages/admin/StoreDetailPage'
+import DashboardPage from '../pages/admin/dashboard/DashboardPage'
+import UsersPage from '../pages/admin/users/UsersPage'
+import ProductsPage from '../pages/admin/products/ProductsPage'
+import StoresPage from '../pages/admin/stores/StoresPage'
+import StoreDetailPage from '../pages/admin/stores/StoreDetailPage'
+import CampaignsPage from '@/pages/admin/campaigns/CampaignsPage'
+import CampaignDetailPage from '@/pages/admin/campaigns/CampaignDetailPage'
+import CategoryListPage from '@/pages/admin/categories/CategoryListPage'
+import CategoryDetailPage from '@/pages/admin/categories/CategoryDetailPage'
 import NotificationListPage from '@/pages/admin/notifications/NotificationListPage'
 import ReportPage from '@/pages/admin/reports/ReportPage'
 import SettingsPage from '@/pages/admin/settings/SettingsPage'
+import NotFoundPage from '../pages/notFound/NotFoundPage'
 
 const router = createBrowserRouter([
   // Public pages - ai cũng truy cập được
@@ -141,7 +141,7 @@ const router = createBrowserRouter([
           { path: 'products', element: <ProductsPage /> },
           { path: 'stores', element: <StoresPage /> },
           { path: 'stores/:id', element: <StoreDetailPage /> },
-          { path: 'categories', element: <CategoriesPage /> },
+          { path: 'categories', element: <CategoryListPage /> },
           { path: 'categories/:id', element: <CategoryDetailPage /> },
           { path: 'campaigns', element: <CampaignsPage /> },
           { path: 'campaigns/:id', element: <CampaignDetailPage /> },

@@ -8,11 +8,12 @@ import {
   LoadingState,
   DetailCard,
   DetailField,
-  StatusBadge,
-  StatusToggle,
 } from '@/components/admin/shared'
+import { Badge } from '@/components/ui/badge'
+import { Switch } from '@/components/ui/switch'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { statusVariantClass } from '@/lib/status-styles'
 
 const formatDate = (date: string) =>
   new Date(date).toLocaleDateString('vi-VN', {
@@ -98,7 +99,7 @@ export default function ReviewDetailPage() {
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-bold text-foreground">Chi tiết đánh giá</h1>
-              <StatusBadge variant={review.isActive ? 'active' : 'inactive'} />
+              <Badge className={cn('border-none shadow-none text-xs font-semibold px-2.5 py-0.5', statusVariantClass(review.isActive ? 'active' : 'inactive'))} />
             </div>
             <p className="mt-1 text-sm text-muted-foreground">
               Ngày tạo: {formatDate(review.createdAt)}
@@ -109,9 +110,9 @@ export default function ReviewDetailPage() {
           <span className="text-sm text-muted-foreground">
             {review.isActive ? 'Đang hiển thị' : 'Đã ẩn'}
           </span>
-          <StatusToggle
-            active={review.isActive}
-            onChange={() => toggleActiveMutation.mutate()}
+          <Switch
+            checked={review.isActive}
+            onCheckedChange={() => toggleActiveMutation.mutate()}
             disabled={toggleActiveMutation.isPending}
           />
         </div>
@@ -207,7 +208,7 @@ export default function ReviewDetailPage() {
 
           <DetailCard title="Thông tin chung">
             <DetailField label="ID đánh giá" value={review._id} mono />
-            <DetailField label="Trạng thái" value={<StatusBadge variant={review.isActive ? 'active' : 'inactive'} />} />
+            <DetailField label="Trạng thái" value={<Badge className={cn('border-none shadow-none text-xs font-semibold px-2.5 py-0.5', statusVariantClass(review.isActive ? 'active' : 'inactive'))} />} />
             <DetailField label="Ngày tạo" value={formatDate(review.createdAt)} />
             {review.updatedAt && (
               <DetailField label="Cập nhật" value={formatDate(review.updatedAt)} />

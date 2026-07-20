@@ -48,7 +48,7 @@ export default function CategoryFormModal({
                   </label>
                 </div>
                 {form.image && (
-                  <div className="relative aspect-video w-full max-w-[200px] rounded-lg overflow-hidden border border-gray-100 bg-gray-50">
+                  <div className="relative aspect-video w-full max-w-50 rounded-lg overflow-hidden border border-gray-100 bg-gray-50">
                     <img src={form.image} alt="Category Preview" className="w-full h-full object-cover" />
                     <button type="button" onClick={() => setForm({ ...form, image: '' })}
                       className="absolute top-2 right-2 p-1 bg-black/60 hover:bg-black/80 text-white rounded-full transition-colors">

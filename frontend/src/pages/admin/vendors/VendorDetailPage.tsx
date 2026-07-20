@@ -9,13 +9,15 @@ import { toast } from 'sonner'
 import { adminService } from '@/services/admin/admin.service'
 import type { IVendor, VendorStatus } from '@/types/vendor.types'
 import {
-  StatusBadge,
   LoadingState,
   DetailCard,
   DetailField,
   ConfirmDialog,
 } from '@/components/admin/shared'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+import { statusVariantClass } from '@/lib/status-styles'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -143,7 +145,7 @@ export default function VendorDetailPage() {
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-bold text-foreground">{vendor.shopName}</h1>
-              <StatusBadge variant={vendor.status} />
+              <Badge className={cn('border-none shadow-none text-xs font-semibold px-2.5 py-0.5', statusVariantClass(vendor.status))} />
             </div>
             <p className="text-sm text-muted-foreground mt-1">ID: {vendor._id}</p>
           </div>
@@ -234,7 +236,7 @@ export default function VendorDetailPage() {
             <div className="space-y-4">
               <DetailField
                 label="Trạng thái hiện tại"
-                value={<StatusBadge variant={vendor.status} />}
+                value={<Badge className={cn('border-none shadow-none text-xs font-semibold px-2.5 py-0.5', statusVariantClass(vendor.status))} />}
               />
               {vendor.rejectionReason && (
                 <DetailField

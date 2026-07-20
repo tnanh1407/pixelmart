@@ -10,7 +10,7 @@ export default function CopyButton({ text }: CopyButtonProps) {
     <button
       onClick={() => {
         navigator.clipboard.writeText(text)
-        toast.success('Đã copy ID')
+        toast.info('Đã copy ID')
       }}
       className="shrink-0 p-1 hover:bg-gray-100 rounded transition-colors cursor-pointer"
       title="Copy ID"

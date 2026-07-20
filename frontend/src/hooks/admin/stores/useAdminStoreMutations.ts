@@ -50,10 +50,8 @@ export function useAdminStoreMutations({
   })
 
   const toggleActiveMutation = useMutation({
-    mutationFn: (id: string) => {
-      const store = stores.find((item) => item._id === id)
-      return adminService.updateStore(id, { isActive: !store?.isActive })
-    },
+    mutationFn: ({ id, isActive }: { id: string; isActive: boolean }) =>
+      adminService.updateStore(id, { isActive }),
     onSuccess: () => {
       invalidateStores()
       toast.success('Cập nhật trạng thái hoạt động thành công', { closeButton: true })

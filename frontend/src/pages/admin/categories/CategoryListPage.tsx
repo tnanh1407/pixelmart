@@ -1,30 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Plus, Tag, Loader2, Upload, X, ImageIcon } from 'lucide-react'
+import { Plus, Loader2, Upload, X } from 'lucide-react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { adminService } from '@/services/admin/admin.service'
 import { useAdminCategoryMutations } from '@/hooks/admin/categories/useAdminCategoryMutations'
-import { PageHeader, SearchToolbar, DataTable, Pagination, LoadingState, EmptyState, DeleteDialog, StatusBadge, ConfirmDialog } from '@/components/admin/shared'
-import type { Column } from '@/components/admin/shared'
+import { PageHeader, SearchToolbar, Pagination, DeleteDialog, ConfirmDialog } from '@/components/admin/shared'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
-
-interface CategoryRow {
-  _id: string
-  name: string
-  slug: string
-  description?: string
-  image?: string
-  isActive: boolean
-  createdAt?: string
-}
+import CategoryTable, { type CategoryRow } from './CategoryTable'
 
 const categoryFormSchema = z.object({
   name: z.string().min(1, 'Tên danh mục không được để trống'),
@@ -44,16 +33,7 @@ const defaultFormValues: CategoryFormData = {
   isActive: true,
 }
 
-const DATE_FORMAT_OPTIONS: Intl.DateTimeFormatOptions = {
-  day: '2-digit',
-  month: '2-digit',
-  year: 'numeric',
-  hour: '2-digit',
-  minute: '2-digit',
-} as const
-
 export default function CategoryListPage() {
-  const navigate = useNavigate()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [search, setSearch] = useState('')
   const [searchInput, setSearchInput] = useState('')
@@ -110,17 +90,17 @@ export default function CategoryListPage() {
     setShowModal(true)
   }, [reset])
 
-  const openEdit = useCallback((cat: CategoryRow) => {
-    setEditingId(cat._id)
-    reset({
-      name: cat.name,
-      slug: cat.slug,
-      description: cat.description || '',
-      image: cat.image || '',
-      isActive: cat.isActive,
-    })
-    setShowModal(true)
-  }, [reset])
+  // const openEdit = useCallback((cat: CategoryRow) => {
+  //   setEditingId(cat._id)
+  //   reset({
+  //     name: cat.name,
+  //     slug: cat.slug,
+  //     description: cat.description || '',
+  //     image: cat.image || '',
+  //     isActive: cat.isActive,
+  //   })
+  //   setShowModal(true)
+  // }, [reset])
 
   const closeModal = useCallback(() => {
     setShowModal(false)
@@ -180,93 +160,6 @@ export default function CategoryListPage() {
   const categories: CategoryRow[] = (data?.categories || []) as CategoryRow[]
   const pagination = data?.pagination || { page: 1, limit: 10, total: 0, totalPages: 0 }
 
-  const columns: Column<CategoryRow>[] = [
-    {
-      header: 'Tên danh mục',
-      headerClassName: 'px-6',
-      cellClassName: 'px-6 py-4',
-      render: (cat) => (
-        <span
-          onClick={() => navigate(`/admin/categories/${cat._id}`)}
-          className="font-medium text-foreground text-sm cursor-pointer hover:text-primary transition-colors"
-        >
-          {cat.name}
-        </span>
-      ),
-    },
-    {
-      header: 'Slug',
-      headerClassName: 'px-6',
-      cellClassName: 'px-6 py-4 text-sm text-muted-foreground',
-      render: (cat) => <code className="text-xs bg-muted px-1.5 py-0.5 rounded">{cat.slug}</code>,
-    },
-    {
-      header: 'Hình ảnh',
-      headerClassName: 'w-20 px-6',
-      cellClassName: 'px-6 py-4',
-      render: (cat) => (
-        <div className="w-12 h-12 rounded-lg overflow-hidden border border-border bg-muted">
-          {cat.image ? (
-            <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <ImageIcon size={16} className="text-muted-foreground" />
-            </div>
-          )}
-        </div>
-      ),
-    },
-    {
-      header: 'Trạng thái',
-      headerClassName: 'px-6',
-      cellClassName: 'px-6 py-4',
-      render: (cat) => (
-        <StatusBadge variant={cat.isActive ? 'active' : 'inactive'} />
-      ),
-    },
-    {
-      header: 'Ngày tạo',
-      headerClassName: 'px-6',
-      cellClassName: 'px-6 py-4 text-sm text-muted-foreground',
-      render: (cat) => (
-        <span>
-          {cat.createdAt
-            ? new Date(cat.createdAt).toLocaleDateString('vi-VN', DATE_FORMAT_OPTIONS)
-            : '\u2014'}
-        </span>
-      ),
-    },
-    {
-      header: 'Thao tác',
-      headerClassName: 'text-right px-6',
-      cellClassName: 'px-6 py-4 text-right',
-      render: (cat) => (
-        <div className="flex items-center justify-end gap-1">
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
-            onClick={() => openEdit(cat)}
-            title="Chỉnh sửa"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
-            onClick={() => setDeleteTargetId(cat._id)}
-            disabled={deleteMutation.isPending}
-            title="Xóa"
-            className="text-destructive hover:bg-destructive-light hover:text-destructive"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
-          </Button>
-        </div>
-      ),
-    },
-  ]
-
   return (
     <div>
       <PageHeader
@@ -288,27 +181,12 @@ export default function CategoryListPage() {
       />
 
       <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
-        {isLoading ? (
-          <LoadingState />
-        ) : isError ? (
-          <div className="p-6">
-            <div className="flex flex-col items-center justify-center py-16">
-              <div className="mb-4 flex size-14 items-center justify-center rounded-full bg-destructive-light">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-destructive"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
-              </div>
-              <h3 className="mb-1 text-lg font-semibold text-foreground">Có lỗi xảy ra</h3>
-              <p className="mb-6 max-w-sm text-center text-sm text-muted-foreground">Không thể tải dữ liệu. Vui lòng thử lại sau.</p>
-              <Button variant="outline" onClick={() => refetch()}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
-                Thử lại
-              </Button>
-            </div>
-          </div>
-        ) : categories.length === 0 ? (
-          <EmptyState icon={Tag} message="Không tìm thấy danh mục nào" />
-        ) : (
-          <DataTable columns={columns} data={categories} keyExtractor={(c) => c._id} />
-        )}
+        <CategoryTable
+          categories={categories}
+          isLoading={isLoading}
+          onDelete={setDeleteTargetId}
+          isDeleting={deleteMutation.isPending}
+        />
         <Pagination page={page} totalPages={pagination.totalPages} onPageChange={setPage} total={pagination.total} />
       </div>
 

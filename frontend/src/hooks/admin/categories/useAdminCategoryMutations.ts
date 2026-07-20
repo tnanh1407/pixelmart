@@ -59,7 +59,7 @@ export function useAdminCategoryMutations({
 
   const toggleActiveMutation = useMutation({
     mutationFn: ({ id, isActive }: { id: string; isActive: boolean }) =>
-      adminService.updateCategory(id, { isActive: !isActive }),
+      adminService.updateCategory(id, { isActive }),
     onSuccess: () => {
       invalidateCategories()
       toast.success('Cập nhật trạng thái thành công', { closeButton: true })

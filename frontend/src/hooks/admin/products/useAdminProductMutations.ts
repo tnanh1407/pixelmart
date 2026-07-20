@@ -12,10 +12,8 @@ export function useAdminProductMutations(products: IProduct[]) {
   }
 
   const toggleActiveMutation = useMutation({
-    mutationFn: (id: string) => {
-      const product = products.find((item) => item._id === id)
-      return adminService.updateProduct(id, { isActive: !product?.isActive })
-    },
+    mutationFn: ({ id, isActive }: { id: string; isActive: boolean }) =>
+      adminService.updateProduct(id, { isActive }),
     onSuccess: () => {
       invalidateProducts()
       toast.success('Cập nhật thành công')

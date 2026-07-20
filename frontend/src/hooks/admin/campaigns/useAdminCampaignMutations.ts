@@ -56,7 +56,7 @@ export function useAdminCampaignMutations({
 
   const toggleActiveMutation = useMutation({
     mutationFn: ({ id, isActive }: { id: string; isActive: boolean }) =>
-      adminService.updateCampaign(id, { isActive: !isActive }),
+      adminService.updateCampaign(id, { isActive }),
     onSuccess: () => {
       invalidateCampaigns()
       toast.success('Cập nhật thành công', { closeButton: true })

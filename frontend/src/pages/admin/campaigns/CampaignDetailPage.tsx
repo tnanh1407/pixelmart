@@ -8,8 +8,10 @@ import {
 import { campaignService } from '@/services/user/campaign.service'
 import { useAdminCampaignMutations } from '@/hooks/admin/campaigns/useAdminCampaignMutations'
 import CampaignFormModal, { useCampaignForm } from './CampaignFormModal'
-import { StatusBadge, ConfirmDialog, LoadingState, ImagePreview } from '@/components/admin/shared'
+import { ConfirmDialog, LoadingState, ImagePreview } from '@/components/admin/shared'
 import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
+import { statusVariantClass } from '@/lib/status-styles'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -115,7 +117,7 @@ export default function CampaignDetailPage() {
           <div className="min-w-0">
             <div className="flex items-center gap-3 flex-wrap">
               <h1 className="text-2xl font-bold tracking-tight truncate">{campaign.title}</h1>
-              <StatusBadge active={campaign.isActive} activeLabel="Đang hiển thị" />
+              <Badge className={cn('border-none shadow-none text-xs font-semibold px-2.5 py-0.5', campaign.isActive ? 'bg-success-light text-success' : 'bg-muted text-muted-foreground')}>{campaign.isActive ? 'Đang hiển thị' : 'Ẩn'}</Badge>
             </div>
             <p className="text-sm text-muted-foreground mt-1 font-mono">
               {campaign._id}
@@ -287,7 +289,7 @@ export default function CampaignDetailPage() {
             <CardContent className="space-y-4">
               <DetailRow label="ID" value={campaign._id} mono />
               <Separator />
-              <DetailRow label="Trạng thái" value={<StatusBadge active={campaign.isActive} activeLabel="Đang hiển thị" />} />
+              <DetailRow label="Trạng thái" value={<Badge className={cn('border-none shadow-none text-xs font-semibold px-2.5 py-0.5', campaign.isActive ? 'bg-success-light text-success' : 'bg-muted text-muted-foreground')}>{campaign.isActive ? 'Đang hiển thị' : 'Ẩn'}</Badge>} />
               <Separator />
               <DetailRow label="Tác giả" value={campaign.author || '\u2014'} />
               <Separator />

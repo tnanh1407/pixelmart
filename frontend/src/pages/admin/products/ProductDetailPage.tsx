@@ -20,12 +20,13 @@ import {
   LoadingState,
   DetailCard,
   DetailField,
-  StatusBadge,
   DeleteDialog,
   ImagePreview,
 } from '@/components/admin/shared'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+import { statusVariantClass } from '@/lib/status-styles'
 import type { IProduct } from '@/types/product.types'
 
 const formatPrice = (price: number) =>
@@ -115,7 +116,7 @@ export default function ProductDetailPage() {
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-bold text-foreground">{product.name}</h1>
-              <StatusBadge variant={product.isActive ? 'active' : 'inactive'} />
+              <Badge className={cn('border-none shadow-none text-xs font-semibold px-2.5 py-0.5', statusVariantClass(product.isActive ? 'active' : 'inactive'))} />
               {product.isFeatured && (
                 <Badge variant="secondary" className="bg-warning-light text-warning border-none">
                   Nổi bật
@@ -130,7 +131,7 @@ export default function ProductDetailPage() {
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            onClick={() => toggleActiveMutation.mutate()}
+            onClick={() => toggleActiveMutation.mutate({ id: product._id, isActive: !product.isActive })}
             disabled={toggleActiveMutation.isPending}
           >
             {product.isActive ? <EyeOff size={16} /> : <Eye size={16} />}

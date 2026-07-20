@@ -1,11 +1,13 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import {
-  ArrowLeft, Store, Phone, Mail, MapPin, Star, Calendar, Edit, ShieldCheck, User, Info,
+  ArrowLeft, Store, Phone, MapPin, Star, Calendar, Edit, ShieldCheck, User, Info,
 } from 'lucide-react'
 import { storeService } from '@/services/user/store.service'
 import type { IStore } from '@/types/store.types'
-import { StatusBadge, LoadingState, DetailCard, DetailField, StatusToggle } from '@/components/admin/shared'
+import { LoadingState, DetailCard, DetailField } from '@/components/admin/shared'
+import { cn } from '@/lib/utils'
+import { statusVariantClass } from '@/lib/status-styles'
 import { Badge } from '@/components/ui/badge'
 
 export default function StoreDetailPage() {
@@ -56,7 +58,7 @@ export default function StoreDetailPage() {
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-bold text-foreground">{store.name}</h1>
-              <StatusBadge active={store.isActive} />
+              <Badge className={cn('border-none shadow-none text-xs font-semibold px-2.5 py-0.5', statusVariantClass(store.isActive ? 'active' : 'inactive'))} />
               {store.isVerified && (
                 <Badge variant="secondary" className="bg-blue-500/10 text-blue-700 border-none flex items-center gap-1">
                   <ShieldCheck size={12} className="fill-blue-700 text-white" />
@@ -151,7 +153,7 @@ export default function StoreDetailPage() {
           <DetailCard title="Trạng thái" icon={ShieldCheck}>
             <DetailField
               label="Hoạt động"
-              value={<StatusBadge active={store.isActive} />}
+              value={<Badge className={cn('border-none shadow-none text-xs font-semibold px-2.5 py-0.5', statusVariantClass(store.isActive ? 'active' : 'inactive'))} />}
             />
             <DetailField
               label="Xác minh"

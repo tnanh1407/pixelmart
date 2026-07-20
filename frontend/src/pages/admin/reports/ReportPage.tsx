@@ -1,16 +1,23 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { analyticsService } from '@/services/admin/analytics.service'
-import { PageContainer, PageHeader, SectionCard, DataTable } from '@/components/admin/shared'
-import type { Column } from '@/components/admin/shared'
+import { PageContainer, PageHeader, SectionCard } from '@/components/admin/shared'
 import { Button } from '@/components/ui/button'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 import {
   DollarSign, ShoppingCart, Package, Users, Store,
   Download, TrendingUp, TrendingDown, BarChart3,
 } from 'lucide-react'
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   Line, ComposedChart, Legend,
 } from 'recharts'
 
@@ -155,70 +162,6 @@ export default function ReportPage() {
 
   const chartData = analytics?.revenueTimeline ?? []
 
-  const productColumns: Column<TopProduct>[] = [
-    {
-      header: 'Sản phẩm',
-      cellClassName: 'px-4',
-      render: (p) => (
-        <div className="flex items-center gap-2">
-          <div className="size-8 rounded bg-muted flex items-center justify-center text-muted-foreground">
-            <Package size={14} />
-          </div>
-          <span className="text-sm font-medium text-foreground">{p.name}</span>
-        </div>
-      ),
-    },
-    {
-      header: 'Giá',
-      cellClassName: 'px-4',
-      render: (p) => <span className="text-sm text-foreground">{formatVND(p.price)}</span>,
-    },
-    {
-      header: 'Đã bán',
-      cellClassName: 'px-4',
-      render: (p) => <span className="text-sm text-foreground">{p.sold}</span>,
-    },
-    {
-      header: 'Doanh thu',
-      cellClassName: 'px-4',
-      render: (p) => (
-        <span className="text-sm font-medium text-foreground">{formatVND(p.revenue)}</span>
-      ),
-    },
-  ]
-
-  const storeColumns: Column<TopStore>[] = [
-    {
-      header: 'Cửa hàng',
-      cellClassName: 'px-4',
-      render: (s) => (
-        <div className="flex items-center gap-2">
-          <div className="size-8 rounded bg-muted flex items-center justify-center text-muted-foreground">
-            <Store size={14} />
-          </div>
-          <span className="text-sm font-medium text-foreground">{s.name}</span>
-        </div>
-      ),
-    },
-    {
-      header: 'Doanh thu',
-      cellClassName: 'px-4',
-      render: (s) => (
-        <span className="text-sm font-medium text-foreground">{formatVND(s.revenue)}</span>
-      ),
-    },
-    {
-      header: 'Đơn hàng',
-      cellClassName: 'px-4',
-      render: (s) => <span className="text-sm text-foreground">{s.orders}</span>,
-    },
-    {
-      header: 'Đánh giá',
-      cellClassName: 'px-4',
-      render: (s) => <span className="text-sm text-foreground">{s.rating}/5</span>,
-    },
-  ]
-
   return (
     <PageContainer>
       <PageHeader
@@ -359,10 +302,62 @@ export default function ReportPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <SectionCard title="Top sản phẩm bán chạy">
-          <DataTable columns={productColumns} data={MOCK_PRODUCTS} keyExtractor={(p) => p.id} />
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Sản phẩm</TableHead>
+                <TableHead>Giá</TableHead>
+                <TableHead>Đã bán</TableHead>
+                <TableHead>Doanh thu</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {MOCK_PRODUCTS.map((p) => (
+                <TableRow key={p.id}>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <div className="size-8 rounded bg-muted flex items-center justify-center text-muted-foreground">
+                        <Package size={14} />
+                      </div>
+                      <span className="text-sm font-medium text-foreground">{p.name}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell><span className="text-sm text-foreground">{formatVND(p.price)}</span></TableCell>
+                  <TableCell><span className="text-sm text-foreground">{p.sold}</span></TableCell>
+                  <TableCell><span className="text-sm font-medium text-foreground">{formatVND(p.revenue)}</span></TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </SectionCard>
         <SectionCard title="Top cửa hàng">
-          <DataTable columns={storeColumns} data={MOCK_STORES} keyExtractor={(s) => s.id} />
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Cửa hàng</TableHead>
+                <TableHead>Doanh thu</TableHead>
+                <TableHead>Đơn hàng</TableHead>
+                <TableHead>Đánh giá</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {MOCK_STORES.map((s) => (
+                <TableRow key={s.id}>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <div className="size-8 rounded bg-muted flex items-center justify-center text-muted-foreground">
+                        <Store size={14} />
+                      </div>
+                      <span className="text-sm font-medium text-foreground">{s.name}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell><span className="text-sm font-medium text-foreground">{formatVND(s.revenue)}</span></TableCell>
+                  <TableCell><span className="text-sm text-foreground">{s.orders}</span></TableCell>
+                  <TableCell><span className="text-sm text-foreground">{s.rating}/5</span></TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </SectionCard>
       </div>
     </PageContainer>

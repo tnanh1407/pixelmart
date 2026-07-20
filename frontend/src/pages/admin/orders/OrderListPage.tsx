@@ -1,66 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
 import { useState, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { ShoppingBag, Clock, CheckCircle, XCircle, Package, Eye } from 'lucide-react'
+import { ShoppingBag, Clock, CheckCircle, XCircle, Package } from 'lucide-react'
 import { adminService } from '@/services/admin/admin.service'
-import type { OrderListResponse, IOrder } from '@/types/order.types'
-import {
-  PageHeader,
-  SearchToolbar,
-  DataTable,
-  Pagination,
-  LoadingState,
-  EmptyState,
-  StatusBadge,
-} from '@/components/admin/shared'
-import type { Column } from '@/components/admin/shared'
+import type { OrderListResponse } from '@/types/order.types'
+import { PageHeader, SearchToolbar, Pagination, LoadingState, EmptyState } from '@/components/admin/shared'
 import { Button } from '@/components/ui/button'
+import OrderTable from './OrderTable'
 
 const emptyPagination = { page: 1, limit: 10, total: 0, totalPages: 0 }
-
-const formatPrice = (price: number) =>
-  new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(price)
-
-const formatDate = (date: string) =>
-  new Date(date).toLocaleDateString('vi-VN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
-
-const orderStatusVariant: Record<string, 'pending' | 'confirmed' | 'shipping' | 'delivered' | 'cancelled'> = {
-  pending: 'pending',
-  confirmed: 'confirmed',
-  processing: 'confirmed',
-  shipping: 'shipping',
-  delivered: 'delivered',
-  cancelled: 'cancelled',
-}
-
-const paymentStatusVariant: Record<string, 'paid' | 'unpaid' | 'refunded' | 'failed'> = {
-  pending: 'unpaid',
-  paid: 'paid',
-  refunded: 'refunded',
-  failed: 'failed',
-}
-
-const statusLabels: Record<string, string> = {
-  pending: 'Chờ xử lý',
-  confirmed: 'Đã xác nhận',
-  processing: 'Đang xử lý',
-  shipping: 'Đang giao',
-  delivered: 'Đã giao',
-  cancelled: 'Đã hủy',
-}
-
-const paymentLabels: Record<string, string> = {
-  pending: 'Chưa thanh toán',
-  paid: 'Đã thanh toán',
-  refunded: 'Đã hoàn tiền',
-  failed: 'Thất bại',
-}
 
 function StatCard({
   icon: Icon,
@@ -117,80 +64,7 @@ export default function OrderListPage() {
     cancelled: orders.filter((o) => o.status === 'cancelled').length,
   }), [orders])
 
-  const columns: Column<IOrder>[] = [
-    {
-      header: 'Mã đơn hàng',
-      cellClassName: 'px-4',
-      render: (o) => (
-        <span
-          onClick={() => navigate(`/admin/orders/${o._id}`)}
-          className="cursor-pointer font-medium text-primary hover:underline"
-        >
-          {o.orderCode}
-        </span>
-      ),
-    },
-    {
-      header: 'Khách hàng',
-      cellClassName: 'px-4',
-      render: (o) => {
-        const user = typeof o.userId === 'object' ? o.userId : null
-        return <span className="text-sm text-foreground">{user ? user.name : 'N/A'}</span>
-      },
-    },
-    {
-      header: 'Cửa hàng',
-      cellClassName: 'px-4',
-      render: (o) => {
-        const store = typeof o.storeId === 'object' ? o.storeId : null
-        return <span className="text-sm text-muted-foreground">{store ? store.name : 'N/A'}</span>
-      },
-    },
-    {
-      header: 'SL',
-      cellClassName: 'px-4 text-center',
-      render: (o) => (
-        <span className="text-sm text-foreground">{o.items.reduce((s, i) => s + i.quantity, 0)}</span>
-      ),
-    },
-    {
-      header: 'Tổng tiền',
-      cellClassName: 'px-4',
-      render: (o) => (
-        <span className="text-sm font-medium text-foreground">{formatPrice(o.totalAmount)}</span>
-      ),
-    },
-    {
-      header: 'Trạng thái',
-      cellClassName: 'px-4',
-      render: (o) => (
-        <StatusBadge variant={orderStatusVariant[o.status]} label={statusLabels[o.status]} />
-      ),
-    },
-    {
-      header: 'Thanh toán',
-      cellClassName: 'px-4',
-      render: (o) => (
-        <StatusBadge variant={paymentStatusVariant[o.paymentStatus]} label={paymentLabels[o.paymentStatus]} />
-      ),
-    },
-    {
-      header: 'Ngày tạo',
-      cellClassName: 'px-4',
-      render: (o) => (
-        <span className="text-sm text-muted-foreground">{formatDate(o.createdAt)}</span>
-      ),
-    },
-    {
-      header: '',
-      cellClassName: 'px-4 text-right',
-      render: (o) => (
-        <Button variant="ghost" size="icon" onClick={() => navigate(`/admin/orders/${o._id}`)}>
-          <Eye size={16} />
-        </Button>
-      ),
-    },
-  ]
+
 
   if (isError) {
     return (
@@ -264,21 +138,7 @@ export default function OrderListPage() {
       />
 
       <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
-        {isLoading ? (
-          <LoadingState />
-        ) : orders.length === 0 ? (
-          <EmptyState
-            icon={Package}
-            message="Không tìm thấy đơn hàng nào"
-            description={
-              search || statusFilter || paymentFilter
-                ? 'Thử thay đổi điều kiện tìm kiếm'
-                : 'Chưa có đơn hàng nào trong hệ thống'
-            }
-          />
-        ) : (
-          <DataTable columns={columns} data={orders} keyExtractor={(o) => o._id} />
-        )}
+        <OrderTable orders={orders} isLoading={isLoading} />
         <Pagination
           page={page}
           totalPages={pagination.totalPages}
