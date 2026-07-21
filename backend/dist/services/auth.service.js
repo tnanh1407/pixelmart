@@ -7,7 +7,7 @@ import { generateTokenPair, verifyRefreshToken } from "../utils/jwt.js";
 import { sendMail } from "../utils/mail.js";
 import ForgotPasswordEmail from "../utils/emails/forgot-password-email.js";
 import VerificationToken from "../models/verification-token.model.js";
-import { TOKEN_TYPES as tokenType } from "../constants/roles";
+import { TOKEN_TYPES as tokenType } from "../constants/roles.js";
 import env from "../config/env.js";
 class AuthService {
     async register(data) {

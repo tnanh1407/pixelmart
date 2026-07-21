@@ -3,7 +3,9 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
+import swaggerUi from "swagger-ui-express";
 import env from "./config/env.ts";
+import swaggerSpec from "./config/swagger.ts";
 import { errorHandler } from "./middlewares/error.middleware.ts";
 import { auth } from "./middlewares/auth.middleware.ts";
 import authRoutes from "./routes/v1/auth.routes.ts";
@@ -44,6 +46,9 @@ if (env.NODE_ENV === "development") {
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });
+
+// Swagger API docs
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", auth, userRoutes);

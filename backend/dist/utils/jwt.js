@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import env from "../config/env.js";
-import { JWT_ACCESS_EXPIRES_IN, JWT_REFRESH_EXPIRES_IN } from "../constants/roles";
+import { JWT_ACCESS_EXPIRES_IN, JWT_REFRESH_EXPIRES_IN } from "../constants/roles.js";
 export const generateAccessToken = (payload) => {
     return jwt.sign(payload, env.JWT_SECRET, {
         expiresIn: JWT_ACCESS_EXPIRES_IN,
