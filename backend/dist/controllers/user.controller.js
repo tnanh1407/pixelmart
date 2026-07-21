@@ -10,8 +10,15 @@ class UserController {
         });
     }
     async getAll(req, res) {
-        const { page, limit, sort, ...filter } = req.query;
-        const result = await userService.getAllUsers(filter, {
+        const { page, limit, sort, search, ...filter } = req.query;
+        const mongoFilter = { ...filter };
+        if (search) {
+            mongoFilter.$or = [
+                { name: { $regex: search, $options: "i" } },
+                { email: { $regex: search, $options: "i" } }
+            ];
+        }
+        const result = await userService.getAllUsers(mongoFilter, {
             page: page ? Number(page) : undefined,
             limit: limit ? Number(limit) : undefined,
             sort: sort,
@@ -38,6 +45,46 @@ class UserController {
         res.json({
             success: true,
             message: "User deleted successfully",
+        });
+    }
+    async toggleActive(req, res) {
+        const id = String(req.params.id);
+        const user = await userService.toggleActive(id);
+        res.json({
+            success: true,
+            message: `User ${user?.isActive ? "activated" : "deactivated"} successfully`,
+            data: user,
+        });
+    }
+    async updateProfile(req, res) {
+        const id = String(req.user?.userId);
+        const file = req.file;
+        let data = {};
+        if (req.body.data) {
+            try {
+                data = JSON.parse(req.body.data);
+            }
+            catch {
+                data = req.body;
+            }
+        }
+        else {
+            data = req.body;
+        }
+        let user;
+        if (Object.keys(data).length > 0) {
+            user = await userService.updateUser(id, data);
+        }
+        if (file) {
+            user = await userService.uploadAvatar(id, file);
+        }
+        if (!user) {
+            user = await userService.getUserById(id);
+        }
+        res.json({
+            success: true,
+            message: "Profile updated successfully",
+            data: user,
         });
     }
 }

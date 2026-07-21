@@ -1,7 +1,6 @@
 import Order, { IOrder } from "../models/order.model.js";
 import Cart from "../models/cart.model.js";
 import Product from "../models/product.model.js";
-import Store from "../models/store.model.js";
 import Voucher from "../models/voucher.model.js";
 import { AppError } from "../middlewares/error.middleware.js";
 

@@ -5,19 +5,7 @@ services:
       - "5000:5000"
     env_file:
       - .env
-      # khởi động mong rồi mới khởi động backend
-    depends_on:
-      - mongo
-      # bị crash sẽ tự chạy lại
     restart: unless-stopped
-
-  mongo:
-    image: mongo:7
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-    restart: unless-stopped
-
+         # bị crash sẽ tự chạy lại
 volumes:
   mongo_data:

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import env from "../config/env.ts";
-import { JWT_ACCESS_EXPIRES_IN, JWT_REFRESH_EXPIRES_IN } from "~/constants/roles.ts";
+import { JWT_ACCESS_EXPIRES_IN, JWT_REFRESH_EXPIRES_IN } from "@/constants/roles";
 
 export interface JwtPayload {
   userId: string;

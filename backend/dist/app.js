@@ -8,15 +8,17 @@ import { errorHandler } from "./middlewares/error.middleware.js";
 import { auth } from "./middlewares/auth.middleware.js";
 import authRoutes from "./routes/v1/auth.routes.js";
 import userRoutes from "./routes/v1/user.routes.js";
+import addressRoutes from "./routes/v1/address.routes.js";
+import categoryRoutes from "./routes/v1/category.routes.js";
+import productRoutes from "./routes/v1/product.routes.js";
+import campaignRoutes from "./routes/v1/campaign.routes.js";
+import campaignItemRoutes, { campaignItemStandaloneRouter } from "./routes/v1/campaignItem.routes.js";
+import paymentRoutes from "./routes/v1/payment.routes.js";
 const app = express();
 app.use(helmet());
 app.use(cors({
     origin: (origin, callback) => {
-        const allowedOrigins = [
-            env.CLIENT_URL,
-            "https://www.tnanhdev.id.vn",
-            "https://tnanhdev.id.vn",
-        ];
+        const allowedOrigins = env.CLIENT_URL ? [env.CLIENT_URL] : [];
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         }
@@ -28,16 +30,25 @@ app.use(cors({
 }));
 app.use(cookieParser());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // đọc dữ liệu form 
 if (env.NODE_ENV === "development") {
     app.use(morgan("dev"));
 }
 else if (env.NODE_ENV === "production") {
     app.use(morgan("combined"));
 }
+// check status
 app.get("/health", (req, res) => {
     res.json({ status: "ok" });
 });
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", auth, userRoutes);
+app.use("/api/v1/addresses", addressRoutes);
+app.use("/api/v1/categories", categoryRoutes);
+app.use("/api/v1/products", productRoutes);
+app.use("/api/v1/campaigns", campaignRoutes);
+app.use("/api/v1/campaigns/:campaignId/items", campaignItemRoutes);
+app.use("/api/v1/campaign-items", campaignItemStandaloneRouter);
+app.use("/api/v1/payment", paymentRoutes);
 app.use(errorHandler);
 export default app;

@@ -1,18 +1,28 @@
-const env = {
-    NODE_ENV: process.env.NODE_ENV,
-    PORT: process.env.PORT,
-    URL_MONGODB: process.env.URL_MONGODB,
-    DB_NAME: process.env.DB_NAME,
-    JWT_SECRET: process.env.JWT_SECRET,
-    JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET,
-    JWT_ACCESS_EXPIRES_IN: process.env.JWT_ACCESS_EXPIRES_IN,
-    JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN,
-    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-    GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL,
-    CLIENT_URL: process.env.CLIENT_URL,
-};
-if (!env.URL_MONGODB) {
-    throw new Error("Missing URL_MONGODB env variable");
-}
+import { z } from "zod";
+const envSchema = z.object({
+    NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+    PORT: z.coerce.number().default(5000),
+    URL_MONGODB: z.string().min(1, "Missing URL_MONGODB env variable"),
+    JWT_SECRET: z.string().min(1, "Missing JWT_SECRET env variable"),
+    JWT_REFRESH_SECRET: z.string().min(1, "Missing JWT_REFRESH_SECRET env variable"),
+    JWT_ACCESS_EXPIRES_IN: z.string().default("15m"),
+    JWT_REFRESH_EXPIRES_IN: z.string().default("7d"),
+    GOOGLE_CLIENT_ID: z.string().default(""),
+    GOOGLE_CLIENT_SECRET: z.string().default(""),
+    GOOGLE_CALLBACK_URL: z.string().default("http://localhost:5000/api/v1/auth/google/callback"),
+    CLIENT_URL: z.string().default("http://localhost:5173"),
+    SMTP_HOST: z.string().default("smtp.gmail.com"),
+    SMTP_PORT: z.coerce.number().default(587),
+    SMTP_USER: z.string().min(1, "Missing SMTP_USER"),
+    SMTP_PASS: z.string().min(1, "Missing SMTP_PASS"),
+    SMTP_FROM: z.string().default("PixelMart <noreply@gmail.com>"),
+    CLOUDINARY_CLOUD_NAME: z.string().min(1, "Missing CLOUDINARY_CLOUD_NAME"),
+    CLOUDINARY_API_KEY: z.string().min(1, "Missing CLOUDINARY_API_KEY"),
+    CLOUDINARY_API_SECRET: z.string().min(1, "Missing CLOUDINARY_API_SECRET"),
+    SEPAY_API_TOKEN: z.string().default(""),
+    SEPAY_BANK_ACCOUNT: z.string().default(""),
+    SEPAY_BANK_NAME: z.string().default("Vietcombank"),
+    SEPAY_WEBHOOK_SECRET: z.string().default(""),
+});
+const env = envSchema.parse(process.env);
 export default env;

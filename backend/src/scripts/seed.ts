@@ -6,7 +6,6 @@ import { hashPassword } from "../utils/bcrypt.js";
 
 import User from "../models/user.model.js";
 import Category from "../models/category.model.js";
-import Store from "../models/store.model.js";
 import Product from "../models/product.model.js";
 import FlashSale from "../models/flashSale.model.js";
 import FlashSaleItem from "../models/flashSaleItem.model.js";
@@ -19,7 +18,6 @@ import Order from "../models/order.model.js";
 import PaymentTransaction from "../models/paymentTransaction.model.js";
 import ReturnRequest from "../models/returnRequest.model.js";
 import Review from "../models/review.model.js";
-import StoreFollow from "../models/storeFollow.model.js";
 import Notification from "../models/notification.model.js";
 
 import { userSeedData } from "../data/user_seed_data.js";
@@ -135,10 +133,10 @@ async function processSeedImages(
 }
 
 const allModels: any[] = [
-  User, Category, Store, Product,
+  User, Category , Product,
   FlashSale, FlashSaleItem, Campaign, CampaignItem,
   Cart, Voucher, VoucherUsage, Order, PaymentTransaction,
-  ReturnRequest, Review, StoreFollow, Notification,
+  ReturnRequest, Review , Notification,
 ];
 
 async function resetDatabase() {
@@ -259,13 +257,6 @@ async function seed() {
   });
   await seedCollection("Categories", Category, catData);
 
-  const storeData = await processSeedImages("Stores", [...storeSeedData], {
-    stringFields: ["logo"],
-    idField: "_id",
-    folderFn: (item: any) => `pixelmart/stores/${item._id}`,
-  });
-  await seedCollection("Stores", Store, storeData);
-
   const prodData = await processSeedImages("Products", [...productSeedData], {
     stringFields: [],
     arrayFields: ["images"],
@@ -300,8 +291,6 @@ async function seed() {
     folderFn: (item: any) => `pixelmart/reviews/${item._id}`,
   });
   await seedCollection("Reviews", Review, revData);
-
-  await seedCollection("StoreFollows", StoreFollow, storeFollowSeedData);
 
   console.log("\n--- Tier 5: Communication ---");
   await seedCollection("Notifications", Notification, notificationSeedData);

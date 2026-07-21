@@ -2,8 +2,9 @@ import "dotenv/config";
 import env from "./config/env.js";
 import app from "./app.js";
 import connectDatabase from "./config/database.js";
+import chalk from "chalk";
 connectDatabase().then(() => {
-    app.listen(env.PORT, () => {
-        console.log(`Server running on port ${env.PORT} [${env.NODE_ENV}]`);
+    app.listen(5000, () => {
+        console.log(chalk.green(`Server running on port ${5000} [${env.NODE_ENV}]`));
     });
 });

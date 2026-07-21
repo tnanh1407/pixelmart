@@ -1,6 +1,7 @@
 import { verifyAccessToken } from "../utils/jwt.js";
 import { AppError } from "./error.middleware.js";
-export const auth = (req, res, next) => {
+import User from "../models/user.model.js";
+export const auth = async (req, res, next) => {
     let token;
     // Try Authorization header first
     const authHeader = req.headers.authorization;
@@ -15,6 +16,10 @@ export const auth = (req, res, next) => {
         throw new AppError("No token provided", 401);
     }
     const decoded = verifyAccessToken(token);
+    const user = await User.findById(decoded.userId);
+    if (!user || !user.isActive) {
+        throw new AppError("Tài khoản không khả dụng. Vui lòng liên hệ quản trị viên.", 401);
+    }
     req.user = decoded;
     next();
 };

@@ -7,7 +7,7 @@ import { generateTokenPair, verifyRefreshToken, type JwtPayload } from "../utils
 import { sendMail } from "../utils/mail.js";
 import ForgotPasswordEmail from "../utils/emails/forgot-password-email.tsx";
 import VerificationToken from "../models/verification-token.model.js";
-import { TOKEN_TYPES as tokenType } from "~/constants/roles.ts";
+import { TOKEN_TYPES as tokenType } from "@/constants/roles";
 import env from "../config/env.js";
 
 interface IRegister {

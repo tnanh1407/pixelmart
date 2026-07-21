@@ -13,7 +13,6 @@ export interface IProduct {
   stock: number;
   images: any;
   categoryId: string;
-  storeId: string;
   specifications?: any;
   viewCount: number;
   soldCount: number;
@@ -91,12 +90,6 @@ const productSchema = new mongoose.Schema<IProductDocument>(
       required: [true, "Danh muc san pham la bat buoc"],
       index: true,
     },
-    storeId: {
-      type: String,
-      ref: "Store",
-      required: [true, "Cua hang ban san pham la bat buoc"],
-      index: true,
-    },
     specifications: {
       type: mongoose.Schema.Types.Mixed,
       default: null,
@@ -138,7 +131,6 @@ const productSchema = new mongoose.Schema<IProductDocument>(
 
 productSchema.index({ name: "text", description: "text" });
 productSchema.index({ categoryId: 1, status: 1, isDeleted: 1 });
-productSchema.index({ storeId: 1, status: 1, isDeleted: 1 });
 productSchema.index({ price: 1, status: 1 });
 productSchema.index({ soldCount: -1 });
 

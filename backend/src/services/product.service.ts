@@ -1,19 +1,11 @@
 import Product, { IProduct } from "../models/product.model.js";
 import FlashSaleItem from "../models/flashSaleItem.model.js";
-import Store from "../models/store.model.js";
 import Category from "../models/category.model.js";
 import { AppError } from "../middlewares/error.middleware.js";
 import { uploadImage, deleteImage, deleteImages } from "../utils/uploadImage.js";
 import { getFolder } from "../config/cloudinary.js";
 
 class ProductService {
-  private async checkStoreOwnership(userId: string, userRole: string, storeId: string): Promise<void> {
-    if (userRole === "admin") return;
-    const store = await Store.findById(storeId);
-    if (!store || store.ownerId !== userId) {
-      throw new AppError("Ban khong phai la chu so huu cua cua hang nay", 403);
-    }
-  }
 
   async getProducts(query: any = {}) {
     const {
@@ -104,9 +96,9 @@ class ProductService {
   }
 
   async createProduct(userId: string, userRole: string, data: Partial<IProduct>) {
-    const { name, storeId, categoryId, price } = data;
+    const { name, categoryId, price } = data;
 
-    if (!name || !storeId || !categoryId || price === undefined) {
+    if (!name || !categoryId || price === undefined) {
       throw new AppError("Vui long cung cap day du: Ten, Cua hang, Danh muc va Gia san pham", 400);
     }
 
@@ -115,12 +107,6 @@ class ProductService {
       throw new AppError("Danh muc san pham khong ton tai", 400);
     }
 
-    const store = await Store.findById(storeId);
-    if (!store) {
-      throw new AppError("Cua hang khong ton tai", 400);
-    }
-
-    await this.checkStoreOwnership(userId, userRole, storeId);
 
     const slug = `${this.generateSlug(name)}-${Math.floor(1000 + Math.random() * 9000)}`;
 
@@ -133,12 +119,6 @@ class ProductService {
   async updateProduct(userId: string, userRole: string, id: string, data: Partial<IProduct>) {
     const product = await this.getProductById(id);
 
-    const store = await Store.findById(product.storeId);
-    if (!store) {
-      throw new AppError("Cua hang cua san pham nay khong kha dung", 400);
-    }
-
-    await this.checkStoreOwnership(userId, userRole, String(store._id));
 
     const { name } = data;
     if (name && name !== product.name) {
@@ -168,14 +148,6 @@ class ProductService {
 
   async deleteProduct(userId: string, userRole: string, id: string) {
     const product = await this.getProductById(id);
-
-    const store = await Store.findById(product.storeId);
-    if (!store) {
-      throw new AppError("Cua hang cua san pham nay khong kha dung", 400);
-    }
-
-    await this.checkStoreOwnership(userId, userRole, String(store._id));
-
     product.isDeleted = true;
     product.deletedAt = new Date();
     await product.save();
@@ -197,10 +169,6 @@ class ProductService {
 
   async uploadProductImage(file: Express.Multer.File, productId: string, userId: string, userRole: string): Promise<string> {
     const product = await this.getProductById(productId);
-    const store = await Store.findById(product.storeId);
-    if (!store || (store.ownerId !== userId && userRole !== "admin")) {
-      throw new AppError("Ban khong co quyen cap nhat san pham nay", 403);
-    }
 
     const { secure_url } = await uploadImage(file, getFolder.product(productId).images);
 
@@ -212,10 +180,6 @@ class ProductService {
 
   async uploadProductImages(files: Express.Multer.File[], productId: string, userId: string, userRole: string): Promise<string[]> {
     const product = await this.getProductById(productId);
-    const store = await Store.findById(product.storeId);
-    if (!store || (store.ownerId !== userId && userRole !== "admin")) {
-      throw new AppError("Ban khong co quyen cap nhat san pham nay", 403);
-    }
 
     const urls: string[] = [];
     for (const file of files) {
@@ -231,10 +195,6 @@ class ProductService {
 
   async removeProductImage(productId: string, imageUrl: string, userId: string, userRole: string) {
     const product = await this.getProductById(productId);
-    const store = await Store.findById(product.storeId);
-    if (!store || (store.ownerId !== userId && userRole !== "admin")) {
-      throw new AppError("Ban khong co quyen cap nhat san pham nay", 403);
-    }
 
     await deleteImage(imageUrl);
 

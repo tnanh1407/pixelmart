@@ -1,0 +1,42 @@
+export const categorySeedData = [
+    {
+        _id: "c0000000-0000-4000-a000-00000000ca01",
+        name: "San pham OCOP",
+        slug: "san-pham-ocop",
+        description: "Cac san pham OCOP dat tieu chuan chat luong quoc gia tu 3 den 5 sao.",
+        image: "https://nongsan.buudien.vn/static/buudien/images/category%20(ocop).png",
+        isActive: true,
+    },
+    {
+        _id: "c0000000-0000-4000-a000-00000000ca02",
+        name: "Thuc pham bo duong",
+        slug: "thuc-pham-bo-duong",
+        description: "Sam ngoc linh, yen sao, dong trung ha thao bo duong va tang cuong suc khoe.",
+        image: "https://gateway.vnpost.vn/prod/minio/nsbd/nongsan/home/common/s3_2024102816160476256.png",
+        isActive: true,
+    },
+    {
+        _id: "c0000000-0000-4000-a000-00000000ca03",
+        name: "Suc khoe va lam dep",
+        slug: "suc-khoe-va-lam-dep",
+        description: "My pham thien nhien, tra thao moc thanh nhiet va san pham cham soc co the lanh manh.",
+        image: "https://gateway.vnpost.vn/prod/minio/nsbd/nongsan/home/common/s3_2024102816175780973.png",
+        isActive: true,
+    },
+    {
+        _id: "c0000000-0000-4000-a000-00000000ca04",
+        name: "Thuc pham va Dac san",
+        slug: "thuc-pham-va-dac-san",
+        description: "Nguon dac san vung mien Viet Nam, thit gac bep, thuc pham dong goi truyen thong sach.",
+        image: "https://gateway.vnpost.vn/prod/minio/nsbd/nongsan/home/common/s3_2024102409274627225.png",
+        isActive: true,
+    },
+    {
+        _id: "c0000000-0000-4000-a000-00000000ca05",
+        name: "Do uong",
+        slug: "do-uong",
+        description: "Ruou truyen thong chat luong, nuoc ep trai cay huu co, tra va ca phe nguyen chat.",
+        image: "https://gateway.vnpost.vn/prod/minio/nsbd/nongsan/home/common/s3_2024102816170139012.png",
+        isActive: true,
+    },
+];

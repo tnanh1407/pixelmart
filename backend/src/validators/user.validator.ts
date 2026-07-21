@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { ROLES } from "../constants/roles.js";
 
 export const registerSchema = z.object({
   firstName: z

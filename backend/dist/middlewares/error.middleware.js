@@ -27,7 +27,7 @@ const errorHandler = (err, req, res, next) => {
     console.error(err.stack);
     // todo1 : chạy vào zod
     if (err.name === "ZodError") {
-        const messages = err.errors.map((e) => e.message);
+        const messages = err.issues.map((e) => e.message);
         return res.status(400).json({
             status: "error",
             message: messages.join(", "),

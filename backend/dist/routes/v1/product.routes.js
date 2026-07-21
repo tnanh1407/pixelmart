@@ -1,0 +1,12 @@
+import { Router } from "express";
+import productController from "../../controllers/product.controller.js";
+import asyncHandler from "../../middlewares/asyncHandler.js";
+import { auth, checkRole } from "../../middlewares/auth.middleware.js";
+import { ROLES } from "../../constants/roles.js";
+const router = Router();
+router.get("/", asyncHandler(productController.getProducts.bind(productController)));
+router.get("/:id", asyncHandler(productController.getProductById.bind(productController)));
+router.post("/", auth, checkRole(ROLES.ADMIN), asyncHandler(productController.createProduct.bind(productController)));
+router.patch("/:id", auth, checkRole(ROLES.ADMIN), asyncHandler(productController.updateProduct.bind(productController)));
+router.delete("/:id", auth, checkRole(ROLES.ADMIN), asyncHandler(productController.deleteProduct.bind(productController)));
+export default router;

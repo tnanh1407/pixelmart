@@ -39,9 +39,6 @@ const userSchema = new mongoose.Schema({
     phone: {
         type: String,
         trim: true,
-        unique: true,
-        sparse: true,
-        match: [/^(0|\+84)[0-9]{9,10}$/, "Invalid phone number"],
     },
     provider: {
         type: String,
@@ -50,7 +47,6 @@ const userSchema = new mongoose.Schema({
     },
     googleId: {
         type: String,
-        unique: true,
         sparse: true,
     },
     avatar: {
@@ -69,7 +65,7 @@ const userSchema = new mongoose.Schema({
     timestamps: true,
 });
 userSchema.pre("validate", async function () {
-    if (this.provider === "local" && !this.password) {
+    if (this.isNew && this.provider === "local" && !this.password) {
         this.invalidate("password", "Password is required");
     }
 });
@@ -78,6 +74,7 @@ userSchema.pre("save", async function () {
         return;
     this.password = await hashPassword(this.password);
 });
+userSchema.index({ role: 1, isActive: 1 });
 userSchema.set("toJSON", {
     transform(doc, ret) {
         const { password, __v, ...rest } = ret;
