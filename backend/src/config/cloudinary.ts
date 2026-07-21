@@ -36,11 +36,4 @@ export const getFolder = {
     images: `${CLOUDINARY_FOLDERS.RETURNS}/${returnId}/images`,
   }),
 };
-
-// Backward compatibility
-export const getUserFolder = (userId: string) => ({
-  avatars: `${CLOUDINARY_FOLDERS.USERS}/${userId}/avatars`,
-  reviews: `${CLOUDINARY_FOLDERS.USERS}/${userId}/reviews`,
-});
-
 export default cloudinary;

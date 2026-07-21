@@ -23,27 +23,37 @@ const router = Router();
  *     parameters:
  *       - in: query
  *         name: page
- *         schema: { type: integer, default: 1 }
+ *         schema:
+ *           type: integer
+ *           default: 1
  *         description: Số trang
  *       - in: query
  *         name: limit
- *         schema: { type: integer, default: 10 }
+ *         schema:
+ *           type: integer
+ *           default: 10
  *         description: Số lượng bản ghi mỗi trang
  *       - in: query
  *         name: sort
- *         schema: { type: string, default: "-createdAt" }
- *         description: Sắp xếp (vd: "createdAt", "-createdAt")
+ *         schema:
+ *           type: string
+ *           default: "-createdAt"
+ *         description: Sắp xếp (vd: createdAt, -createdAt)
  *       - in: query
  *         name: search
- *         schema: { type: string }
+ *         schema:
+ *           type: string
  *         description: Tìm kiếm theo tên hoặc email
  *       - in: query
  *         name: role
- *         schema: { type: string, enum: [user, admin] }
+ *         schema:
+ *           type: string
+ *           enum: [user, admin]
  *         description: Lọc theo vai trò
  *       - in: query
  *         name: isActive
- *         schema: { type: boolean }
+ *         schema:
+ *           type: boolean
  *         description: Lọc theo trạng thái hoạt động
  *     responses:
  *       200:
@@ -83,7 +93,8 @@ router.get("/", checkRole(ROLES.ADMIN), asyncHandler(userController.getAll.bind(
  *       - in: path
  *         name: id
  *         required: true
- *         schema: { type: string }
+ *         schema:
+ *           type: string
  *         description: ID của người dùng
  *     responses:
  *       200:
@@ -93,7 +104,9 @@ router.get("/", checkRole(ROLES.ADMIN), asyncHandler(userController.getAll.bind(
  *             schema:
  *               type: object
  *               properties:
- *                 success: { type: boolean, example: true }
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *                 data:
  *                   $ref: '#/components/schemas/User'
  *       401:
@@ -127,7 +140,8 @@ router.get("/:id", asyncHandler(userController.getById.bind(userController)));
  *       - in: path
  *         name: id
  *         required: true
- *         schema: { type: string }
+ *         schema:
+ *           type: string
  *         description: ID của người dùng
  *     requestBody:
  *       required: true
@@ -143,8 +157,12 @@ router.get("/:id", asyncHandler(userController.getById.bind(userController)));
  *             schema:
  *               type: object
  *               properties:
- *                 success: { type: boolean, example: true }
- *                 message: { type: string, example: User updated successfully }
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: User updated successfully
  *                 data:
  *                   $ref: '#/components/schemas/User'
  *       401:
@@ -183,8 +201,12 @@ router.patch("/:id", checkRole(ROLES.ADMIN), asyncHandler(userController.update.
  *             schema:
  *               type: object
  *               properties:
- *                 success: { type: boolean, example: true }
- *                 message: { type: string, example: Profile updated successfully }
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Profile updated successfully
  *                 data:
  *                   $ref: '#/components/schemas/User'
  *       401:
@@ -226,8 +248,12 @@ router.patch("/me", auth, asyncHandler(userController.updateMe.bind(userControll
  *             schema:
  *               type: object
  *               properties:
- *                 success: { type: boolean, example: true }
- *                 message: { type: string, example: Profile updated successfully }
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Profile updated successfully
  *                 data:
  *                   $ref: '#/components/schemas/User'
  *       401:
@@ -252,7 +278,8 @@ router.patch("/profile", auth, ...uploadAvatar, asyncHandler(userController.upda
  *       - in: path
  *         name: id
  *         required: true
- *         schema: { type: string }
+ *         schema:
+ *           type: string
  *         description: ID của người dùng
  *     responses:
  *       200:
@@ -262,8 +289,12 @@ router.patch("/profile", auth, ...uploadAvatar, asyncHandler(userController.upda
  *             schema:
  *               type: object
  *               properties:
- *                 success: { type: boolean, example: true }
- *                 message: { type: string, example: User activated successfully }
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: User activated successfully
  *                 data:
  *                   $ref: '#/components/schemas/User'
  *       401:
@@ -292,7 +323,8 @@ router.patch("/:id/toggle-active", checkRole(ROLES.ADMIN), asyncHandler(userCont
  *       - in: path
  *         name: id
  *         required: true
- *         schema: { type: string }
+ *         schema:
+ *           type: string
  *         description: ID của người dùng cần xóa
  *     responses:
  *       200:
@@ -302,8 +334,12 @@ router.patch("/:id/toggle-active", checkRole(ROLES.ADMIN), asyncHandler(userCont
  *             schema:
  *               type: object
  *               properties:
- *                 success: { type: boolean, example: true }
- *                 message: { type: string, example: User deleted successfully }
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: User deleted successfully
  *       401:
  *         description: Không có quyền truy cập
  *       403:

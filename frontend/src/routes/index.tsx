@@ -30,8 +30,7 @@ import StoreDetailPage from '../pages/admin/stores/StoreDetailPage'
 import CampaignsPage from '@/pages/admin/campaigns/CampaignsPage'
 import CampaignDetailPage from '@/pages/admin/campaigns/CampaignDetailPage'
 import CategoryListPage from '@/pages/admin/categories/CategoryListPage'
-import CategoryDetailPage from '@/pages/admin/categories/CategoryDetailPage'
-import NotificationListPage from '@/pages/admin/notifications/NotificationListPage'
+// import CategoryDetailPage from '@/pages/admin/categories/CategoryDetailPage'import NotificationListPage from '@/pages/admin/notifications/NotificationListPage'
 import ReportPage from '@/pages/admin/reports/ReportPage'
 import SettingsPage from '@/pages/admin/settings/SettingsPage'
 import NotFoundPage from '../pages/notFound/NotFoundPage'
@@ -142,10 +141,10 @@ const router = createBrowserRouter([
           { path: 'stores', element: <StoresPage /> },
           { path: 'stores/:id', element: <StoreDetailPage /> },
           { path: 'categories', element: <CategoryListPage /> },
-          { path: 'categories/:id', element: <CategoryDetailPage /> },
+          // { path: 'categories/:id', element: <CategoryDetailPage /> },
           { path: 'campaigns', element: <CampaignsPage /> },
           { path: 'campaigns/:id', element: <CampaignDetailPage /> },
-          { path: 'notifications', element: <NotificationListPage /> },
+          // { path: 'notifications', element: <NotificationListPage /> },
           { path: 'reports', element: <ReportPage /> },
           { path: 'settings', element: <SettingsPage /> },
         ],
