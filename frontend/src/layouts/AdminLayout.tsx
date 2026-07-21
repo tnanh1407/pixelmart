@@ -1,8 +1,8 @@
 import { Outlet } from 'react-router-dom'
-import { AppSidebar } from '@/components/admin/app-sidebar'
-import { SiteHeader } from '@/components/admin/site-header'
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import DefaultHelmet from '@/components/common/DefaultHelmet'
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
+import { SiteHeader } from '@/components/admin/Sidebar/SidebarHeaderMain'
+import { AppSidebar } from '@/components/admin/Sidebar/Sidebar'
 
 export default function AdminLayout() {
   return (

@@ -12,6 +12,8 @@ export interface ICampaign {
   type: (typeof CAMPAIGN_TYPE)[keyof typeof CAMPAIGN_TYPE];
   shortDescription?: string;
   content?: string;
+  image: string;
+  order?: number;
   isActive: boolean;
   startDate?: Date;
   endDate?: Date;
@@ -65,6 +67,14 @@ const campaignSchema = new mongoose.Schema<ICampaignDocument>(
       type: String,
       trim: true,
       default: "",
+    },
+    image: {
+      type: String,
+      required: [true, "Hinh anh la bat buoc"],
+    },
+    order: {
+      type: Number,
+      default: 0,
     },
     isActive: {
       type: Boolean,

@@ -40,11 +40,6 @@ Enum payment_type {
   refund
 }
 
-Enum product_status {
-  draft
-  published
-  archived
-}
 
 Enum order_status {
   pending
@@ -77,8 +72,6 @@ Enum voucher_scope {
   platform
   store
 }
-
-
 
 Enum notification_type {
   order
@@ -193,41 +186,6 @@ Table wards {
 }
 
 
-// ==================== STORES ====================
-
-Table stores {
-  _id varchar [pk, note: "UUID v4"]
-  name varchar(255) [not null]
-  slug varchar(255) [unique, not null]
-  logo varchar(500)
-  description text
-  ownerId varchar [ref: > users._id, unique, not null]
-  phone varchar(20)
-  email varchar(255)
-  street varchar(255)
-  provinceCode varchar(20) [ref: > provinces.code]
-  districtCode varchar(20) [ref: > districts.code]
-  wardCode varchar(20) [ref: > wards.code]
-  policies json
-  isVerified boolean [default: false]
-  isActive boolean [default: true]
-  createdAt timestamp [default: `now()`]
-  updatedAt timestamp
-
-}
-
-Table store_follows {
-  _id varchar [pk, note: "UUID v4"]
-  userId varchar [ref: > users._id, not null]
-  storeId varchar [ref: > stores._id, not null]
-  createdAt timestamp [default: `now()`]
-  updatedAt timestamp
-
-  indexes {
-    (userId, storeId) [unique]
-  }
-}
-
 // ==================== CATEGORIES ====================
 
 Table categories {
@@ -254,11 +212,10 @@ Table products {
   stock int [default: 0]
   images json
   categoryId varchar [ref: > categories._id, not null]
-  storeId varchar [ref: > stores._id, not null]
   specifications json // thông số kĩ thuật
   viewCount int [default: 0]
   soldCount int [default: 0]
-  status product_status [default: "draft"]
+  status boolean [default: true]
   isDeleted boolean [default: false]
   deletedAt timestamp
   publishedAt timestamp
@@ -283,7 +240,6 @@ Table carts {
 Table orders {
   _id varchar [pk, note: "UUID v4"]
   userId varchar [ref: > users._id, not null]
-  storeId varchar [ref: > stores._id, not null]
   orderCode varchar(50) [unique, not null]
   status order_status [default: "pending"]
   items json [not null, note: "embedded array of order items"]
@@ -325,14 +281,12 @@ Table payment_transactions {
   gatewayResponse json
   createdAt timestamp [default: `now()`]
   updatedAt timestamp
-
 }
 
 Table return_requests {
   _id varchar [pk, note: "UUID v4"]
   orderId varchar [ref: > orders._id, not null]
   userId varchar [ref: > users._id, not null]
-  storeId varchar [ref: > stores._id, not null]
   reason varchar(500) [not null]
   description text
   status return_request_status [default: "pending"]
@@ -439,7 +393,6 @@ Table vouchers {
   minOrderValue decimal(15,2) [default: 0]
   maxDiscount decimal(15,2)
   scope voucher_scope [default: "platform"]
-  storeId varchar [ref: > stores._id]
   usageLimit int [not null]
   usedCount int [default: 0]
   startDate timestamp [not null]

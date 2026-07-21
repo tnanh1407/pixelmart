@@ -48,7 +48,7 @@ class CampaignService {
   }
 
   async getCampaignById(id: string) {
-    const campaign = await Campaign.findById(id);
+    const campaign = await Campaign.findById(id).populate("authorId", "name avatar");
     if (!campaign) {
       throw new AppError("Chien dich khong ton tai", 404);
     }

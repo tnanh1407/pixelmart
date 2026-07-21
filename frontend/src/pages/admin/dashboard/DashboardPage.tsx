@@ -11,7 +11,7 @@ import {
   KPICard, RevenueChart, OrderStats, StorePerformance,
   ProductPerformance, UserAnalytics, SystemHealth,
   RecentActivity, QuickActions,
-} from '@/components/admin/dashboard'
+} from '@/components/admin/Main/dashboard'
 
 const kpiConfig = (data: DashboardAnalytics | undefined) => [
   {

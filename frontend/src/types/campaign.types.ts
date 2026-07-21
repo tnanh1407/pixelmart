@@ -6,6 +6,8 @@ export interface ICampaignSubsection {
 export interface ICampaign {
   _id: string
   title: string
+  slug: string
+  type: "promotion" | "blog"
   shortDescription?: string
   content?: string
   image: string
@@ -13,11 +15,10 @@ export interface ICampaign {
   startDate?: string
   endDate?: string
   order: number
-  durationInDays?: string
+  durationInDays?: number
   createdAt: string
   updatedAt: string
-  author?: string
-  categoryName?: string
+  authorId?: string | { _id: string; name: string; avatar?: string }
   sapo?: string
   contentSections?: ICampaignSubsection[]
   highlightsTitle?: string
