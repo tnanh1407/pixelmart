@@ -11,11 +11,11 @@ const router = Router();
  *   post:
  *     tags:
  *       - Auth
- *     summary: Register a new user account
+ *     summary: Đăng ký tài khoản người dùng mới
  *     description: >
- *       Creates a new user with local (email/password) provider.
- *       On success, sets `accessToken` (15min) and `refreshToken` (7d) as httpOnly cookies
- *       and returns the created user object.
+ *       Tạo người dùng mới với nhà cung cấp local (email/mật khẩu).
+ *       Khi thành công, tự động đặt `accessToken` (15 phút) và `refreshToken` (7 ngày) dưới dạng httpOnly cookies
+ *       và trả về đối tượng người dùng đã tạo.
  *     requestBody:
  *       required: true
  *       content:
@@ -30,7 +30,7 @@ const router = Router();
  *             confirmPassword: password123
  *     responses:
  *       201:
- *         description: Account created. Tokens set as httpOnly cookies.
+ *         description: Tài khoản đã được tạo. Token được đặt dưới dạng httpOnly cookies.
  *         headers:
  *           Set-Cookie:
  *             schema:
@@ -47,7 +47,7 @@ const router = Router();
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: Register successfully
+ *                   example: Đăng ký thành công
  *                 data:
  *                   type: object
  *                   properties:
@@ -72,7 +72,7 @@ const router = Router();
  *                   createdAt: "2026-07-21T10:00:00.000Z"
  *                   updatedAt: "2026-07-21T10:00:00.000Z"
  *       400:
- *         description: Validation error (missing fields, password mismatch, etc.)
+ *         description: Lỗi validation (thiếu trường, mật khẩu không khớp, v.v.)
  *         content:
  *           application/json:
  *             schema:
@@ -81,7 +81,7 @@ const router = Router();
  *               success: false
  *               message: "[\"First name is required\",\"Passwords do not match\"]"
  *       409:
- *         description: Email already exists
+ *         description: Email đã tồn tại
  *         content:
  *           application/json:
  *             schema:
@@ -97,11 +97,11 @@ router.post("/register", asyncHandler(authController.register.bind(authControlle
  * /api/v1/auth/login:
  *   post:
  *     tags: [Auth]
- *     summary: Login with email and password
+ *     summary: Đăng nhập bằng email và mật khẩu
  *     description: >
- *       Authenticates a user with email and password.
- *       Requires email to be verified first.
- *       On success, sets `accessToken` (15min) and `refreshToken` (7d) as httpOnly cookies.
+ *       Xác thực người dùng bằng email và mật khẩu.
+ *       Yêu cầu email phải được xác thực trước.
+ *       Khi thành công, tự động đặt `accessToken` (15 phút) và `refreshToken` (7 ngày) dưới dạng httpOnly cookies.
  *     requestBody:
  *       required: true
  *       content:
@@ -113,7 +113,7 @@ router.post("/register", asyncHandler(authController.register.bind(authControlle
  *             password: password123
  *     responses:
  *       200:
- *         description: Login successful. Tokens set as httpOnly cookies.
+ *         description: Đăng nhập thành công. Token được đặt dưới dạng httpOnly cookies.
  *         headers:
  *           Set-Cookie:
  *             schema:
@@ -130,7 +130,7 @@ router.post("/register", asyncHandler(authController.register.bind(authControlle
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: Login successfully
+ *                   example: Đăng nhập thành công
  *                 data:
  *                   type: object
  *                   properties:
@@ -155,7 +155,7 @@ router.post("/register", asyncHandler(authController.register.bind(authControlle
  *                   createdAt: "2026-07-21T10:00:00.000Z"
  *                   updatedAt: "2026-07-21T10:00:00.000Z"
  *       401:
- *         description: Invalid email or password
+ *         description: Email hoặc mật khẩu không đúng
  *         content:
  *           application/json:
  *             schema:
@@ -164,24 +164,24 @@ router.post("/register", asyncHandler(authController.register.bind(authControlle
  *               success: false
  *               message: Invalid email or password
  *       403:
- *         description: Account locked or email not verified
+ *         description: Tài khoản bị khóa hoặc email chưa được xác thực
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *             examples:
  *               notVerified:
- *                 summary: Email not verified
+ *                 summary: Email chưa được xác thực
  *                 value:
  *                   success: false
  *                   message: "Email not verified. Please verify your email before logging in."
  *               locked:
- *                 summary: Account locked
+ *                 summary: Tài khoản bị khóa
  *                 value:
  *                   success: false
  *                   message: "Tài khoản đã bị khóa. Vui lòng liên hệ quản trị viên."
  *               googleAccount:
- *                 summary: Google account
+ *                 summary: Tài khoản Google
  *                 value:
  *                   success: false
  *                   message: "Tài khoản này sử dụng đăng nhập Google. Vui lòng đăng nhập bằng Google."
@@ -193,13 +193,13 @@ router.post("/login", asyncHandler(authController.login.bind(authController)));
  * /api/v1/auth/google:
  *   post:
  *     tags: [Auth]
- *     summary: Login or register with Google OAuth
+ *     summary: Đăng nhập hoặc đăng ký bằng Google OAuth
  *     description: >
- *       Authenticates using Google OAuth credentials.
- *       - If `googleId` exists → login.
- *       - If email exists but no `googleId` → link Google account to existing account.
- *       - If neither exists → create new account with `provider: "google"` and `isEmailVerified: true`.
- *       On success, sets `accessToken` (15min) and `refreshToken` (7d) as httpOnly cookies.
+ *       Xác thực bằng thông tin Google OAuth.
+ *       - Nếu `googleId` tồn tại → đăng nhập.
+ *       - Nếu email tồn tại nhưng không có `googleId` → liên kết tài khoản Google với tài khoản hiện có.
+ *       - Nếu không tồn tại → tạo tài khoản mới với `provider: "google"` và `isEmailVerified: true`.
+ *       Khi thành công, tự động đặt `accessToken` (15 phút) và `refreshToken` (7 ngày) dưới dạng httpOnly cookies.
  *     requestBody:
  *       required: true
  *       content:
@@ -213,7 +213,7 @@ router.post("/login", asyncHandler(authController.login.bind(authController)));
  *             avatar: "https://lh3.googleusercontent.com/..."
  *     responses:
  *       200:
- *         description: Google login successful. Tokens set as httpOnly cookies.
+ *         description: Đăng nhập Google thành công. Token được đặt dưới dạng httpOnly cookies.
  *         headers:
  *           Set-Cookie:
  *             schema:
@@ -230,7 +230,7 @@ router.post("/login", asyncHandler(authController.login.bind(authController)));
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: Google login successfully
+ *                   example: Đăng nhập Google thành công
  *                 data:
  *                   type: object
  *                   properties:
@@ -238,7 +238,7 @@ router.post("/login", asyncHandler(authController.login.bind(authController)));
  *                       $ref: '#/components/schemas/User'
  *             example:
  *               success: true
- *               message: Google login successfully
+ *               message: Đăng nhập Google thành công
  *               data:
  *                 user:
  *                   _id: "550e8400-e29b-41d4-a716-446655440000"
@@ -255,7 +255,7 @@ router.post("/login", asyncHandler(authController.login.bind(authController)));
  *                   createdAt: "2026-07-21T10:00:00.000Z"
  *                   updatedAt: "2026-07-21T10:00:00.000Z"
  *       403:
- *         description: Account is locked
+ *         description: Tài khoản bị khóa
  *         content:
  *           application/json:
  *             schema:
@@ -271,14 +271,14 @@ router.post("/google", asyncHandler(authController.googleLogin.bind(authControll
  * /api/v1/auth/refresh:
  *   post:
  *     tags: [Auth]
- *     summary: Refresh access token
+ *     summary: Làm mới access token
  *     description: >
- *       Uses the `refreshToken` httpOnly cookie to generate a new token pair.
- *       The old refresh token is verified against `JWT_REFRESH_SECRET`.
- *       On success, new `accessToken` (15min) and `refreshToken` (7d) are set as httpOnly cookies.
+ *       Sử dụng cookie `refreshToken` httpOnly để tạo cặp token mới.
+ *       Refresh token cũ được xác minh bằng `JWT_REFRESH_SECRET`.
+ *       Khi thành công, `accessToken` (15 phút) và `refreshToken` (7 ngày) mới được đặt dưới dạng httpOnly cookies.
  *     responses:
  *       200:
- *         description: Token refreshed successfully. New tokens set as httpOnly cookies.
+ *         description: Token đã được làm mới thành công. Token mới được đặt dưới dạng httpOnly cookies.
  *         headers:
  *           Set-Cookie:
  *             schema:
@@ -295,21 +295,21 @@ router.post("/google", asyncHandler(authController.googleLogin.bind(authControll
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: Token refreshed successfully
+ *                   example: Token đã được làm mới thành công
  *       401:
- *         description: No refresh token cookie or invalid/expired token
+ *         description: Không có cookie refresh token hoặc token không hợp lệ/hết hạn
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *             examples:
  *               noToken:
- *                 summary: Missing cookie
+ *                 summary: Thiếu cookie
  *                 value:
  *                   success: false
  *                   message: No refresh token provided
  *               invalidToken:
- *                 summary: Invalid or expired
+ *                 summary: Không hợp lệ hoặc đã hết hạn
  *                 value:
  *                   success: false
  *                   message: Invalid or expired refresh token
@@ -321,13 +321,13 @@ router.post("/refresh", asyncHandler(authController.refreshToken.bind(authContro
  * /api/v1/auth/logout:
  *   post:
  *     tags: [Auth]
- *     summary: Logout current user
+ *     summary: Đăng xuất người dùng hiện tại
  *     description: >
- *       Clears the `accessToken` and `refreshToken` httpOnly cookies.
- *       No authentication required — can be called even without being logged in.
+ *       Xóa cookie `accessToken` và `refreshToken` httpOnly.
+ *       Không yêu cầu xác thực — có thể gọi ngay cả khi chưa đăng nhập.
  *     responses:
  *       200:
- *         description: Cookies cleared successfully
+ *         description: Cookie đã được xóa thành công
  *         headers:
  *           Set-Cookie:
  *             schema:
@@ -344,7 +344,7 @@ router.post("/refresh", asyncHandler(authController.refreshToken.bind(authContro
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: Logged out successfully
+ *                   example: Đã đăng xuất thành công
  */
 router.post("/logout", asyncHandler(authController.logout.bind(authController)));
 
@@ -353,19 +353,19 @@ router.post("/logout", asyncHandler(authController.logout.bind(authController)))
  * /api/v1/auth/me:
  *   get:
  *     tags: [Auth]
- *     summary: Get current authenticated user profile
+ *     summary: Lấy thông tin hồ sơ người dùng hiện tại
  *     description: >
- *       Returns the authenticated user's profile.
- *       Requires a valid JWT via `Authorization: Bearer <token>` header or `accessToken` cookie.
- *       If the account is locked (isActive = false), returns 403.
- *       The response includes a `hasPassword` field indicating whether the user has a password set
- *       (useful for Google-authenticated users who cannot change password).
+ *       Trả về hồ sơ của người dùng đã xác thực.
+ *       Yêu cầu JWT hợp lệ qua header `Authorization: Bearer <token>` hoặc cookie `accessToken`.
+ *       Nếu tài khoản bị khóa (isActive = false), trả về 403.
+ *       Phản hồi bao gồm trường `hasPassword` cho biết người dùng đã đặt mật khẩu hay chưa
+ *       (hữu ích cho người dùng xác thực qua Google không thể đổi mật khẩu).
  *     security:
  *       - bearerAuth: []
  *       - cookieAuth: []
  *     responses:
  *       200:
- *         description: Current user profile
+ *         description: Hồ sơ người dùng hiện tại
  *         content:
  *           application/json:
  *             schema:
@@ -400,7 +400,7 @@ router.post("/logout", asyncHandler(authController.logout.bind(authController)))
  *                 updatedAt: "2026-07-21T10:00:00.000Z"
  *                 hasPassword: true
  *       401:
- *         description: Missing or invalid access token
+ *         description: Thiếu hoặc không có token truy cập hợp lệ
  *         content:
  *           application/json:
  *             schema:
@@ -409,7 +409,7 @@ router.post("/logout", asyncHandler(authController.logout.bind(authController)))
  *               success: false
  *               message: Unauthorized
  *       403:
- *         description: Account is locked
+ *         description: Tài khoản bị khóa
  *         content:
  *           application/json:
  *             schema:
@@ -425,18 +425,18 @@ router.get("/me", auth, asyncHandler(authController.getMe.bind(authController)))
  * /api/v1/auth/send-verification:
  *   post:
  *     tags: [Auth]
- *     summary: Send 6-digit email verification code
+ *     summary: Gửi mã xác thực email 6 chữ số
  *     description: >
- *       Sends a 6-digit OTP code to the authenticated user's email for email verification.
- *       The code expires in 15 minutes.
- *       Rate-limited to 5 resends per day per user.
- *       Requires authentication.
+ *       Gửi mã OTP 6 chữ số đến email của người dùng đã xác thực để xác minh email.
+ *       Mã có hiệu lực trong 15 phút.
+ *       Giới hạn tối đa 5 lần gửi lại mỗi ngày cho mỗi người dùng.
+ *       Yêu cầu xác thực.
  *     security:
  *       - bearerAuth: []
  *       - cookieAuth: []
  *     responses:
  *       200:
- *         description: Verification code sent to email
+ *         description: Mã xác thực đã được gửi đến email
  *         content:
  *           application/json:
  *             schema:
@@ -447,9 +447,9 @@ router.get("/me", auth, asyncHandler(authController.getMe.bind(authController)))
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: Verification code sent successfully
+ *                   example: Mã xác thực đã được gửi thành công
  *       400:
- *         description: Email already verified
+ *         description: Email đã được xác thực
  *         content:
  *           application/json:
  *             schema:
@@ -458,7 +458,7 @@ router.get("/me", auth, asyncHandler(authController.getMe.bind(authController)))
  *               success: false
  *               message: Email is already verified
  *       429:
- *         description: Too many requests (max 5/day)
+ *         description: Quá nhiều yêu cầu (tối đa 5 lần/ngày)
  *         content:
  *           application/json:
  *             schema:
@@ -474,11 +474,11 @@ router.post("/send-verification", auth, asyncHandler(authController.sendVerifica
  * /api/v1/auth/verify-email:
  *   post:
  *     tags: [Auth]
- *     summary: Verify email with 6-digit code
+ *     summary: Xác thực email bằng mã 6 chữ số
  *     description: >
- *       Verifies the user's email using the 6-digit code sent to their email.
- *       The code expires in 15 minutes.
- *       Requires authentication.
+ *       Xác thực email của người dùng bằng mã 6 chữ số được gửi đến email.
+ *       Mã có hiệu lực trong 15 phút.
+ *       Yêu cầu xác thực.
  *     security:
  *       - bearerAuth: []
  *       - cookieAuth: []
@@ -492,7 +492,7 @@ router.post("/send-verification", auth, asyncHandler(authController.sendVerifica
  *             code: "123456"
  *     responses:
  *       200:
- *         description: Email verified successfully
+ *         description: Email đã được xác thực thành công
  *         content:
  *           application/json:
  *             schema:
@@ -503,26 +503,26 @@ router.post("/send-verification", auth, asyncHandler(authController.sendVerifica
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: Email verified successfully
+ *                   example: Xác thực email thành công
  *       400:
- *         description: Invalid/expired code or already verified
+ *         description: Mã không hợp lệ/hết hạn hoặc đã được xác thực
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *             examples:
  *               invalidCode:
- *                 summary: Invalid or expired code
+ *                 summary: Mã không hợp lệ hoặc đã hết hạn
  *                 value:
  *                   success: false
  *                   message: Invalid or expired verification code
  *               alreadyVerified:
- *                 summary: Already verified
+ *                 summary: Đã xác thực
  *                 value:
  *                   success: false
  *                   message: Email is already verified
  *       401:
- *         description: Unauthorized
+ *         description: Không có quyền truy cập
  *         content:
  *           application/json:
  *             schema:
@@ -535,18 +535,18 @@ router.post("/verify-email", auth, asyncHandler(authController.verifyEmail.bind(
  * /api/v1/auth/resend-verification:
  *   post:
  *     tags: [Auth]
- *     summary: Resend email verification code
+ *     summary: Gửi lại mã xác thực email
  *     description: >
- *       Resends a new 6-digit verification code to the user's email.
- *       Deletes any previous unused codes first.
- *       Rate-limited to 5 resends per day per user.
- *       Requires authentication.
+ *       Gửi lại mã xác thực 6 chữ số mới đến email của người dùng.
+ *       Xóa các mã cũ chưa sử dụng trước đó.
+ *       Giới hạn tối đa 5 lần gửi lại mỗi ngày cho mỗi người dùng.
+ *       Yêu cầu xác thực.
  *     security:
  *       - bearerAuth: []
  *       - cookieAuth: []
  *     responses:
  *       200:
- *         description: New verification code sent
+ *         description: Mã xác thực mới đã được gửi
  *         content:
  *           application/json:
  *             schema:
@@ -559,7 +559,7 @@ router.post("/verify-email", auth, asyncHandler(authController.verifyEmail.bind(
  *                   type: string
  *                   example: Verification code resent successfully
  *       400:
- *         description: Email already verified
+ *         description: Email đã được xác thực
  *         content:
  *           application/json:
  *             schema:
@@ -568,7 +568,7 @@ router.post("/verify-email", auth, asyncHandler(authController.verifyEmail.bind(
  *               success: false
  *               message: Email is already verified
  *       429:
- *         description: Too many requests (max 5/day)
+ *         description: Quá nhiều yêu cầu (tối đa 5 lần/ngày)
  *         content:
  *           application/json:
  *             schema:
@@ -584,11 +584,11 @@ router.post("/resend-verification", auth, asyncHandler(authController.resendVeri
  * /api/v1/auth/forgot-password:
  *   post:
  *     tags: [Auth]
- *     summary: Request password reset email
+ *     summary: Yêu cầu email đặt lại mật khẩu
  *     description: >
- *       Sends a password reset link to the given email address.
- *       The link contains a UUID token that expires in 15 minutes.
- *       **Silent fail**: If the email does not exist, still returns 200 to prevent email enumeration.
+ *       Gửi liên kết đặt lại mật khẩu đến địa chỉ email đã cho.
+ *       Liên kết chứa token UUID có hiệu lực trong 15 phút.
+ *       **Im lặng**: Nếu email không tồn tại, vẫn trả về 200 để tránh dò tìm email.
  *     requestBody:
  *       required: true
  *       content:
@@ -599,7 +599,7 @@ router.post("/resend-verification", auth, asyncHandler(authController.resendVeri
  *             email: john@example.com
  *     responses:
  *       200:
- *         description: Reset link sent (if email exists). Always returns 200 to prevent email enumeration.
+ *         description: Liên kết đặt lại mật khẩu đã được gửi (nếu email tồn tại). Luôn trả về 200 để tránh dò tìm email.
  *         content:
  *           application/json:
  *             schema:
@@ -610,7 +610,7 @@ router.post("/resend-verification", auth, asyncHandler(authController.resendVeri
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: If the email exists, a reset link has been sent
+ *                   example: Nếu email tồn tại, liên kết đặt lại mật khẩu đã được gửi
  */
 router.post("/forgot-password", asyncHandler(authController.forgotPassword.bind(authController)));
 
@@ -619,11 +619,11 @@ router.post("/forgot-password", asyncHandler(authController.forgotPassword.bind(
  * /api/v1/auth/reset-password:
  *   post:
  *     tags: [Auth]
- *     summary: Reset password with token
+ *     summary: Đặt lại mật khẩu bằng token
  *     description: >
- *       Resets the password using the token received via email.
- *       The token is a UUID v4 that expires in 15 minutes.
- *       Once used, the token is marked as used and cannot be reused.
+ *       Đặt lại mật khẩu bằng token nhận được qua email.
+ *       Token là UUID v4 có hiệu lực trong 15 phút.
+ *       Sau khi sử dụng, token được đánh dấu đã dùng và không thể sử dụng lại.
  *     requestBody:
  *       required: true
  *       content:
@@ -636,7 +636,7 @@ router.post("/forgot-password", asyncHandler(authController.forgotPassword.bind(
  *             confirmPassword: "newPassword123"
  *     responses:
  *       200:
- *         description: Password has been reset successfully
+ *         description: Mật khẩu đã được đặt lại thành công
  *         content:
  *           application/json:
  *             schema:
@@ -656,12 +656,12 @@ router.post("/forgot-password", asyncHandler(authController.forgotPassword.bind(
  *               $ref: '#/components/schemas/ErrorResponse'
  *             examples:
  *               invalidToken:
- *                 summary: Invalid or expired token
+ *                 summary: Token không hợp lệ hoặc đã hết hạn
  *                 value:
  *                   success: false
  *                   message: Invalid or expired reset token
  *               passwordMismatch:
- *                 summary: Passwords do not match
+ *                 summary: Mật khẩu không khớp
  *                 value:
  *                   success: false
  *                   message: "[\"Passwords do not match\"]"
@@ -673,12 +673,12 @@ router.post("/reset-password", asyncHandler(authController.resetPassword.bind(au
  * /api/v1/auth/change-password:
  *   post:
  *     tags: [Auth]
- *     summary: Change password (authenticated)
+ *     summary: Đổi mật khẩu (đã xác thực)
  *     description: >
- *       Changes the password for the currently authenticated user.
- *       Requires the current password for verification.
- *       Only works for accounts with `provider: "local"`.
- *       Google-authenticated accounts cannot change password.
+ *       Thay đổi mật khẩu cho người dùng hiện tại đã xác thực.
+ *       Yêu cầu mật khẩu hiện tại để xác minh.
+ *       Chỉ hoạt động với tài khoản có `provider: "local"`.
+ *       Tài khoản xác thực qua Google không thể đổi mật khẩu.
  *     security:
  *       - bearerAuth: []
  *       - cookieAuth: []
@@ -694,7 +694,7 @@ router.post("/reset-password", asyncHandler(authController.resetPassword.bind(au
  *             confirmPassword: "newPassword123"
  *     responses:
  *       200:
- *         description: Password changed successfully
+ *         description: Đổi mật khẩu thành công
  *         content:
  *           application/json:
  *             schema:
@@ -714,17 +714,17 @@ router.post("/reset-password", asyncHandler(authController.resetPassword.bind(au
  *               $ref: '#/components/schemas/ErrorResponse'
  *             examples:
  *               wrongPassword:
- *                 summary: Wrong current password
+ *                 summary: Mật khẩu hiện tại không đúng
  *                 value:
  *                   success: false
  *                   message: "Mật khẩu hiện tại không đúng"
  *               googleAccount:
- *                 summary: Google account cannot change password
+ *                 summary: Không thể đổi mật khẩu tài khoản Google
  *                 value:
  *                   success: false
  *                   message: "Tài khoản này sử dụng đăng nhập Google. Không thể thay đổi mật khẩu."
  *       401:
- *         description: Unauthorized
+ *         description: Không có quyền truy cập
  *         content:
  *           application/json:
  *             schema:

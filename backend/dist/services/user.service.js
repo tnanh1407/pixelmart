@@ -121,6 +121,9 @@ class UserService {
         if (!user) {
             throw new AppError("User not found", 404);
         }
+        if (user.role === "admin" && user.isActive) {
+            throw new AppError("Không thể vô hiệu hóa tài khoản quản trị viên", 403);
+        }
         return await User.findByIdAndUpdate(id, { isActive: !user.isActive }, { returnDocument: "after" });
     }
 }

@@ -1,6 +1,6 @@
 import { type Request, type Response } from "express";
 import userService from "../services/user.service.js";
-import { updateUserSchema } from "../validators/user.validator.js";
+import { updateUserSchema, updateProfileSchema } from "../validators/user.validator.js";
 
 class UserController {
   async getById(req: Request, res: Response) {
@@ -59,6 +59,17 @@ class UserController {
     res.json({
       success: true,
       message: `User ${user?.isActive ? "activated" : "deactivated"} successfully`,
+      data: user,
+    });
+  }
+
+  async updateMe(req: Request, res: Response) {
+    const id = String(req.user?.userId);
+    const data = updateProfileSchema.parse(req.body);
+    const user = await userService.updateUser(id, data);
+    res.json({
+      success: true,
+      message: "Profile updated successfully",
       data: user,
     });
   }

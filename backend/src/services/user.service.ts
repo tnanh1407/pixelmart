@@ -1,7 +1,7 @@
 import User, { type IUser } from "../models/user.model.js";
 import { AppError } from "../middlewares/error.middleware.js";
 import { hashPassword } from "../utils/bcrypt.js";
-import cloudinary, { CLOUDINARY_FOLDERS, getUserFolder } from "../config/cloudinary.js";
+import cloudinary, { CLOUDINARY_FOLDERS, getFolder } from "../config/cloudinary.js";
 import { extractPublicId } from "../utils/cloudinary/cloudinaryHelps.js";
 
 class UserService {
@@ -96,8 +96,6 @@ class UserService {
       throw new AppError("User not found", 404);
     }
 
-    const userFolders = getUserFolder(userId);
-
     if (user.avatar && user.avatar.includes("cloudinary")) {
       const publicId = extractPublicId(user.avatar);
       if (publicId) {
@@ -108,7 +106,7 @@ class UserService {
     const b64 = Buffer.from(file.buffer).toString("base64");
     const dataURI = `data:${file.mimetype};base64,${b64}`;
     const result = await cloudinary.uploader.upload(dataURI, {
-      folder: userFolders.avatars,
+      folder: getFolder.user(userId).avatar,
       public_id: "avatar",
       format: "webp",
       overwrite: true,
@@ -133,10 +131,8 @@ class UserService {
       }
     }
 
-    const userFolders = getUserFolder(id);
     try {
-      await cloudinary.api.delete_folder(userFolders.avatars);
-      await cloudinary.api.delete_folder(userFolders.reviews);
+      await cloudinary.api.delete_folder(getFolder.user(id).avatar);
     } catch {
     }
 
@@ -147,6 +143,10 @@ class UserService {
     const user = await User.findById(id);
     if (!user) {
       throw new AppError("User not found", 404);
+    }
+
+    if (user.role === "admin" && user.isActive) {
+      throw new AppError("Không thể vô hiệu hóa tài khoản quản trị viên", 403);
     }
 
     return await User.findByIdAndUpdate(id, { isActive: !user.isActive }, { returnDocument: "after" });

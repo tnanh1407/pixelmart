@@ -29,6 +29,20 @@ export const updateUserSchema = z.object({
   email: z.string().email("Invalid email format").optional(),
   phone: z.string().optional(),
   gender: z.enum(["male", "female", "other"]).optional(),
+  role: z.enum(["user", "admin"]).optional(),
+}).refine((data) => Object.keys(data).length > 0, {
+  message: "At least one field must be provided",
+});
+
+export const updateProfileSchema = z.object({
+  name: z
+    .string()
+    .min(2, "Name must be at least 2 characters")
+    .max(100, "Name must be less than 100 characters")
+    .optional(),
+  email: z.string().email("Invalid email format").optional(),
+  phone: z.string().optional(),
+  gender: z.enum(["male", "female", "other"]).optional(),
 }).refine((data) => Object.keys(data).length > 0, {
   message: "At least one field must be provided",
 });
@@ -51,8 +65,6 @@ export const verifyEmailSchema = z.object({
     .length(6, "Verification code must be 6 digits")
     .regex(/^\d+$/, "Verification code must contain only numbers"),
 });
-
-export const resendVerificationSchema = z.object({});
 
 export const forgotPasswordSchema = z.object({
   email: z.string().email("Invalid email format"),

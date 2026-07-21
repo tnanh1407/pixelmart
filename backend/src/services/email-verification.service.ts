@@ -1,7 +1,7 @@
 import { render } from "@react-email/render";
 import User from "../models/user.model.js";
 import VerificationToken from "../models/verification-token.model.js";
-import { TOKEN_TYPES as tokenType } from "@/constants/roles";
+import { TOKEN_TYPES as tokenType } from "../constants/roles.js";
 import { generateOtp } from "../utils/otp.js";
 import { sendMail } from "../utils/mail.js";
 import { AppError } from "../middlewares/error.middleware.js";

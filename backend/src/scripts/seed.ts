@@ -22,7 +22,6 @@ import Notification from "../models/notification.model.js";
 
 import { userSeedData } from "../data/user_seed_data.js";
 import { categorySeedData } from "../data/category_seed_data.js";
-import { storeSeedData } from "../data/store_seed_data.js";
 import { productSeedData } from "../data/product_seed_data.js";
 import { flashSaleSeedData } from "../data/flashSale_seed_data.js";
 import { flashSaleItemSeedData } from "../data/flashSaleItem_seed_data.js";
@@ -35,7 +34,6 @@ import { orderSeedData } from "../data/order_seed_data.js";
 import { paymentTransactionSeedData } from "../data/paymentTransaction_seed_data.js";
 import { returnRequestSeedData } from "../data/returnRequest_seed_data.js";
 import { reviewSeedData } from "../data/review_seed_data.js";
-import { storeFollowSeedData } from "../data/storeFollow_seed_data.js";
 import { notificationSeedData } from "../data/notification_seed_data.js";
 
 dotenv.config();

@@ -1,6 +1,6 @@
 import { type Request, type Response, type NextFunction } from "express";
-import { verifyAccessToken, type JwtPayload } from "../utils/jwt.ts";
-import { AppError } from "./error.middleware.ts";
+import { verifyAccessToken, type JwtPayload } from "../utils/jwt.js";
+import { AppError } from "./error.middleware.js";
 import User from "../models/user.model.js";
 
 declare global {

@@ -3,7 +3,9 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
+import swaggerUi from "swagger-ui-express";
 import env from "./config/env.js";
+import swaggerSpec from "./swagger/swagger.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
 import { auth } from "./middlewares/auth.middleware.js";
 import authRoutes from "./routes/v1/auth.routes.js";
@@ -41,6 +43,8 @@ else if (env.NODE_ENV === "production") {
 app.get("/health", (req, res) => {
     res.json({ status: "ok" });
 });
+// Swagger API docs
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", auth, userRoutes);
 app.use("/api/v1/addresses", addressRoutes);
